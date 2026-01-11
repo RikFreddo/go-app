@@ -1,5 +1,7 @@
 const decks = {
-    // === GRAMMATICA ===
+    // ==========================================
+    // 1. GRAMMATICA (ESSENZIALE PER FRASI)
+    // ==========================================
     "grammatica_zh": {
         title: "Grammatica (Cinese)", tags: ["grammatica", "zh"],
         cards: [
@@ -11,6 +13,8 @@ const decks = {
             { id: "g_zh6", lang: "zh", level: 1, word: "吃", pronunciation: "chī", meaning: "Mangiare", type: "base", pos: "verb" },
             { id: "g_zh7", lang: "zh", level: 1, word: "去", pronunciation: "qù", meaning: "Andare", type: "base", pos: "verb" },
             { id: "g_zh8", lang: "zh", level: 1, word: "喝", pronunciation: "hē", meaning: "Bere", type: "base", pos: "verb" },
+            { id: "g_zh9", lang: "zh", level: 1, word: "他", pronunciation: "tā", meaning: "Lui", type: "base", pos: "pronoun" },
+            { id: "g_zh10", lang: "zh", level: 1, word: "她", pronunciation: "tā", meaning: "Lei", type: "base", pos: "pronoun" },
             { id: "g_zh11", lang: "zh", level: 1, word: "买", pronunciation: "mǎi", meaning: "Comprare", type: "base", pos: "verb" },
             { id: "g_zh12", lang: "zh", level: 1, word: "要", pronunciation: "yào", meaning: "Volere", type: "base", pos: "verb" },
             { id: "g_zh13", lang: "zh", level: 1, word: "爱", pronunciation: "ài", meaning: "Amare", type: "base", pos: "verb" },
@@ -49,102 +53,156 @@ const decks = {
             { id: "g_ar8", lang: "ar", level: 1, word: "يَشْرَبُ", pronunciation: "yashrabu", meaning: "Beve", type: "base", pos: "verb" },
             { id: "g_ar11", lang: "ar", level: 1, word: "يَشْتَرِي", pronunciation: "yashtarī", meaning: "Compra", type: "base", pos: "verb" },
             { id: "g_ar12", lang: "ar", level: 1, word: "يُرِيدُ", pronunciation: "yurīdu", meaning: "Vuole", type: "base", pos: "verb" },
+            { id: "g_ar13", lang: "ar", level: 1, word: "يُحِبُّ", pronunciation: "yuḥibbu", meaning: "Ama", type: "base", pos: "verb" },
             { id: "g_ar14", lang: "ar", level: 2, word: "جَمِيل", pronunciation: "jamīl", meaning: "Bello", type: "base", pos: "adj" },
             { id: "g_ar15", lang: "ar", level: 2, word: "لَذِيذ", pronunciation: "ladhīdh", meaning: "Delizioso", type: "base", pos: "adj" }
         ]
     },
 
-    // === CIBO ===
+    // ==========================================
+    // 2. CIBO (UTILE PER FRASI)
+    // ==========================================
     "cibo_zh": {
         title: "Cibo (Cinese)", tags: ["cibo", "zh"],
         cards: [
-            { id: "c_zh1", lang: "zh", level: 1, word: "饭", pronunciation: "fàn", meaning: "Riso", type: "base" },
-            { id: "c_zh2", lang: "zh", level: 1, word: "茶", pronunciation: "chá", meaning: "Tè", type: "base" },
-            { id: "c_zh3", lang: "zh", level: 1, word: "水", pronunciation: "shuǐ", meaning: "Acqua", type: "base" },
-            { id: "c_zh4", lang: "zh", level: 1, word: "苹果", pronunciation: "píngguǒ", meaning: "Mela", type: "base" },
-            { id: "c_zh5", lang: "zh", level: 1, word: "肉", pronunciation: "ròu", meaning: "Carne", type: "base" }
+            { id: "c_zh1", lang: "zh", level: 1, word: "饭", pronunciation: "fàn", meaning: "Riso / Cibo", type: "base", pos: "food" },
+            { id: "c_zh2", lang: "zh", level: 1, word: "茶", pronunciation: "chá", meaning: "Tè", type: "base", pos: "drink" },
+            { id: "c_zh3", lang: "zh", level: 1, word: "水", pronunciation: "shuǐ", meaning: "Acqua", type: "base", pos: "drink" },
+            { id: "c_zh4", lang: "zh", level: 1, word: "苹果", pronunciation: "píngguǒ", meaning: "Mela", type: "base", pos: "food" },
+            { id: "c_zh5", lang: "zh", level: 1, word: "肉", pronunciation: "ròu", meaning: "Carne", type: "base", pos: "food" }
         ]
     },
     "cibo_ja": {
         title: "Cibo (Giapponese)", tags: ["cibo", "ja"],
         cards: [
-            { id: "c_ja1", lang: "ja", level: 1, word: "ご飯", pronunciation: "ごはん", meaning: "Riso", type: "base" },
-            { id: "c_ja2", lang: "ja", level: 1, word: "お茶", pronunciation: "おちゃ", meaning: "Tè", type: "base" },
-            { id: "c_ja3", lang: "ja", level: 1, word: "水", pronunciation: "みず", meaning: "Acqua", type: "base" },
-            { id: "c_ja4", lang: "ja", level: 1, word: "りんご", pronunciation: "りんご", meaning: "Mela", type: "base" },
-            { id: "c_ja5", lang: "ja", level: 1, word: "肉", pronunciation: "にく", meaning: "Carne", type: "base" },
-            { id: "c_ja6", lang: "ja", level: 1, word: "魚", pronunciation: "さかな", meaning: "Pesce", type: "base" }
+            { id: "c_ja1", lang: "ja", level: 1, word: "ご飯", pronunciation: "ごはん", meaning: "Riso", type: "base", pos: "food" },
+            { id: "c_ja2", lang: "ja", level: 1, word: "お茶", pronunciation: "おちゃ", meaning: "Tè", type: "base", pos: "drink" },
+            { id: "c_ja3", lang: "ja", level: 1, word: "水", pronunciation: "みず", meaning: "Acqua", type: "base", pos: "drink" },
+            { id: "c_ja4", lang: "ja", level: 1, word: "りんご", pronunciation: "りんご", meaning: "Mela", type: "base", pos: "food" },
+            { id: "c_ja5", lang: "ja", level: 1, word: "肉", pronunciation: "にく", meaning: "Carne", type: "base", pos: "food" },
+            { id: "c_ja6", lang: "ja", level: 1, word: "魚", pronunciation: "さかな", meaning: "Pesce", type: "base", pos: "food" }
         ]
     },
     "cibo_ar": {
         title: "Cibo (Arabo)", tags: ["cibo", "ar"],
         cards: [
-            { id: "c_ar1", lang: "ar", level: 1, word: "خُبْز", pronunciation: "khubz", meaning: "Pane", type: "base" },
-            { id: "c_ar2", lang: "ar", level: 1, word: "شَاي", pronunciation: "shāy", meaning: "Tè", type: "base" },
-            { id: "c_ar3", lang: "ar", level: 1, word: "مَاء", pronunciation: "mā'", meaning: "Acqua", type: "base" },
-            { id: "c_ar4", lang: "ar", level: 1, word: "تُفَّاح", pronunciation: "tuffāḥ", meaning: "Mela", type: "base" },
-            { id: "c_ar5", lang: "ar", level: 1, word: "لَحْم", pronunciation: "laḥm", meaning: "Carne", type: "base" }
+            { id: "c_ar1", lang: "ar", level: 1, word: "خُبْز", pronunciation: "khubz", meaning: "Pane", type: "base", pos: "food" },
+            { id: "c_ar2", lang: "ar", level: 1, word: "شَاي", pronunciation: "shāy", meaning: "Tè", type: "base", pos: "drink" },
+            { id: "c_ar3", lang: "ar", level: 1, word: "مَاء", pronunciation: "mā'", meaning: "Acqua", type: "base", pos: "drink" }, // Nota: è duplicato in natura, ma va bene
+            { id: "c_ar4", lang: "ar", level: 1, word: "تُفَّاح", pronunciation: "tuffāḥ", meaning: "Mela", type: "base", pos: "food" },
+            { id: "c_ar5", lang: "ar", level: 1, word: "لَحْم", pronunciation: "laḥm", meaning: "Carne", type: "base", pos: "food" }
         ]
     },
 
-    // === NATURA ===
+    // ==========================================
+    // 3. NATURA (VERSIONE ESTESA - RIPRISTINO RADICI)
+    // ==========================================
     "natura_zh": {
         title: "Natura (Cinese)", tags: ["natura", "zh"], 
         cards: [
-            { id: "zh1", lang: "zh", level: 1, word: "木", pronunciation: "mù", meaning: "Albero", type: "base" },
-            { id: "zh2", lang: "zh", level: 1, word: "水", pronunciation: "shuǐ", meaning: "Acqua", type: "base" },
-            { id: "zh7", lang: "zh", level: 1, word: "山", pronunciation: "shān", meaning: "Montagna", type: "base" },
-            { id: "zh12", lang: "zh", level: 1, word: "天", pronunciation: "tiān", meaning: "Cielo", type: "base" },
-            { id: "zh19", lang: "zh", level: 2, word: "花", pronunciation: "huā", meaning: "Fiore", type: "base" }
+            { id: "zh1", lang: "zh", level: 1, word: "木", pronunciation: "mù", meaning: "Albero/Legno", type: "base", pos: "noun" },
+            { id: "zh2", lang: "zh", level: 1, word: "水", pronunciation: "shuǐ", meaning: "Acqua", type: "base", pos: "noun" },
+            { id: "zh3", lang: "zh", level: 1, word: "火", pronunciation: "huǒ", meaning: "Fuoco", type: "base", pos: "noun" },
+            { id: "zh4", lang: "zh", level: 1, word: "土", pronunciation: "tǔ", meaning: "Terra", type: "base", pos: "noun" },
+            { id: "zh5", lang: "zh", level: 1, word: "日", pronunciation: "rì", meaning: "Sole/Giorno", type: "base", pos: "noun" },
+            { id: "zh6", lang: "zh", level: 1, word: "月", pronunciation: "yuè", meaning: "Luna/Mese", type: "base", pos: "noun" },
+            { id: "zh7", lang: "zh", level: 1, word: "山", pronunciation: "shān", meaning: "Montagna", type: "base", pos: "place" },
+            { id: "zh10", lang: "zh", level: 1, word: "雨", pronunciation: "yǔ", meaning: "Pioggia", type: "base", pos: "noun" },
+            { id: "zh12", lang: "zh", level: 1, word: "天", pronunciation: "tiān", meaning: "Cielo", type: "base", pos: "place" },
+            { id: "zh13", lang: "zh", level: 2, word: "林", pronunciation: "lín", meaning: "Bosco", type: "derivato", requires: ["zh1"], pos: "place" },
+            { id: "zh15", lang: "zh", level: 2, word: "河", pronunciation: "hé", meaning: "Fiume", type: "derivato", requires: ["zh2"], pos: "place" },
+            { id: "zh16", lang: "zh", level: 2, word: "海", pronunciation: "hǎi", meaning: "Mare", type: "derivato", requires: ["zh2"], pos: "place" },
+            { id: "zh17", lang: "zh", level: 2, word: "火山", pronunciation: "huǒshān", meaning: "Vulcano", type: "derivato", requires: ["zh3", "zh7"], pos: "place" },
+            { id: "zh19", lang: "zh", level: 2, word: "花", pronunciation: "huā", meaning: "Fiore", type: "derivato", requires: ["zh1"], pos: "noun" },
+            { id: "zh29", lang: "zh", level: 3, word: "沙漠", pronunciation: "shāmò", meaning: "Deserto", type: "derivato", requires: ["zh2", "zh4"], pos: "place" },
+            { id: "zh40", lang: "zh", level: 4, word: "森林", pronunciation: "sēnlín", meaning: "Foresta", type: "derivato", requires: ["zh13"], pos: "place" }
         ]
     },
     "natura_ja": {
         title: "Natura (Giapponese)", tags: ["natura", "ja"],
         cards: [
-            { id: "ja1", lang: "ja", level: 1, word: "川", pronunciation: "かわ", meaning: "Fiume", type: "base" },
-            { id: "ja2", lang: "ja", level: 1, word: "山", pronunciation: "やま", meaning: "Montagna", type: "base" },
-            { id: "ja6", lang: "ja", level: 1, word: "空", pronunciation: "そら", meaning: "Cielo", type: "base" },
-            { id: "ja13", lang: "ja", level: 1, word: "花", pronunciation: "はな", meaning: "Fiore", type: "base" }
+            { id: "ja1", lang: "ja", level: 1, word: "川", pronunciation: "かわ", meaning: "Fiume", type: "base", pos: "place" },
+            { id: "ja2", lang: "ja", level: 1, word: "山", pronunciation: "やま", meaning: "Montagna", type: "base", pos: "place" },
+            { id: "ja3", lang: "ja", level: 1, word: "雨", pronunciation: "あめ", meaning: "Pioggia", type: "base", pos: "noun" },
+            { id: "ja4", lang: "ja", level: 1, word: "雪", pronunciation: "ゆき", meaning: "Neve", type: "base", pos: "noun" },
+            { id: "ja5", lang: "ja", level: 1, word: "風", pronunciation: "かぜ", meaning: "Vento", type: "base", pos: "noun" },
+            { id: "ja6", lang: "ja", level: 1, word: "空", pronunciation: "そら", meaning: "Cielo", type: "base", pos: "place" },
+            { id: "ja9", lang: "ja", level: 1, word: "木", pronunciation: "き", meaning: "Albero", type: "base", pos: "noun" },
+            { id: "ja11", lang: "ja", level: 1, word: "海", pronunciation: "うみ", meaning: "Mare", type: "base", pos: "place" },
+            { id: "ja13", lang: "ja", level: 1, word: "花", pronunciation: "はな", meaning: "Fiore", type: "base", pos: "noun" },
+            { id: "ja15", lang: "ja", level: 2, word: "火山", pronunciation: "かざん", meaning: "Vulcano", type: "derivato", requires: ["ja2"], pos: "place" },
+            { id: "ja10", lang: "ja", level: 2, word: "森", pronunciation: "もり", meaning: "Foresta", type: "base", requires: ["ja9"], pos: "place" }
         ]
     },
     "natura_ar": {
         title: "Natura (Arabo)", tags: ["natura", "ar"],
         cards: [
-            { id: "ar4", lang: "ar", level: 1, word: "مَاء", pronunciation: "mā'", meaning: "Acqua", type: "base" },
-            { id: "ar14", lang: "ar", level: 2, word: "شَمْس", pronunciation: "shams", meaning: "Sole", type: "base" },
-            { id: "ar17", lang: "ar", level: 2, word: "بَحْر", pronunciation: "baḥr", meaning: "Mare", type: "base" },
-            { id: "ar19", lang: "ar", level: 2, word: "جَبَل", pronunciation: "jabal", meaning: "Montagna", type: "base" },
-            { id: "ar23", lang: "ar", level: 3, word: "شَجَرَة", pronunciation: "shajara", meaning: "Albero", type: "base" }
+            // RADICI (Livello 1) - FONDAMENTALI
+            { id: "ar1", lang: "ar", level: 1, word: "أ ر ض", pronunciation: "'-R-D", meaning: "Radice: Terra", type: "base", pos: "noun" },
+            { id: "ar2", lang: "ar", level: 1, word: "ش م س", pronunciation: "Sh-M-S", meaning: "Radice: Sole", type: "base", pos: "noun" },
+            { id: "ar3", lang: "ar", level: 1, word: "ق م ر", pronunciation: "Q-M-R", meaning: "Radice: Luna", type: "base", pos: "noun" },
+            { id: "ar4", lang: "ar", level: 1, word: "م ا ء", pronunciation: "mā'", meaning: "Acqua", type: "base", pos: "noun" }, // Acqua è base
+            { id: "ar5", lang: "ar", level: 1, word: "ب ح ر", pronunciation: "B-H-R", meaning: "Radice: Mare", type: "base", pos: "noun" },
+            { id: "ar7", lang: "ar", level: 1, word: "ج ب ل", pronunciation: "J-B-L", meaning: "Radice: Montagna", type: "base", pos: "noun" },
+            { id: "ar8", lang: "ar", level: 1, word: "ش ج ر", pronunciation: "Sh-J-R", meaning: "Radice: Albero", type: "base", pos: "noun" },
+            
+            // DERIVATI (Livello 2/3)
+            { id: "ar12", lang: "ar", level: 2, word: "أَرْض", pronunciation: "arḍ", meaning: "Terra/Suolo", type: "derivato", requires: ["ar1"], pos: "place" },
+            { id: "ar14", lang: "ar", level: 2, word: "شَمْس", pronunciation: "shams", meaning: "Sole", type: "derivato", requires: ["ar2"], pos: "noun" },
+            { id: "ar17", lang: "ar", level: 2, word: "بَحْر", pronunciation: "baḥr", meaning: "Mare", type: "derivato", requires: ["ar5"], pos: "place" },
+            { id: "ar19", lang: "ar", level: 2, word: "جَبَل", pronunciation: "jabal", meaning: "Montagna", type: "derivato", requires: ["ar7"], pos: "place" },
+            { id: "ar23", lang: "ar", level: 3, word: "شَجَرَة", pronunciation: "shajara", meaning: "Albero", type: "derivato", requires: ["ar8"], pos: "noun" },
+            { id: "ar24", lang: "ar", level: 3, word: "غَابَة", pronunciation: "ghāba", meaning: "Foresta", type: "derivato", requires: ["ar23"], pos: "place" }
         ]
     },
 
-    // === VIAGGIO ===
+    // ==========================================
+    // 4. VIAGGIO (VERSIONE ESTESA)
+    // ==========================================
     "viaggio_zh": {
         title: "Viaggio (Cinese)", tags: ["viaggio", "zh"],
         cards: [
-            { id: "v_zh1", lang: "zh", level: 1, word: "去", pronunciation: "qù", meaning: "Andare", type: "base" },
-            { id: "v_zh2", lang: "zh", level: 1, word: "车", pronunciation: "chē", meaning: "Auto", type: "base" },
-            { id: "v_zh5", lang: "zh", level: 2, word: "飞机", pronunciation: "fēijī", meaning: "Aereo", type: "base" },
-            { id: "v_zh7", lang: "zh", level: 2, word: "车站", pronunciation: "chēzhàn", meaning: "Stazione", type: "base" },
-            { id: "v_zh17", lang: "zh", level: 3, word: "旅馆", pronunciation: "lǚguǎn", meaning: "Hotel", type: "base" }
+            { id: "v_zh1", lang: "zh", level: 1, word: "去", pronunciation: "qù", meaning: "Andare", type: "base", pos: "verb" },
+            { id: "v_zh2", lang: "zh", level: 1, word: "车", pronunciation: "chē", meaning: "Auto/Veicolo", type: "base", pos: "noun" },
+            { id: "v_zh3", lang: "zh", level: 1, word: "飞", pronunciation: "fēi", meaning: "Volare", type: "base", pos: "verb" },
+            { id: "v_zh4", lang: "zh", level: 1, word: "机", pronunciation: "jī", meaning: "Macchina", type: "base", pos: "noun" },
+            { id: "v_zh8", lang: "zh", level: 1, word: "票", pronunciation: "piào", meaning: "Biglietto", type: "base", pos: "noun" },
+            { id: "v_zh9", lang: "zh", level: 1, word: "门", pronunciation: "mén", meaning: "Porta", type: "base", pos: "place" },
+            { id: "v_zh5", lang: "zh", level: 2, word: "飞机", pronunciation: "fēijī", meaning: "Aereo", type: "derivato", requires: ["v_zh3", "v_zh4"], pos: "noun" },
+            { id: "v_zh6", lang: "zh", level: 2, word: "火车", pronunciation: "huǒchē", meaning: "Treno", type: "derivato", requires: ["v_zh2"], pos: "noun" }, 
+            { id: "v_zh7", lang: "zh", level: 2, word: "车站", pronunciation: "chēzhàn", meaning: "Stazione", type: "derivato", requires: ["v_zh2"], pos: "place" },
+            { id: "v_zh12", lang: "zh", level: 3, word: "机票", pronunciation: "jīpiào", meaning: "Biglietto Aereo", type: "derivato", requires: ["v_zh4", "v_zh8"], pos: "noun" },
+            { id: "v_zh14", lang: "zh", level: 3, word: "护照", pronunciation: "hùzhào", meaning: "Passaporto", type: "base", pos: "noun" },
+            { id: "v_zh16", lang: "zh", level: 3, word: "门口", pronunciation: "ménkǒu", meaning: "Ingresso", type: "derivato", requires: ["v_zh9"], pos: "place" },
+            { id: "v_zh17", lang: "zh", level: 3, word: "旅馆", pronunciation: "lǚguǎn", meaning: "Hotel", type: "base", pos: "place" }
         ]
     },
     "viaggio_ja": {
         title: "Viaggio (Giapponese)", tags: ["viaggio", "ja"],
         cards: [
-            { id: "v_ja1", lang: "ja", level: 1, word: "行く", pronunciation: "いく", meaning: "Andare", type: "base" },
-            { id: "v_ja2", lang: "ja", level: 1, word: "車", pronunciation: "くるま", meaning: "Auto", type: "base" },
-            { id: "v_ja4", lang: "ja", level: 1, word: "駅", pronunciation: "えき", meaning: "Stazione", type: "base" },
-            { id: "v_ja7", lang: "ja", level: 2, word: "ホテル", pronunciation: "ほてる", meaning: "Hotel", type: "base" },
-            { id: "v_ja12", lang: "ja", level: 2, word: "切符", pronunciation: "きっぷ", meaning: "Biglietto", type: "base" }
+            { id: "v_ja1", lang: "ja", level: 1, word: "行く", pronunciation: "いく", meaning: "Andare", type: "base", pos: "verb" },
+            { id: "v_ja2", lang: "ja", level: 1, word: "車", pronunciation: "くるま", meaning: "Auto", type: "base", pos: "noun" },
+            { id: "v_ja4", lang: "ja", level: 1, word: "駅", pronunciation: "えき", meaning: "Stazione", type: "base", pos: "place" },
+            { id: "v_ja7", lang: "ja", level: 2, word: "ホテル", pronunciation: "ほてる", meaning: "Hotel", type: "base", pos: "place" },
+            { id: "v_ja12", lang: "ja", level: 2, word: "切符", pronunciation: "きっぷ", meaning: "Biglietto", type: "base", pos: "noun" },
+            { id: "v_ja13", lang: "ja", level: 3, word: "パスポート", pronunciation: "ぱすぽーと", meaning: "Passaporto", type: "base", pos: "noun" },
+            { id: "v_ja17", lang: "ja", level: 3, word: "入り口", pronunciation: "いりぐち", meaning: "Entrata", type: "base", pos: "place" }
         ]
     },
     "viaggio_ar": {
         title: "Viaggio (Arabo)", tags: ["viaggio", "ar"],
         cards: [
-            { id: "v_ar5", lang: "ar", level: 2, word: "مَطَار", pronunciation: "maṭār", meaning: "Aeroporto", type: "base" },
-            { id: "v_ar11", lang: "ar", level: 3, word: "جَوَاز", pronunciation: "jawāz", meaning: "Passaporto", type: "base" },
-            { id: "v_ar14", lang: "ar", level: 3, word: "فُنْدُق", pronunciation: "funduq", meaning: "Hotel", type: "base" }
+            // RADICI VIAGGIO
+            { id: "v_ar1", lang: "ar", level: 1, word: "س ف ر", pronunciation: "S-F-R", meaning: "Radice: Viaggio", type: "base", pos: "noun" },
+            { id: "v_ar2", lang: "ar", level: 1, word: "ط ي ر", pronunciation: "T-Y-R", meaning: "Radice: Volare", type: "base", pos: "noun" },
+            { id: "v_ar9", lang: "ar", level: 1, word: "ج و ز", pronunciation: "J-W-Z", meaning: "Radice: Passare", type: "base", pos: "noun" },
+            
+            // DERIVATI
+            { id: "v_ar4", lang: "ar", level: 2, word: "سَفَر", pronunciation: "safar", meaning: "Viaggio", type: "derivato", requires: ["v_ar1"], pos: "noun" },
+            { id: "v_ar5", lang: "ar", level: 2, word: "مَطَار", pronunciation: "maṭār", meaning: "Aeroporto", type: "derivato", requires: ["v_ar2"], pos: "place" },
+            { id: "v_ar6", lang: "ar", level: 2, word: "طَائِرَة", pronunciation: "ṭā'ira", meaning: "Aereo", type: "derivato", requires: ["v_ar2"], pos: "noun" },
+            { id: "v_ar11", lang: "ar", level: 3, word: "جَوَاز", pronunciation: "jawāz", meaning: "Passaporto", type: "derivato", requires: ["v_ar9"], pos: "noun" },
+            { id: "v_ar14", lang: "ar", level: 3, word: "فُنْدُق", pronunciation: "funduq", meaning: "Hotel", type: "base", pos: "place" }
         ]
     }
 };
