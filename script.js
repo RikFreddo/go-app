@@ -14,7 +14,7 @@ window.onload = function() {
 
 // --- 1. NAVIGAZIONE ---
 function showScreen(screenId) {
-    // AGGIUNTO 'unlock-menu' alla lista
+    // Elenco di tutte le schermate possibili
     const screens = ['main-menu', 'config-menu', 'settings-menu', 'game-screen', 'progress-menu', 'reset-menu', 'sentence-screen', 'unlock-menu'];
     screens.forEach(s => {
         const el = document.getElementById(s);
@@ -24,6 +24,7 @@ function showScreen(screenId) {
     const target = document.getElementById(screenId);
     if(target) {
         target.style.display = 'flex';
+        // La Top Bar c'è sempre tranne che nella Home
         if (screenId === 'main-menu') {
             document.getElementById('topBar').style.display = 'none';
         } else {
@@ -166,39 +167,14 @@ function speakSentence() {
     window.speechSynthesis.speak(speech);
 }
 
-// --- 3. GESTIONE DATI (RESET, EXPORT E SBLOCCO) ---
-function exportData() {
-    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(userProgress));
-    const dl = document.createElement('a'); dl.setAttribute("href", dataStr); dl.setAttribute("download", "go_backup.json");
-    document.body.appendChild(dl); dl.click(); dl.remove();
-}
-function importData(input) {
-    const file = input.files[0]; if (!file) return;
-    const reader = new FileReader();
-    reader.onload = function(e) { try { userProgress = JSON.parse(e.target.result); saveProgress(); alert("Fatto!"); } catch (err) { alert("Errore file."); } };
-    reader.readAsText(file);
-}
+// --- 3. GESTIONE DATI (SBLOCCO, RESET, EXPORT) ---
 
-// Menu Reset
-function showResetMenu() { renderCheckboxes('reset-topic-options', 'reset-lang-options'); showScreen('reset-menu'); }
-function performReset() {
-    const container = document.getElementById('reset-menu');
-    let st = Array.from(container.querySelectorAll('input[name="topic"]:checked')).map(cb => cb.value);
-    let sl = Array.from(container.querySelectorAll('input[name="lang"]:checked')).map(cb => cb.value);
-    if(st.length===0 && sl.length===0) return alert("Seleziona cosa resettare.");
-    if(!confirm("Sicuro di cancellare?")) return;
-    Object.keys(decks).forEach(key => {
-        let d = decks[key];
-        if (st.includes(d.tags[0]) || sl.includes(d.tags[1])) d.cards.forEach(c => delete userProgress[c.id]);
-    });
-    saveProgress(); alert("Reset completato."); showSettingsMenu();
-}
-
-// Menu Sblocco (NUOVO)
+// Questa è la funzione che mancava o non veniva letta!
 function showUnlockMenu() {
     renderCheckboxes('unlock-topic-options', 'unlock-lang-options');
     showScreen('unlock-menu');
 }
+
 function performUnlock() {
     const container = document.getElementById('unlock-menu');
     let st = Array.from(container.querySelectorAll('input[name="topic"]:checked')).map(cb => cb.value);
@@ -221,6 +197,31 @@ function performUnlock() {
     showSettingsMenu();
 }
 
+function exportData() {
+    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(userProgress));
+    const dl = document.createElement('a'); dl.setAttribute("href", dataStr); dl.setAttribute("download", "go_backup.json");
+    document.body.appendChild(dl); dl.click(); dl.remove();
+}
+function importData(input) {
+    const file = input.files[0]; if (!file) return;
+    const reader = new FileReader();
+    reader.onload = function(e) { try { userProgress = JSON.parse(e.target.result); saveProgress(); alert("Fatto!"); } catch (err) { alert("Errore file."); } };
+    reader.readAsText(file);
+}
+function showResetMenu() { renderCheckboxes('reset-topic-options', 'reset-lang-options'); showScreen('reset-menu'); }
+function performReset() {
+    const container = document.getElementById('reset-menu');
+    let st = Array.from(container.querySelectorAll('input[name="topic"]:checked')).map(cb => cb.value);
+    let sl = Array.from(container.querySelectorAll('input[name="lang"]:checked')).map(cb => cb.value);
+    if(st.length===0 && sl.length===0) return alert("Seleziona cosa cancellare.");
+    if(!confirm("Sicuro di cancellare?")) return;
+    Object.keys(decks).forEach(key => {
+        let d = decks[key];
+        if (st.includes(d.tags[0]) || sl.includes(d.tags[1])) d.cards.forEach(c => delete userProgress[c.id]);
+    });
+    saveProgress(); alert("Reset completato."); showSettingsMenu();
+}
+
 // --- UTILS & FLASHCARDS ---
 function renderCheckboxes(topicId, langId) {
     const topicContainer = document.getElementById(topicId);
@@ -232,7 +233,7 @@ function renderCheckboxes(topicId, langId) {
         let t = decks[key].tags; if (!t) return;
         if(t[0]) topics.add(t[0]); if(t[1]) langs.add(t[1]);
     });
-    const isReset = topicId.includes('reset'); // Default check per config e unlock, uncheck per reset
+    const isReset = topicId.includes('reset'); 
     const defaultChecked = !isReset; 
     topics.forEach(topic => {
         let prettyName = capitalize(topic);
