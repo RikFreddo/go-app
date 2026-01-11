@@ -153,7 +153,7 @@ body.dark-mode .type-tag { background-color: #11443a; color: #81e6d3; }
 .audio-btn { background:none; border:none; cursor:pointer; font-size: 1.4rem; }
 body.dark-mode .audio-btn { filter: invert(1); }
 
-/* CONTROLS */
+/* CONTROLS (Fix Blocco) */
 .controls-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; opacity: 0.3; pointer-events: none; transition: opacity 0.3s; }
 .controls-active { opacity: 1 !important; pointer-events: auto !important; }
 .btn { padding: 12px; border: none; border-radius: 10px; font-size: 0.9rem; font-weight: bold; color: white; cursor: pointer; }
@@ -164,7 +164,7 @@ body.dark-mode .audio-btn { filter: invert(1); }
 .btn-green { background-color: #2ecc71; }
 .instruction { font-size: 0.8rem; color: #888; margin-top: 10px; }
 
-/* --- SENTENCE GENERATOR STYLES --- */
+/* SENTENCE GENERATOR */
 .sentence-box {
     font-size: 2rem;
     margin: 20px 0;
@@ -173,6 +173,13 @@ body.dark-mode .audio-btn { filter: invert(1); }
     flex-wrap: wrap;
     justify-content: center;
     gap: 8px;
+    width: 100%;
+}
+
+/* FIX ARABO RTL */
+.rtl-text {
+    direction: rtl;
+    flex-direction: row-reverse; /* Inverte l'ordine dei flex item */
 }
 
 .clickable-word {
@@ -182,39 +189,16 @@ body.dark-mode .audio-btn { filter: invert(1); }
     transition: color 0.2s;
 }
 
-.clickable-word:hover {
-    color: var(--primary-color);
-    border-bottom-color: var(--primary-color);
-}
-
-/* Tooltip semplice per la traduzione */
+.clickable-word:hover { color: var(--primary-color); border-bottom-color: var(--primary-color); }
 .clickable-word::after {
     content: attr(data-meaning);
     position: absolute;
-    bottom: 100%;
-    left: 50%;
-    transform: translateX(-50%);
-    background: #333;
-    color: white;
-    padding: 5px 10px;
-    border-radius: 5px;
-    font-size: 0.8rem;
-    white-space: nowrap;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.2s;
-    z-index: 10;
+    bottom: 100%; left: 50%; transform: translateX(-50%);
+    background: #333; color: white; padding: 5px 10px;
+    border-radius: 5px; font-size: 0.8rem; white-space: nowrap;
+    opacity: 0; pointer-events: none; transition: opacity 0.2s; z-index: 10;
 }
-
-.clickable-word:active::after,
-.clickable-word:focus::after {
-    opacity: 1;
-}
-
-/* Mobile fix per tooltip al click */
-.clickable-word.show-hint::after {
-    opacity: 1;
-}
+.clickable-word:active::after, .clickable-word:focus::after, .clickable-word.show-hint::after { opacity: 1; }
 
 .sentence-solution {
     margin-top: 20px;
@@ -224,9 +208,4 @@ body.dark-mode .audio-btn { filter: invert(1); }
     width: 100%;
     box-sizing: border-box;
 }
-
-#sentTranslation {
-    font-size: 1.2rem;
-    color: var(--text-color);
-    margin: 0;
-}
+#sentTranslation { font-size: 1.2rem; color: var(--text-color); margin: 0; }
