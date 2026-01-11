@@ -6,7 +6,7 @@ let userProgress = {};
 let userSentenceProgress = {}; 
 let previousScreen = 'main-menu';
 
-// Variabili per Frasi (Mode 8.0)
+// Variabili per Frasi
 let sentenceDeck = [];
 let currentSentence = null;
 let isSentFlipped = false;
@@ -36,10 +36,15 @@ function goBack() { showScreen(previousScreen); }
 
 // --- 2. MODALITÀ FRASI (BANK MODE) ---
 function startSentenceMode() {
-    // Filtra le frasi dal Sentence Bank
+    // Controllo sicurezza: database.js è caricato?
+    if (typeof sentenceBank === 'undefined') {
+        alert("Errore: Il database delle frasi non è caricato. Ricarica la pagina.");
+        return;
+    }
+
     let validSentences = sentenceBank.filter(s => {
-        if (!s.requires) return true; // Se non ha requisiti è libera
-        // Controlla se TUTTE le carte richieste sono 'perfect'
+        if (!s.requires) return true;
+        // Controlla se l'utente ha sbloccato tutte le parole necessarie
         return s.requires.every(reqId => userProgress[reqId] === 'perfect');
     });
 
@@ -51,12 +56,16 @@ function startSentenceMode() {
     sentenceDeck = shuffleArray(validSentences);
     previousScreen = 'main-menu';
     showScreen('sentence-screen');
-    loadNextSentence();
+    
+    // Piccolo ritardo per assicurarsi che la pagina sia renderizzata prima di scrivere
+    setTimeout(() => {
+        loadNextSentence();
+    }, 50);
 }
 
 function loadNextSentence() {
     if (sentenceDeck.length === 0) {
-        if(confirm("Hai finito tutte le frasi disponibili! Vuoi ricominciare?")) {
+        if(confirm("Hai completato tutte le frasi disponibili! Vuoi ricominciare?")) {
             startSentenceMode();
         } else {
             goToHome();
@@ -69,53 +78,71 @@ function loadNextSentence() {
     
     // UI Reset
     const cardEl = document.getElementById('sentFlashcard');
-    cardEl.classList.remove('flipped');
-    document.getElementById('sentControls').classList.remove('controls-active');
+    if(cardEl) cardEl.classList.remove('flipped');
+    
+    const ctrls = document.getElementById('sentControls');
+    if(ctrls) ctrls.classList.remove('controls-active');
+    
     document.getElementById('s_instructionText').innerText = "Tocca per girare";
 
-    // Popola dati
-    setTimeout(() => {
-        document.getElementById('s_langTag').innerText = getLangNameFull(currentSentence.lang);
-        document.getElementById('s_langTag').style.color = getLangColor(currentSentence.lang);
-        
-        // Fronte
-        document.getElementById('s_wordDisplay').innerText = currentSentence.text;
-        if(currentSentence.lang === 'ar') document.getElementById('s_wordDisplay').style.direction = 'rtl';
-        else document.getElementById('s_wordDisplay').style.direction = 'ltr';
+    // Popola dati con controllo esistenza elementi
+    try {
+        const langEl = document.getElementById('s_langTag');
+        const frontEl = document.getElementById('s_wordDisplay');
+        const backEl = document.getElementById('s_backWordDisplay');
+        const pronEl = document.getElementById('s_pronunciationDisplay');
+        const meanEl = document.getElementById('s_meaningDisplay');
+        const statusEl = document.getElementById('sentStatus');
 
-        // Retro
-        document.getElementById('s_backWordDisplay').innerText = currentSentence.text;
-        if(currentSentence.lang === 'ar') document.getElementById('s_backWordDisplay').style.direction = 'rtl';
-        else document.getElementById('s_backWordDisplay').style.direction = 'ltr';
-
-        document.getElementById('s_pronunciationDisplay').innerText = currentSentence.pronunciation;
-        document.getElementById('s_meaningDisplay').innerText = currentSentence.translation;
+        if(langEl) {
+            langEl.innerText = getLangNameFull(currentSentence.lang);
+            langEl.style.color = getLangColor(currentSentence.lang);
+        }
         
-        document.getElementById('sentStatus').innerText = "Frasi rimaste: " + sentenceDeck.length;
-    }, 200);
+        if(frontEl) {
+            frontEl.innerText = currentSentence.text;
+            frontEl.style.direction = (currentSentence.lang === 'ar') ? 'rtl' : 'ltr';
+        }
+
+        if(backEl) {
+            backEl.innerText = currentSentence.text;
+            backEl.style.direction = (currentSentence.lang === 'ar') ? 'rtl' : 'ltr';
+        }
+
+        if(pronEl) pronEl.innerText = currentSentence.pronunciation;
+        if(meanEl) meanEl.innerText = currentSentence.translation;
+        if(statusEl) statusEl.innerText = "Frasi: " + sentenceDeck.length;
+
+    } catch(e) {
+        console.error("Errore nel caricamento frase: ", e);
+        alert("Si è verificato un errore nel mostrare la frase.");
+    }
 }
 
 function flipSentenceCard() {
     if (isSentFlipped) return;
-    document.getElementById('sentFlashcard').classList.add('flipped');
+    const cardEl = document.getElementById('sentFlashcard');
+    if(cardEl) cardEl.classList.add('flipped');
+    
     isSentFlipped = true;
-    document.getElementById('sentControls').classList.add('controls-active');
+    
+    const ctrls = document.getElementById('sentControls');
+    if(ctrls) ctrls.classList.add('controls-active');
+    
     document.getElementById('s_instructionText').innerText = "Come è andata?";
 }
 
 function handleSentenceResult(result) {
     if (!isSentFlipped) return;
     
-    // Salva progresso frase (opzionale, per le statistiche)
     userSentenceProgress[currentSentence.id] = result;
     saveProgress();
 
-    // Logica mazzo: se perfect via, altrimenti rimetti in fondo
     if (result === 'perfect') {
         sentenceDeck.shift();
     } else {
         let missed = sentenceDeck.shift();
-        sentenceDeck.push(missed); // Rimetti in fondo per ripeterla
+        sentenceDeck.push(missed);
     }
     loadNextSentence();
 }
@@ -124,7 +151,7 @@ function handleSentenceResult(result) {
 window.speakSentenceScript = function() {
     if (!currentSentence) return;
     let t = currentSentence.text;
-    if (currentSentence.lang === 'ar') t = t.replace(/\s/g, ''); // Fix arabo unito
+    if (currentSentence.lang === 'ar') t = t.replace(/\s/g, ''); 
     let s = new SpeechSynthesisUtterance(t);
     if(currentSentence.lang==='zh') s.lang='zh-CN';
     if(currentSentence.lang==='ja') s.lang='ja-JP';
@@ -139,24 +166,26 @@ function showSentenceProgress() {
     let count = 0;
 
     // Cerca nei Sentence Bank le frasi fatte
-    sentenceBank.forEach(s => {
-        let status = userSentenceProgress[s.id];
-        if(status) {
-            count++;
-            const item = document.createElement('div');
-            item.className = 'prog-item';
-            let icon = (status==='perfect') ? '<span class="dot dot-green"></span>' : (status==='hard' ? '<span class="dot dot-yellow"></span>' : '<span class="dot dot-red"></span>');
-            
-            item.innerHTML = `
-                <div class="prog-info">
-                    <div class="prog-word" style="font-size:1rem; color:${getLangColor(s.lang)}">${s.text}</div>
-                    <div class="prog-meaning" style="font-size:0.8rem;">${s.translation}</div>
-                </div>
-                <div class="prog-status">${icon}</div>
-            `;
-            list.appendChild(item);
-        }
-    });
+    if (typeof sentenceBank !== 'undefined') {
+        sentenceBank.forEach(s => {
+            let status = userSentenceProgress[s.id];
+            if(status) {
+                count++;
+                const item = document.createElement('div');
+                item.className = 'prog-item';
+                let icon = (status==='perfect') ? '<span class="dot dot-green"></span>' : (status==='hard' ? '<span class="dot dot-yellow"></span>' : '<span class="dot dot-red"></span>');
+                
+                item.innerHTML = `
+                    <div class="prog-info">
+                        <div class="prog-word" style="font-size:1rem; color:${getLangColor(s.lang)}">${s.text}</div>
+                        <div class="prog-meaning" style="font-size:0.8rem;">${s.translation}</div>
+                    </div>
+                    <div class="prog-status">${icon}</div>
+                `;
+                list.appendChild(item);
+            }
+        });
+    }
 
     if(count === 0) list.innerHTML = "<p style='color:#666'>Nessuna frase completata.</p>";
     showScreen('sent-progress-menu');
@@ -164,9 +193,7 @@ function showSentenceProgress() {
 function closeSentProgress() { showScreen('sentence-screen'); }
 
 
-// --- RESTO DEL CODICE (Flashcards, Settings, etc.) ---
-// ... (Queste funzioni sono standard e invariate, le includo per completezza)
-
+// --- RESTO (SETTINGS, UNLOCK, FLASHCARD) ---
 function showConfigMenu() { previousScreen = 'main-menu'; renderCheckboxes('topic-options', 'lang-options'); showScreen('config-menu'); }
 function showSettingsMenu() { 
     if(document.getElementById('sentence-screen').style.display==='flex') previousScreen='sentence-screen';
@@ -175,7 +202,6 @@ function showSettingsMenu() {
     updateThemeButtons(); showScreen('settings-menu'); 
 }
 
-// Unlock Menu
 function showUnlockMenu() { renderCheckboxes('unlock-topic-options', 'unlock-lang-options'); showScreen('unlock-menu'); }
 function performUnlock() {
     const c=document.getElementById('unlock-menu');
@@ -193,7 +219,6 @@ function performUnlock() {
     saveProgress(); alert(cnt+" carte sbloccate."); showSettingsMenu();
 }
 
-// Reset / Export / Import
 function exportData() { 
     let d = { flashcards: userProgress, sentences: userSentenceProgress };
     let u = "data:text/json;charset=utf-8,"+encodeURIComponent(JSON.stringify(d));
@@ -226,7 +251,6 @@ function performReset(){
     saveProgress(); alert("Reset OK"); showSettingsMenu();
 }
 
-// Flashcard Logic Standard
 function renderCheckboxes(tid, lid) {
     const tc=document.getElementById(tid); const lc=document.getElementById(lid);
     if(!tc||!lc)return; tc.innerHTML=""; lc.innerHTML="";
