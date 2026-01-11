@@ -14,7 +14,8 @@ window.onload = function() {
 
 // --- 1. NAVIGAZIONE ---
 function showScreen(screenId) {
-    const screens = ['main-menu', 'config-menu', 'settings-menu', 'game-screen', 'progress-menu', 'reset-menu', 'sentence-screen'];
+    // AGGIUNTO 'unlock-menu' alla lista
+    const screens = ['main-menu', 'config-menu', 'settings-menu', 'game-screen', 'progress-menu', 'reset-menu', 'sentence-screen', 'unlock-menu'];
     screens.forEach(s => {
         const el = document.getElementById(s);
         if(el) el.style.display = 'none';
@@ -50,17 +51,14 @@ function showSettingsMenu() {
 
 // --- 2. GENERATORE DI FRASI INTELLIGENTE ---
 function startSentenceMode() {
-    // 1. Raccogli tutte le carte "Perfette"
     let knownCards = [];
     Object.keys(decks).forEach(k => {
         knownCards = [...knownCards, ...decks[k].cards.filter(c => userProgress[c.id] === 'perfect')];
     });
 
-    // 2. Dividi per Lingua
     let pool = { zh: [], ja: [], ar: [] };
     knownCards.forEach(c => { if(pool[c.lang]) pool[c.lang].push(c); });
 
-    // 3. Verifica requisiti minimi per lingua (almeno 1 pronome e 1 verbo)
     let viableLangs = [];
     ['zh', 'ja', 'ar'].forEach(l => {
         let hasPronoun = pool[l].some(c => c.pos === 'pronoun');
@@ -69,7 +67,7 @@ function startSentenceMode() {
     });
 
     if(viableLangs.length === 0) {
-        alert("Non hai ancora abbastanza vocaboli 'Perfetti'!\n\nStudia i mazzi Grammatica e Cibo/Viaggio per sbloccare pronomi e verbi.");
+        alert("Non hai ancora abbastanza vocaboli 'Perfetti'!\n\nStudia i mazzi Grammatica e Cibo/Viaggio (o usa il tasto 'Sblocca Tutto' nelle impostazioni).");
         return;
     }
 
@@ -86,72 +84,44 @@ function generateNextSentence(pool, viableLangs) {
     let lang = viableLangs[Math.floor(Math.random() * viableLangs.length)];
     let words = pool[lang];
 
-    // Filtra per POS
     let pronouns = words.filter(c => c.pos === 'pronoun');
     let verbs = words.filter(c => c.pos && c.pos.startsWith('verb'));
     
-    // Seleziona un verbo a caso
     const rand = (arr) => arr[Math.floor(Math.random() * arr.length)];
     let verb = rand(verbs);
     let subj = rand(pronouns);
     
-    // LOGICA SEMANTICA: Cosa può fare questo verbo?
     let validObjects = [];
-    
-    if (verb.pos === 'verb_eat') {
-        validObjects = words.filter(c => c.pos === 'food');
-    } else if (verb.pos === 'verb_drink') {
-        validObjects = words.filter(c => c.pos === 'drink');
-    } else if (verb.pos === 'verb_move') {
-        // Andare -> Luogo
-        validObjects = words.filter(c => c.pos === 'place');
-    } else {
-        // Verbi generali (Vedere, Essere, Avere, Piacere) -> Tutto tranne pronomi e verbi
-        validObjects = words.filter(c => ['noun', 'place', 'food', 'drink', 'adj'].includes(c.pos));
-    }
+    if (verb.pos === 'verb_eat') validObjects = words.filter(c => c.pos === 'food');
+    else if (verb.pos === 'verb_drink') validObjects = words.filter(c => c.pos === 'drink');
+    else if (verb.pos === 'verb_move') validObjects = words.filter(c => c.pos === 'place');
+    else validObjects = words.filter(c => ['noun', 'place', 'food', 'drink', 'adj'].includes(c.pos));
 
-    // Se non abbiamo oggetti validi per quel verbo (es. sai dire "Mangiare" ma non sai "Mela"), riprova
-    if (validObjects.length === 0) {
-        // Riprova con un altro tentativo (o cambia lingua se sfortunato, ma qui semplifichiamo richiamando la funzione)
-        // Per evitare loop infiniti, se fallisce usiamo un fallback generico se possibile
-        return generateNextSentence(pool, viableLangs);
-    }
+    if (validObjects.length === 0) return generateNextSentence(pool, viableLangs);
 
     let obj = rand(validObjects);
     let sentenceParts = [];
     let translation = "";
 
-    // COSTRUZIONE FRASE
     if (lang === 'zh') {
-        // Cinese: SVO
         sentenceParts = [subj, verb, obj];
         translation = `${subj.meaning} ${verb.meaning} ${obj.meaning}`;
-        // Fix traduzioni specifiche
         if(verb.meaning === 'Andare') translation = `${subj.meaning} va a ${obj.meaning}`;
         if(verb.meaning === 'Essere') translation = `${subj.meaning} è ${obj.meaning}`;
         if(verb.meaning === 'Stare a / In') translation = `${subj.meaning} è a ${obj.meaning}`;
-
     } else if (lang === 'ja') {
-        // Giapponese: SOV
         let partWa = { word: 'は', meaning: '(sogg.)', lang: 'ja' };
-        let partObj = { word: 'を', meaning: '(ogg.)', lang: 'ja' }; // Default
-        
-        if (verb.pos === 'verb_move') partObj = { word: 'に', meaning: 'a', lang: 'ja' }; // Moto a luogo
-        if (verb.word === '好き') partObj = { word: 'が', meaning: '(sogg. logico)', lang: 'ja' }; // Mi piace (Ga)
-
+        let partObj = { word: 'を', meaning: '(ogg.)', lang: 'ja' };
+        if (verb.pos === 'verb_move') partObj = { word: 'に', meaning: 'a', lang: 'ja' };
+        if (verb.word === '好き') partObj = { word: 'が', meaning: '(sogg. logico)', lang: 'ja' };
         sentenceParts = [subj, partWa, obj, partObj, verb];
         translation = `${subj.meaning} ... ${obj.meaning} ... ${verb.meaning}`;
-
     } else if (lang === 'ar') {
-        // Arabo: VSO (Verb + Subj + Obj)
         let prep = {word:'', meaning:''};
         if(verb.pos === 'verb_move' || obj.pos === 'place') {
-            // Se non c'è già una preposizione nel verbo, aggiungiamo "fi" (in) o "ila" (a)
-            // Semplificazione: se luogo, mettiamo "in/a"
              if(verb.word !== 'يَذْهَبُ') prep = words.find(w => w.pos === 'prep') || {word:'فِي', meaning:'in'};
-             else prep = {word:'إِلَى', meaning:'a'}; // Va -> A
+             else prep = {word:'إِلَى', meaning:'a'};
         }
-
         sentenceParts = [verb, subj];
         if(prep.word) sentenceParts.push(prep);
         sentenceParts.push(obj);
@@ -169,49 +139,89 @@ function renderSentence(parts, translation, lang) {
     document.getElementById('sentLangTag').innerText = getLangNameFull(lang);
     document.getElementById('sentLangTag').style.color = getLangColor(lang);
     document.getElementById('sentTranslation').innerText = translation;
-    
     currentSentenceText = parts.map(p => p.word).join(''); 
-
     parts.forEach(part => {
         if(!part.word) return;
         let span = document.createElement('span');
         span.className = 'clickable-word';
         span.innerText = part.word;
         span.setAttribute('data-meaning', part.meaning);
-        span.onclick = function() {
-            this.classList.add('show-hint');
-            setTimeout(() => this.classList.remove('show-hint'), 2000);
-        };
+        span.onclick = function() { this.classList.add('show-hint'); setTimeout(() => this.classList.remove('show-hint'), 2000); };
         container.appendChild(span);
     });
 }
-
 function revealSentence() {
     document.getElementById('sentenceSolution').style.visibility = 'visible';
     document.getElementById('btnShowSent').style.display = 'none';
     document.getElementById('sentControls').style.display = 'grid';
 }
-
-function nextSentence() {
-    if(window.lastPool) generateNextSentence(window.lastPool, window.lastViable);
-    else startSentenceMode();
-}
-
+function nextSentence() { if(window.lastPool) generateNextSentence(window.lastPool, window.lastViable); else startSentenceMode(); }
 function speakSentence() {
     let text = currentSentenceText;
     let langCode = document.getElementById('sentLangTag').innerText;
     let speech = new SpeechSynthesisUtterance(text);
     if (langCode.includes('Cinese')) speech.lang = 'zh-CN';
     if (langCode.includes('Giapponese')) speech.lang = 'ja-JP';
-    if (langCode.includes('Arabo')) {
-         speech.lang = 'ar-SA';
-         text = text.replace(/\s/g, ''); 
-         speech.text = text;
-    }
+    if (langCode.includes('Arabo')) { speech.lang = 'ar-SA'; text = text.replace(/\s/g, ''); speech.text = text; }
     window.speechSynthesis.speak(speech);
 }
 
-// --- FLASHCARD ENGINE & UTILS (Uguale a prima) ---
+// --- 3. GESTIONE DATI (RESET, EXPORT E SBLOCCO) ---
+function exportData() {
+    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(userProgress));
+    const dl = document.createElement('a'); dl.setAttribute("href", dataStr); dl.setAttribute("download", "go_backup.json");
+    document.body.appendChild(dl); dl.click(); dl.remove();
+}
+function importData(input) {
+    const file = input.files[0]; if (!file) return;
+    const reader = new FileReader();
+    reader.onload = function(e) { try { userProgress = JSON.parse(e.target.result); saveProgress(); alert("Fatto!"); } catch (err) { alert("Errore file."); } };
+    reader.readAsText(file);
+}
+
+// Menu Reset
+function showResetMenu() { renderCheckboxes('reset-topic-options', 'reset-lang-options'); showScreen('reset-menu'); }
+function performReset() {
+    const container = document.getElementById('reset-menu');
+    let st = Array.from(container.querySelectorAll('input[name="topic"]:checked')).map(cb => cb.value);
+    let sl = Array.from(container.querySelectorAll('input[name="lang"]:checked')).map(cb => cb.value);
+    if(st.length===0 && sl.length===0) return alert("Seleziona cosa resettare.");
+    if(!confirm("Sicuro di cancellare?")) return;
+    Object.keys(decks).forEach(key => {
+        let d = decks[key];
+        if (st.includes(d.tags[0]) || sl.includes(d.tags[1])) d.cards.forEach(c => delete userProgress[c.id]);
+    });
+    saveProgress(); alert("Reset completato."); showSettingsMenu();
+}
+
+// Menu Sblocco (NUOVO)
+function showUnlockMenu() {
+    renderCheckboxes('unlock-topic-options', 'unlock-lang-options');
+    showScreen('unlock-menu');
+}
+function performUnlock() {
+    const container = document.getElementById('unlock-menu');
+    let st = Array.from(container.querySelectorAll('input[name="topic"]:checked')).map(cb => cb.value);
+    let sl = Array.from(container.querySelectorAll('input[name="lang"]:checked')).map(cb => cb.value);
+    if(st.length===0 && sl.length===0) return alert("Seleziona cosa sbloccare.");
+    if(!confirm("Confermi di sbloccare tutte queste carte come 'Perfette'?")) return;
+    
+    let count = 0;
+    Object.keys(decks).forEach(key => {
+        let d = decks[key];
+        if (st.includes(d.tags[0]) || sl.includes(d.tags[1])) {
+            d.cards.forEach(c => {
+                userProgress[c.id] = 'perfect';
+                count++;
+            });
+        }
+    });
+    saveProgress(); 
+    alert(`Fatto! ${count} carte sbloccate.`); 
+    showSettingsMenu();
+}
+
+// --- UTILS & FLASHCARDS ---
 function renderCheckboxes(topicId, langId) {
     const topicContainer = document.getElementById(topicId);
     const langContainer = document.getElementById(langId);
@@ -219,12 +229,10 @@ function renderCheckboxes(topicId, langId) {
     topicContainer.innerHTML = ""; langContainer.innerHTML = "";
     let topics = new Set(); let langs = new Set();
     Object.keys(decks).forEach(key => {
-        let t = decks[key].tags;
-        if (!t) return;
-        if(t[0]) topics.add(t[0]);
-        if(t[1]) langs.add(t[1]);
+        let t = decks[key].tags; if (!t) return;
+        if(t[0]) topics.add(t[0]); if(t[1]) langs.add(t[1]);
     });
-    const isReset = topicId.includes('reset');
+    const isReset = topicId.includes('reset'); // Default check per config e unlock, uncheck per reset
     const defaultChecked = !isReset; 
     topics.forEach(topic => {
         let prettyName = capitalize(topic);
@@ -238,19 +246,15 @@ function renderCheckboxes(topicId, langId) {
 
 function startCustomSession() {
     const container = document.getElementById('config-menu');
-    let selectedTopics = Array.from(container.querySelectorAll('input[name="topic"]:checked')).map(cb => cb.value);
-    let selectedLangs = Array.from(container.querySelectorAll('input[name="lang"]:checked')).map(cb => cb.value);
-    if(selectedTopics.length === 0 || selectedLangs.length === 0) return alert("Seleziona opzioni!");
-
+    let st = Array.from(container.querySelectorAll('input[name="topic"]:checked')).map(cb => cb.value);
+    let sl = Array.from(container.querySelectorAll('input[name="lang"]:checked')).map(cb => cb.value);
+    if(st.length===0 || sl.length===0) return alert("Seleziona opzioni!");
     playDeck = [];
     Object.keys(decks).forEach(key => {
-        let deckData = decks[key];
-        if (selectedTopics.includes(deckData.tags[0]) && selectedLangs.includes(deckData.tags[1])) {
-            playDeck = [...playDeck, ...deckData.cards];
-        }
+        let d = decks[key];
+        if (st.includes(d.tags[0]) && sl.includes(d.tags[1])) playDeck = [...playDeck, ...d.cards];
     });
-
-    if (playDeck.length === 0) return alert("Nessuna carta.");
+    if(playDeck.length===0) return alert("Nessuna carta.");
     prepareSessionDeck();
 }
 
@@ -292,7 +296,6 @@ function loadNextCard() {
     cardElement.classList.remove('flipped');
     document.getElementById('controls').classList.remove('controls-active');
     document.getElementById('instructionText').innerText = "Tocca per girare";
-
     setTimeout(() => {
         document.getElementById('langTag').innerText = getLangName(currentCard.lang);
         document.getElementById('wordDisplay').innerText = currentCard.word;
@@ -330,45 +333,12 @@ function handleResult(result) {
     loadNextCard();
 }
 
-// Backup & Reset
-function exportData() {
-    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(userProgress));
-    const dl = document.createElement('a');
-    dl.setAttribute("href", dataStr);
-    dl.setAttribute("download", "go_backup.json");
-    document.body.appendChild(dl); dl.click(); dl.remove();
-}
-function importData(input) {
-    const file = input.files[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = function(e) {
-        try { userProgress = JSON.parse(e.target.result); saveProgress(); alert("Fatto!"); } 
-        catch (err) { alert("Errore file."); }
-    };
-    reader.readAsText(file);
-}
-function showResetMenu() { renderCheckboxes('reset-topic-options', 'reset-lang-options'); showScreen('reset-menu'); }
-function performReset() {
-    const container = document.getElementById('reset-menu');
-    let st = Array.from(container.querySelectorAll('input[name="topic"]:checked')).map(cb => cb.value);
-    let sl = Array.from(container.querySelectorAll('input[name="lang"]:checked')).map(cb => cb.value);
-    if(st.length===0 && sl.length===0) return alert("Seleziona cosa cancellare.");
-    if(!confirm("Sicuro di cancellare?")) return;
-    Object.keys(decks).forEach(key => {
-        let d = decks[key];
-        if (st.includes(d.tags[0]) || sl.includes(d.tags[1])) d.cards.forEach(c => delete userProgress[c.id]);
-    });
-    saveProgress(); alert("Reset completato."); showSettingsMenu();
-}
-
 function showGlobalProgress() {
     let targetDeck = (playDeck.length > 0) ? playDeck : getAllCards();
     let stats = { total: 0, perfect: 0, learning: 0, locked: 0 };
     const listContainer = document.getElementById('progress-list');
     listContainer.innerHTML = "";
     stats.total = targetDeck.length;
-
     targetDeck.forEach(card => {
         let isLocked = false;
         if (card.requires) {
@@ -379,7 +349,6 @@ function showGlobalProgress() {
         if (isLocked) stats.locked++;
         else if (status === 'perfect') stats.perfect++;
         else if (status) stats.learning++;
-
         const item = document.createElement('div');
         item.className = 'prog-item';
         if (isLocked) item.classList.add('status-locked');
@@ -397,13 +366,13 @@ function closeProgress() { if (playDeck.length > 0) showScreen('game-screen'); e
 function getAllCards() { let all = []; Object.keys(decks).forEach(k => all = [...all, ...decks[k].cards]); return all; }
 function saveProgress() { localStorage.setItem('go_flashcards_progress', JSON.stringify(userProgress)); }
 function loadProgress() { const d = localStorage.getItem('go_flashcards_progress'); if (d) userProgress = JSON.parse(d); }
-function setTheme(mode) { localStorage.setItem('go_theme_mode', mode); applyTheme(mode); updateThemeButtons(); }
-function applyTheme(mode) {
+function setTheme(m) { localStorage.setItem('go_theme_mode', m); applyTheme(m); updateThemeButtons(); }
+function applyTheme(m) {
     const body = document.body;
-    if(mode === 'auto') {
+    if(m === 'auto') {
         if(window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) body.classList.add('dark-mode');
         else body.classList.remove('dark-mode');
-    } else if (mode === 'dark') body.classList.add('dark-mode');
+    } else if (m === 'dark') body.classList.add('dark-mode');
     else body.classList.remove('dark-mode');
 }
 function updateThemeButtons() {
