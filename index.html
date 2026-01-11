@@ -6,7 +6,7 @@
     <title>Go</title>
     <link rel="icon" type="image/png" href="icon.png">
     <link rel="apple-touch-icon" href="icon.png">
-    <link rel="stylesheet" href="style.css?v=8">
+    <link rel="stylesheet" href="style.css?v=8.1">
 </head>
 <body>
 
@@ -25,10 +25,10 @@
         </div>
         <div class="menu-buttons">
             <button onclick="showConfigMenu()" class="main-btn primary-btn">🎴 Flashcards</button>
-            <button onclick="startSentenceMode()" class="main-btn" style="background-color:#9b59b6; color:white;">📝 Generatore Frasi</button>
+            <button onclick="startSentenceMode()" class="main-btn" style="background-color:#9b59b6; color:white;">📝 Frasi</button>
             <button onclick="showSettingsMenu()" class="main-btn secondary-btn">⚙️ Impostazioni</button>
         </div>
-        <p class="footer-ver">v8.0 - Sentence Bank</p>
+        <p class="footer-ver">v8.1 - Fixes</p>
     </div>
 
     <div id="settings-menu" class="menu-overlay full-center" style="display:none;">
@@ -103,7 +103,12 @@
     </div>
 
     <div class="app-container" id="game-screen" style="display:none;">
-        <header><h1 id="deckTitle">Sessione</h1><p id="deckStatus">Carte: 0</p></header>
+        <header>
+             <div class="header-row">
+                <h1 id="deckTitle">Sessione</h1>
+                <p id="deckStatus">Carte: 0</p>
+            </div>
+        </header>
         <div class="card-container">
             <div class="card" id="flashcard" onclick="flipCard()">
                 <div class="card-front">
@@ -136,11 +141,11 @@
 
     <div class="app-container" id="sentence-screen" style="display:none;">
         <header>
-            <div style="display:flex; justify-content:space-between; align-items:center; width:100%;">
+            <div class="header-row">
                 <h1>Frasi</h1>
                 <button onclick="showSentenceProgress()" class="icon-btn" style="font-size:0.8rem;">📊 Stat</button>
             </div>
-            <p id="sentStatus">Frasi disponibili: 0</p>
+            <p id="sentStatus" style="text-align:left; color:#666; font-size:0.9rem;">Frasi disponibili: 0</p>
         </header>
 
         <div class="card-container">
@@ -175,8 +180,8 @@
         <p class="instruction" id="s_instructionText">Tocca per girare</p>
     </div>
 
-    <script src="database.js?v=8"></script>
-    <script src="script.js?v=8"></script>
+    <script src="database.js?v=8.1"></script>
+    <script src="script.js?v=8.1"></script>
     <script>
         function speakWord(event) {
             event.stopPropagation();
