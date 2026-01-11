@@ -30,6 +30,7 @@ body {
     text-align: center;
     transition: background 0.3s, color 0.3s;
     overflow-x: hidden;
+    -webkit-tap-highlight-color: transparent; /* Rimuove il flash blu su mobile */
 }
 
 .app-container {
@@ -39,6 +40,7 @@ body {
     justify-content: center;
 }
 
+/* TOP BAR */
 .top-bar {
     position: fixed; top: 0; left: 0; width: 100%;
     padding: 10px 15px; box-sizing: border-box;
@@ -51,20 +53,20 @@ body {
     padding: 8px 12px; border-radius: 8px; backdrop-filter: blur(5px);
 }
 
+/* MENUS */
 .menu-overlay {
     position: fixed; top: 0; left: 0; width: 100%; height: 100%;
     background-color: var(--bg-color); z-index: 50;
     padding: 20px; box-sizing: border-box;
     overflow-y: auto;
 }
-
 .full-center { display: flex; flex-direction: column; justify-content: center; align-items: center; }
 .center-top { display: flex; flex-direction: column; align-items: center; }
 
-/* MAIN MENU */
 .logo-container { margin-bottom: 40px; }
 .app-logo { width: 120px; height: 120px; border-radius: 25px; box-shadow: 0 10px 20px var(--card-shadow); }
 .app-title { font-size: 2.5rem; margin: 10px 0; font-weight: 800; letter-spacing: -1px; }
+
 .menu-buttons { display: flex; flex-direction: column; gap: 15px; width: 100%; max-width: 300px; }
 .main-btn {
     padding: 18px; border: none; border-radius: 15px;
@@ -76,48 +78,23 @@ body {
 .secondary-btn { background-color: var(--card-bg); color: var(--text-color); border: 1px solid var(--border-color); }
 .footer-ver { position: absolute; bottom: 20px; color: var(--header-p); font-size: 0.8rem; opacity: 0.5; }
 
-/* SETTINGS */
+/* SETTINGS & CHECKBOXES */
 .settings-panel { width: 100%; max-width: 350px; }
 .setting-group { background: var(--card-bg); padding: 20px; border-radius: 15px; border: 1px solid var(--border-color); margin-bottom: 20px; }
-.setting-group h3 { margin: 0 0 15px 0; font-size: 1rem; text-align: left; }
-.setting-desc { font-size: 0.8rem; color: var(--header-p); margin-top: 10px; }
-
 .theme-switcher { display: flex; gap: 5px; background: var(--btn-bg); padding: 5px; border-radius: 12px; }
-.theme-btn {
-    flex: 1; padding: 10px; border: none; background: transparent;
-    color: var(--text-color); font-weight: bold; border-radius: 8px; cursor: pointer; font-size: 0.9rem;
-}
+.theme-btn { flex: 1; padding: 10px; border: none; background: transparent; color: var(--text-color); font-weight: bold; border-radius: 8px; cursor: pointer; }
 .theme-btn.active { background-color: var(--card-bg); box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-
-/* GESTIONE DATI */
 .data-buttons { display: flex; flex-direction: column; gap: 10px; }
-.data-btn {
-    padding: 12px; border: none; border-radius: 10px; background-color: var(--btn-bg);
-    color: var(--text-color); font-weight: bold; cursor: pointer; text-align: left;
-}
+.data-btn { padding: 12px; border: none; border-radius: 10px; background-color: var(--btn-bg); color: var(--text-color); font-weight: bold; cursor: pointer; text-align: left; }
 .btn-danger { background-color: #fadbd8; color: #c0392b; }
-body.dark-mode .btn-danger { background-color: #581818; color: #e74c3c; }
-
-/* CONFIG & RESET */
 .scroll-container { width: 100%; max-width: 400px; padding-bottom: 20px; }
 .config-section { width: 100%; margin-bottom: 20px; text-align: left; }
-.config-section h3 { font-size: 1rem; color: var(--header-p); margin-bottom: 10px; border-bottom: 1px solid var(--border-color); padding-bottom: 5px; }
 .options-grid { display: flex; flex-wrap: wrap; gap: 10px; }
-.chk-label {
-    display: flex; align-items: center; gap: 8px;
-    background-color: var(--card-bg); padding: 10px 15px;
-    border-radius: 10px; border: 1px solid var(--border-color);
-    cursor: pointer; flex-grow: 1; user-select: none;
-}
+.chk-label { display: flex; align-items: center; gap: 8px; background-color: var(--card-bg); padding: 10px 15px; border-radius: 10px; border: 1px solid var(--border-color); cursor: pointer; flex-grow: 1; }
 .chk-label input { width: 18px; height: 18px; accent-color: var(--primary-color); }
-.start-btn {
-    padding: 15px 50px; background-color: var(--primary-color);
-    color: white; border: none; border-radius: 30px; font-size: 1.2rem;
-    font-weight: bold; cursor: pointer; margin-bottom: 30px;
-    box-shadow: 0 4px 15px rgba(52, 152, 219, 0.4);
-}
+.start-btn { padding: 15px 50px; background-color: var(--primary-color); color: white; border: none; border-radius: 30px; font-size: 1.2rem; font-weight: bold; cursor: pointer; margin-bottom: 30px; box-shadow: 0 4px 15px rgba(52, 152, 219, 0.4); }
 
-/* STATS */
+/* STATS & PUNTINI (Questi erano spariti!) */
 .stats-dashboard { width: 100%; max-width: 500px; display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 10px; margin: 60px 0 20px 0; }
 .stat-box { background-color: var(--card-bg); border-radius: 10px; padding: 10px 5px; border: 1px solid var(--border-color); display: flex; flex-direction: column; align-items: center; }
 .stat-num { font-size: 1.3rem; font-weight: bold; }
@@ -128,32 +105,35 @@ body.dark-mode .btn-danger { background-color: #581818; color: #e74c3c; }
 .prog-info { display: flex; flex-direction: column; gap: 4px; }
 .prog-word { font-size: 1.3rem; font-weight: bold; }
 .prog-meaning { font-size: 0.9rem; color: var(--header-p); }
-.prog-status { font-size: 1.2rem; }
+.prog-status { font-size: 1.2rem; display:flex; align-items:center; }
 .btn-close { background: transparent; border: 2px solid var(--text-color); color: var(--text-color); width: 30px; height: 30px; border-radius: 50%; font-weight: bold; cursor: pointer; }
 
-/* GAME CARD */
-header h1 { font-size: 1.4rem; margin: 40px 0 5px 0; }
-header p { color: var(--header-p); font-size: 0.9rem; margin: 0; }
-.card-container { flex-grow: 1; perspective: 1000px; margin: 20px auto; width: 100%; max-height: 400px; cursor: pointer; }
+/* CLASSI PUNTINI (DOTS) RIPRISTINATE */
+.dot { display: inline-block; width: 12px; height: 12px; border-radius: 50%; }
+.dot-green { background-color: #2ecc71; }
+.dot-blue { background-color: #3498db; }
+.dot-yellow { background-color: #f1c40f; }
+.dot-red { background-color: #e74c3c; }
+.dot-grey { background-color: #ddd; }
+
+/* CARDS & HEADER */
+/* Header specifico per le carte per evitare tagli */
+header { width: 100%; box-sizing: border-box; margin-top: 40px; margin-bottom: 10px; }
+.header-row { display: flex; justify-content: space-between; align-items: center; width: 100%; }
+.header-row h1 { font-size: 1.4rem; margin: 0; text-align: left; }
+.header-row p { font-size: 0.9rem; color: var(--header-p); margin: 0; text-align: left;}
+
+.card-container { flex-grow: 1; perspective: 1000px; margin: 10px auto; width: 100%; max-height: 400px; cursor: pointer; }
 .card { width: 100%; height: 100%; position: relative; transition: transform 0.5s; transform-style: preserve-3d; box-shadow: 0 10px 20px var(--card-shadow); border-radius: 20px; }
 .card.flipped { transform: rotateY(180deg); }
 .card-front, .card-back { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; display: flex; flex-direction: column; justify-content: center; align-items: center; border-radius: 20px; background-color: var(--card-bg); padding: 15px; box-sizing: border-box; }
-.card-front { z-index: 2; }
 .card-back { transform: rotateY(180deg); border: 2px solid var(--btn-bg); }
 .lang-tag { position: absolute; top: 15px; right: 15px; background: var(--btn-bg); color: var(--btn-text); padding: 4px 10px; border-radius: 12px; font-size: 0.75rem; font-weight: bold; }
-#wordDisplay { font-size: 3.5rem; margin: 0; color: var(--text-color); }
 .hint { position: absolute; bottom: 15px; color: #888; font-size: 0.8rem; }
-.back-word { font-size: 2.5rem; margin: 0 0 10px 0; color: var(--text-color); font-weight: normal; }
-#pronunciationDisplay { font-size: 1.4rem; color: #666; font-weight: bold; }
-body.dark-mode #pronunciationDisplay { color: #aaa; }
-#meaningDisplay { font-size: 1.2rem; color: var(--header-p); }
-.ipa-text { font-family: 'Courier New', monospace; color: #888; font-size: 1rem; margin-top: -5px; margin-bottom: 15px; }
-.type-tag { margin-top: 15px; padding: 4px 12px; background-color: #d1f2eb; color: #117a65; border-radius: 5px; font-size: 0.8rem; }
-body.dark-mode .type-tag { background-color: #11443a; color: #81e6d3; }
 .audio-btn { background:none; border:none; cursor:pointer; font-size: 1.4rem; }
 body.dark-mode .audio-btn { filter: invert(1); }
 
-/* CONTROLS (Fix Blocco) */
+/* CONTROLS */
 .controls-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; opacity: 0.3; pointer-events: none; transition: opacity 0.3s; }
 .controls-active { opacity: 1 !important; pointer-events: auto !important; }
 .btn { padding: 12px; border: none; border-radius: 10px; font-size: 0.9rem; font-weight: bold; color: white; cursor: pointer; }
@@ -162,50 +142,3 @@ body.dark-mode .audio-btn { filter: invert(1); }
 .btn-blue { background-color: #3498db; }
 .btn-yellow { background-color: #f1c40f; color: #333; }
 .btn-green { background-color: #2ecc71; }
-.instruction { font-size: 0.8rem; color: #888; margin-top: 10px; }
-
-/* SENTENCE GENERATOR */
-.sentence-box {
-    font-size: 2rem;
-    margin: 20px 0;
-    line-height: 1.4;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 8px;
-    width: 100%;
-}
-
-/* FIX ARABO RTL */
-.rtl-text {
-    direction: rtl;
-    flex-direction: row-reverse; /* Inverte l'ordine dei flex item */
-}
-
-.clickable-word {
-    border-bottom: 2px dashed var(--border-color);
-    cursor: pointer;
-    position: relative;
-    transition: color 0.2s;
-}
-
-.clickable-word:hover { color: var(--primary-color); border-bottom-color: var(--primary-color); }
-.clickable-word::after {
-    content: attr(data-meaning);
-    position: absolute;
-    bottom: 100%; left: 50%; transform: translateX(-50%);
-    background: #333; color: white; padding: 5px 10px;
-    border-radius: 5px; font-size: 0.8rem; white-space: nowrap;
-    opacity: 0; pointer-events: none; transition: opacity 0.2s; z-index: 10;
-}
-.clickable-word:active::after, .clickable-word:focus::after, .clickable-word.show-hint::after { opacity: 1; }
-
-.sentence-solution {
-    margin-top: 20px;
-    padding: 20px;
-    background-color: var(--btn-bg);
-    border-radius: 15px;
-    width: 100%;
-    box-sizing: border-box;
-}
-#sentTranslation { font-size: 1.2rem; color: var(--text-color); margin: 0; }
