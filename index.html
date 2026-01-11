@@ -28,7 +28,7 @@
             <button onclick="startSentenceMode()" class="main-btn" style="background-color:#9b59b6; color:white;">📝 Generatore Frasi</button>
             <button onclick="showSettingsMenu()" class="main-btn secondary-btn">⚙️ Impostazioni</button>
         </div>
-        <p class="footer-ver">v5.5 - Sentences</p>
+        <p class="footer-ver">v6.0 - Unlocker</p>
     </div>
 
     <div id="settings-menu" class="menu-overlay full-center" style="display:none;">
@@ -47,6 +47,7 @@
                 <div class="data-buttons">
                     <button onclick="exportData()" class="data-btn">⬇️ Esporta Backup</button>
                     <button onclick="document.getElementById('fileInput').click()" class="data-btn">⬆️ Importa Backup</button>
+                    <button onclick="showUnlockMenu()" class="data-btn" style="background-color:#f39c12; color:white;">🔓 Sblocca Tutto (Cheat)...</button>
                     <button onclick="showResetMenu()" class="data-btn btn-danger">🗑️ Reset...</button>
                 </div>
                 <input type="file" id="fileInput" style="display:none" onchange="importData(this)">
@@ -62,6 +63,17 @@
             <div class="config-section"><h3>Lingue</h3><div id="lang-options" class="options-grid"></div></div>
         </div>
         <button onclick="startCustomSession()" class="start-btn">INIZIA</button>
+    </div>
+
+    <div id="unlock-menu" class="menu-overlay center-top" style="display:none;">
+        <h1 style="margin-top: 60px; color:#f39c12;">Sblocca Carte</h1>
+        <p style="color:var(--header-p); margin-bottom:20px;">Segna come "Perfette" tutte le carte di:</p>
+        <div class="scroll-container">
+            <div class="config-section"><h3>Argomenti</h3><div id="unlock-topic-options" class="options-grid"></div></div>
+            <div class="config-section"><h3>Lingue</h3><div id="unlock-lang-options" class="options-grid"></div></div>
+        </div>
+        <button onclick="performUnlock()" class="start-btn" style="background-color:#f39c12;">SBLOCCA ORA</button>
+        <button onclick="showSettingsMenu()" class="main-btn secondary-btn" style="margin-top:10px;">Annulla</button>
     </div>
 
     <div id="reset-menu" class="menu-overlay center-top" style="display:none;">
@@ -118,29 +130,20 @@
     </div>
 
     <div class="app-container" id="sentence-screen" style="display:none;">
-        <header>
-            <h1>Generatore Frasi</h1>
-            <p>Tocca una parola per l'aiuto</p>
-        </header>
-
+        <header><h1>Generatore Frasi</h1><p>Tocca una parola per l'aiuto</p></header>
         <div class="card-container">
             <div class="card" style="cursor: default;">
                 <div class="card-front" style="justify-content: flex-start; padding-top: 40px;">
                     <span class="lang-tag" id="sentLangTag">...</span>
-                    
-                    <div id="sentenceDisplay" class="sentence-box">
-                        </div>
-
+                    <div id="sentenceDisplay" class="sentence-box"></div>
                     <div id="sentenceSolution" class="sentence-solution" style="visibility: hidden;">
                         <p id="sentTranslation">...</p>
                         <button onclick="speakSentence()" class="audio-btn" style="font-size: 2rem; margin-top:10px;">🔊</button>
                     </div>
-                    
                     <button id="btnShowSent" onclick="revealSentence()" class="main-btn secondary-btn" style="margin-top:auto; width:100%;">Mostra Soluzione</button>
                 </div>
             </div>
         </div>
-
         <div class="controls-grid" id="sentControls" style="display:none;">
             <button class="btn btn-red" onclick="nextSentence()">Non so</button>
             <button class="btn btn-blue" onclick="nextSentence()">Difficile</button>
