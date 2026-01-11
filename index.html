@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Go</title>
+    <link rel="icon" type="image/png" href="icon.png">
+    <link rel="apple-touch-icon" href="icon.png">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="top-bar" id="topBar" style="display:none;">
+        <button onclick="goToHome()" class="icon-btn">🏠 Home</button>
+        <div style="display:flex; gap:10px;">
+            <button onclick="showGlobalProgress()" class="icon-btn" id="btnProgress">📊</button>
+            <button onclick="showSettingsMenu()" class="icon-btn">⚙️</button>
+        </div>
+    </div>
+
+    <div id="main-menu" class="menu-overlay full-center">
+        <div class="logo-container">
+            <img src="icon.png" alt="Go Logo" class="app-logo">
+            <h1 class="app-title">Go</h1>
+        </div>
+        <div class="menu-buttons">
+            <button onclick="showConfigMenu()" class="main-btn primary-btn">🎴 Flashcards</button>
+            <button onclick="startSentenceMode()" class="main-btn" style="background-color:#9b59b6; color:white;">📝 Generatore Frasi</button>
+            <button onclick="showSettingsMenu()" class="main-btn secondary-btn">⚙️ Impostazioni</button>
+        </div>
+        <p class="footer-ver">v5.5 - Sentences</p>
+    </div>
+
+    <div id="settings-menu" class="menu-overlay full-center" style="display:none;">
+        <div class="settings-panel">
+            <h2>Impostazioni</h2>
+            <div class="setting-group">
+                <h3>Tema</h3>
+                <div class="theme-switcher">
+                    <button onclick="setTheme('light')" id="theme-light" class="theme-btn">☀️ Light</button>
+                    <button onclick="setTheme('dark')" id="theme-dark" class="theme-btn">🌙 Dark</button>
+                    <button onclick="setTheme('auto')" id="theme-auto" class="theme-btn">🤖 Auto</button>
+                </div>
+            </div>
+            <div class="setting-group">
+                <h3>Gestione Dati</h3>
+                <div class="data-buttons">
+                    <button onclick="exportData()" class="data-btn">⬇️ Esporta Backup</button>
+                    <button onclick="document.getElementById('fileInput').click()" class="data-btn">⬆️ Importa Backup</button>
+                    <button onclick="showResetMenu()" class="data-btn btn-danger">🗑️ Reset...</button>
+                </div>
+                <input type="file" id="fileInput" style="display:none" onchange="importData(this)">
+            </div>
+            <button onclick="goBack()" class="main-btn secondary-btn" style="margin-top:20px;">Indietro</button>
+        </div>
+    </div>
+
+    <div id="config-menu" class="menu-overlay center-top" style="display:none;">
+        <h1 style="margin-top: 60px;">Crea Sessione</h1>
+        <div class="scroll-container">
+            <div class="config-section"><h3>Argomenti</h3><div id="topic-options" class="options-grid"></div></div>
+            <div class="config-section"><h3>Lingue</h3><div id="lang-options" class="options-grid"></div></div>
+        </div>
+        <button onclick="startCustomSession()" class="start-btn">INIZIA</button>
+    </div>
+
+    <div id="reset-menu" class="menu-overlay center-top" style="display:none;">
+        <h1 style="margin-top: 60px; color:#e74c3c;">Reset Progressi</h1>
+        <div class="scroll-container">
+            <div class="config-section"><h3>Argomenti</h3><div id="reset-topic-options" class="options-grid"></div></div>
+            <div class="config-section"><h3>Lingue</h3><div id="reset-lang-options" class="options-grid"></div></div>
+        </div>
+        <button onclick="performReset()" class="start-btn" style="background-color:#e74c3c;">CONFERMA RESET</button>
+        <button onclick="showSettingsMenu()" class="main-btn secondary-btn" style="margin-top:10px;">Annulla</button>
+    </div>
+
+    <div id="progress-menu" class="menu-overlay center-top" style="display:none;">
+        <div class="progress-header"><h2>Progressi</h2><button onclick="closeProgress()" class="btn-close">X</button></div>
+        <div class="stats-dashboard">
+            <div class="stat-box"><span id="stat-total" class="stat-num">0</span><span class="stat-label">Totali</span></div>
+            <div class="stat-box"><span id="stat-perfect" class="stat-num" style="color:#2ecc71;">0</span><span class="stat-label">Perfette</span></div>
+            <div class="stat-box"><span id="stat-learning" class="stat-num" style="color:#f1c40f;">0</span><span class="stat-label">In Corso</span></div>
+            <div class="stat-box"><span id="stat-locked" class="stat-num" style="color:#aaa;">0</span><span class="stat-label">Bloccate</span></div>
+        </div>
+        <div id="progress-list" class="progress-list-container"></div>
+    </div>
+
+    <div class="app-container" id="game-screen" style="display:none;">
+        <header><h1 id="deckTitle">Sessione</h1><p id="deckStatus">Carte: 0</p></header>
+        <div class="card-container">
+            <div class="card" id="flashcard" onclick="flipCard()">
+                <div class="card-front">
+                    <span class="lang-tag" id="langTag">Lingua</span>
+                    <h2 id="wordDisplay">...</h2>
+                    <p class="hint">Tocca per girare</p>
+                </div>
+                <div class="card-back">
+                    <div class="back-content">
+                        <h2 id="backWordDisplay" class="back-word">...</h2>
+                        <div style="display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 5px;">
+                            <h3 id="pronunciationDisplay" style="margin: 0; color: #555;">...</h3>
+                            <button onclick="speakWord(event)" class="audio-btn">🔊</button>
+                        </div>
+                        <p id="ipaDisplay" class="ipa-text">/ ... /</p>
+                        <p id="meaningDisplay">...</p>
+                        <div id="typeTag" class="type-tag">...</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="controls-grid" id="controls">
+            <button class="btn btn-red" onclick="handleResult('none')">Non so</button>
+            <button class="btn btn-blue" onclick="handleResult('reading')">Lettura</button>
+            <button class="btn btn-yellow" onclick="handleResult('meaning')">Senso</button>
+            <button class="btn btn-green" onclick="handleResult('perfect')">Perfetto</button>
+        </div>
+        <p class="instruction" id="instructionText">Tocca la carta per vedere la soluzione</p>
+    </div>
+
+    <div class="app-container" id="sentence-screen" style="display:none;">
+        <header>
+            <h1>Generatore Frasi</h1>
+            <p>Tocca una parola per l'aiuto</p>
+        </header>
+
+        <div class="card-container">
+            <div class="card" style="cursor: default;">
+                <div class="card-front" style="justify-content: flex-start; padding-top: 40px;">
+                    <span class="lang-tag" id="sentLangTag">...</span>
+                    
+                    <div id="sentenceDisplay" class="sentence-box">
+                        </div>
+
+                    <div id="sentenceSolution" class="sentence-solution" style="visibility: hidden;">
+                        <p id="sentTranslation">...</p>
+                        <button onclick="speakSentence()" class="audio-btn" style="font-size: 2rem; margin-top:10px;">🔊</button>
+                    </div>
+                    
+                    <button id="btnShowSent" onclick="revealSentence()" class="main-btn secondary-btn" style="margin-top:auto; width:100%;">Mostra Soluzione</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="controls-grid" id="sentControls" style="display:none;">
+            <button class="btn btn-red" onclick="nextSentence()">Non so</button>
+            <button class="btn btn-blue" onclick="nextSentence()">Difficile</button>
+            <button class="btn btn-green" onclick="nextSentence()">Perfetto</button>
+        </div>
+    </div>
+
+    <script src="database.js"></script>
+    <script src="script.js"></script>
+    <script>
+        function speakWord(event) {
+            event.stopPropagation();
+            if (window.speakWordScript) window.speakWordScript();
+        }
+    </script>
+</body>
+</html>
