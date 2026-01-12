@@ -30,7 +30,7 @@ body {
     text-align: center;
     transition: background 0.3s, color 0.3s;
     overflow-x: hidden;
-    -webkit-tap-highlight-color: transparent; /* Rimuove il flash blu su mobile */
+    -webkit-tap-highlight-color: transparent;
 }
 
 .app-container {
@@ -94,7 +94,7 @@ body {
 .chk-label input { width: 18px; height: 18px; accent-color: var(--primary-color); }
 .start-btn { padding: 15px 50px; background-color: var(--primary-color); color: white; border: none; border-radius: 30px; font-size: 1.2rem; font-weight: bold; cursor: pointer; margin-bottom: 30px; box-shadow: 0 4px 15px rgba(52, 152, 219, 0.4); }
 
-/* STATS & PUNTINI (Questi erano spariti!) */
+/* STATS */
 .stats-dashboard { width: 100%; max-width: 500px; display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 10px; margin: 60px 0 20px 0; }
 .stat-box { background-color: var(--card-bg); border-radius: 10px; padding: 10px 5px; border: 1px solid var(--border-color); display: flex; flex-direction: column; align-items: center; }
 .stat-num { font-size: 1.3rem; font-weight: bold; }
@@ -105,11 +105,12 @@ body {
 .prog-info { display: flex; flex-direction: column; gap: 4px; }
 .prog-word { font-size: 1.3rem; font-weight: bold; }
 .prog-meaning { font-size: 0.9rem; color: var(--header-p); }
-.prog-status { font-size: 1.2rem; display:flex; align-items:center; }
+.prog-status { font-size: 1.2rem; display:flex; align-items:center; justify-content: flex-end; }
 .btn-close { background: transparent; border: 2px solid var(--text-color); color: var(--text-color); width: 30px; height: 30px; border-radius: 50%; font-weight: bold; cursor: pointer; }
 
-/* CLASSI PUNTINI (DOTS) RIPRISTINATE */
-.dot { display: inline-block; width: 12px; height: 12px; border-radius: 50%; }
+/* --- QUI SONO I PUNTINI --- */
+/* Se mancavano queste righe, i puntini non si vedevano! */
+.dot { display: inline-block; width: 12px; height: 12px; border-radius: 50%; margin-left: 5px; }
 .dot-green { background-color: #2ecc71; }
 .dot-blue { background-color: #3498db; }
 .dot-yellow { background-color: #f1c40f; }
@@ -117,7 +118,6 @@ body {
 .dot-grey { background-color: #ddd; }
 
 /* CARDS & HEADER */
-/* Header specifico per le carte per evitare tagli */
 header { width: 100%; box-sizing: border-box; margin-top: 40px; margin-bottom: 10px; }
 .header-row { display: flex; justify-content: space-between; align-items: center; width: 100%; }
 .header-row h1 { font-size: 1.4rem; margin: 0; text-align: left; }
