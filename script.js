@@ -1,3 +1,7 @@
+// ==========================================
+// GO SCRIPT v0.16 - DEBUG & STABILITY
+// ==========================================
+
 // Variabili globali
 let playDeck = [];
 let currentCard = null;
@@ -12,14 +16,34 @@ let currentSentence = null;
 let isSentFlipped = false;
 
 window.onload = function() {
-    // Try-Catch per evitare che un errore nei dati blocchi tutto l'avvio
     try {
+        // RESET DI SICUREZZA PER NUOVA VERSIONE
+        // Se l'utente ha una versione vecchia dei dati, puliamo per evitare blocchi
+        if (!localStorage.getItem('v0.16_clean')) {
+            console.log("Eseguo pulizia dati per aggiornamento...");
+            localStorage.removeItem('go_flashcards_progress'); // Rimuove solo progressi carte
+            // Non rimuoviamo le impostazioni tema
+            localStorage.setItem('v0.16_clean', 'true');
+            alert("L'app è stata aggiornata alla v0.16!\n\nI progressi sono stati resettati per compatibilità con i nuovi 500 vocaboli.");
+        }
+
         loadSettings();
         loadProgress();
+        
+        // Verifica integrità Database
+        if (typeof decks === 'undefined') {
+            throw new Error("Il file database.js non è stato caricato correttamente.");
+        }
+        
+        // Conta le carte totali per verifica
+        let totalCards = 0;
+        Object.keys(decks).forEach(k => totalCards += decks[k].cards.length);
+        console.log("Totale carte caricate: " + totalCards);
+
         goToHome(); 
+
     } catch(e) {
-        console.error("Errore avvio:", e);
-        alert("Errore critico all'avvio. Prova a fare Reset dalle impostazioni se riesci.");
+        alert("ERRORE AVVIO: " + e.message);
     }
 };
 
@@ -42,32 +66,33 @@ function goBack() { showScreen(previousScreen); }
 
 // --- 2. FLASHCARDS ENGINE ---
 function startCustomSession() {
-    // Controllo se decks esiste
-    if (typeof decks === 'undefined') return alert("Errore: Database non caricato.");
+    try {
+        const c = document.getElementById('config-menu');
+        let st = Array.from(c.querySelectorAll('input[name="topic"]:checked')).map(x => x.value);
+        let sl = Array.from(c.querySelectorAll('input[name="lang"]:checked')).map(x => x.value);
+        
+        if (st.length === 0 || sl.length === 0) return alert("Seleziona almeno un argomento e una lingua!");
+        
+        playDeck = [];
+        Object.keys(decks).forEach(k => {
+            let d = decks[k];
+            if (st.includes(d.tags[0]) && sl.includes(d.tags[1])) {
+                playDeck = [...playDeck, ...d.cards];
+            }
+        });
 
-    const c = document.getElementById('config-menu');
-    let st = Array.from(c.querySelectorAll('input[name="topic"]:checked')).map(x => x.value);
-    let sl = Array.from(c.querySelectorAll('input[name="lang"]:checked')).map(x => x.value);
-    
-    if (st.length === 0 || sl.length === 0) return alert("Seleziona almeno un argomento e una lingua!");
-    
-    playDeck = [];
-    Object.keys(decks).forEach(k => {
-        let d = decks[k];
-        if (st.includes(d.tags[0]) && sl.includes(d.tags[1])) {
-            playDeck = [...playDeck, ...d.cards];
-        }
-    });
-
-    if (playDeck.length === 0) return alert("Nessuna carta trovata con questa combinazione.");
-    
-    prepareSessionDeck();
+        if (playDeck.length === 0) return alert("Nessuna carta trovata con questa combinazione.");
+        
+        prepareSessionDeck();
+    } catch (e) {
+        alert("Errore avvio sessione: " + e.message);
+    }
 }
 
 function prepareSessionDeck() {
     const SESSION_SIZE = 20; 
 
-    // 1. Identifica le carte NUOVE sbloccabili
+    // Identifica carte
     let unlockableCards = playDeck.filter(c => {
         if (userProgress[c.id] === 'perfect') return false; 
         if (c.requires) {
@@ -77,11 +102,9 @@ function prepareSessionDeck() {
         return true;
     });
 
-    // 2. Identifica le carte per il RIPASSO
     let reviewCards = playDeck.filter(c => userProgress[c.id] === 'perfect');
     shuffleArray(reviewCards);
 
-    // 3. Costruisci il mazzo
     let deckBuilder = [];
     let isReviewMode = false;
 
@@ -104,7 +127,7 @@ function prepareSessionDeck() {
     }
 
     if (deckBuilder.length === 0) return alert("Tutto completato! Fai un Reset o aggiungi argomenti.");
-    if (isReviewMode) alert("🎉 Carte nuove finite! Avvio ripasso.");
+    if (isReviewMode) alert("Modalità RIPASSO attivata.");
 
     deck = shuffleArray(deckBuilder);
     showScreen('game-screen');
@@ -112,43 +135,40 @@ function prepareSessionDeck() {
 }
 
 function loadNextCard() {
-    if (deck.length === 0) {
-        if(confirm("Sessione finita! Vuoi continuare?")) prepareSessionDeck();
-        else showConfigMenu();
-        return;
-    }
-
-    currentCard = deck[0];
-    isFlipped = false;
-    
-    const el = document.getElementById('flashcard');
-    if(el) el.classList.remove('flipped');
-    
-    // I controlli sono sempre attivi col nuovo CSS, ma cambiamo il testo
-    document.getElementById('instructionText').innerText = "Tocca per girare";
-
-    // Timeout per evitare glitch grafici
-    setTimeout(() => {
-        try {
-            document.getElementById('langTag').innerText = getLangName(currentCard.lang);
-            document.getElementById('wordDisplay').innerText = currentCard.word;
-            updateLangStyle(currentCard.lang);
-            document.getElementById('backWordDisplay').innerText = currentCard.word;
-            document.getElementById('pronunciationDisplay').innerText = currentCard.pronunciation;
-            document.getElementById('ipaDisplay').innerText = currentCard.ipa ? `/${currentCard.ipa}/` : ''; 
-            document.getElementById('meaningDisplay').innerText = currentCard.meaning;
-            
-            let st = userProgress[currentCard.id];
-            let statusLabel = st === 'perfect' ? "RIPASSO" : (st ? "IN CORSO" : "NUOVA");
-            let colorStyle = st === 'perfect' ? "color:#2ecc71;" : (st ? "color:#3498db;" : "color:#e67e22;");
-            
-            document.getElementById('typeTag').innerHTML = `<span style="${colorStyle} font-weight:bold;">${statusLabel}</span>`;
-        } catch (e) {
-            console.error("Errore rendering carta:", e);
+    try {
+        if (deck.length === 0) {
+            if(confirm("Sessione finita! Vuoi continuare?")) prepareSessionDeck();
+            else showConfigMenu();
+            return;
         }
-    }, 100);
-    
-    updateCount();
+
+        currentCard = deck[0];
+        isFlipped = false;
+        
+        const el = document.getElementById('flashcard');
+        if(el) el.classList.remove('flipped');
+        
+        document.getElementById('instructionText').innerText = "Tocca per girare";
+
+        // RIMOSSO TIMEOUT per evitare errori asincroni
+        document.getElementById('langTag').innerText = getLangName(currentCard.lang);
+        document.getElementById('wordDisplay').innerText = currentCard.word;
+        updateLangStyle(currentCard.lang);
+        document.getElementById('backWordDisplay').innerText = currentCard.word;
+        document.getElementById('pronunciationDisplay').innerText = currentCard.pronunciation;
+        document.getElementById('ipaDisplay').innerText = currentCard.ipa ? `/${currentCard.ipa}/` : ''; 
+        document.getElementById('meaningDisplay').innerText = currentCard.meaning;
+        
+        let st = userProgress[currentCard.id];
+        let statusLabel = st === 'perfect' ? "RIPASSO" : (st ? "IN CORSO" : "NUOVA");
+        let colorStyle = st === 'perfect' ? "color:#2ecc71;" : (st ? "color:#3498db;" : "color:#e67e22;");
+        
+        document.getElementById('typeTag').innerHTML = `<span style="${colorStyle} font-weight:bold;">${statusLabel}</span>`;
+        
+        updateCount();
+    } catch (e) {
+        alert("Errore caricamento carta: " + e.message);
+    }
 }
 
 function flipCard() {
@@ -159,60 +179,65 @@ function flipCard() {
 }
 
 function handleResult(result) {
-    // Rimosso il blocco !isFlipped per permettere di cliccare sempre in caso di bug
-    // if (!isFlipped) return; 
-    
-    if (!currentCard) return; // Safety check
+    try {
+        if (!currentCard) throw new Error("Nessuna carta attiva");
 
-    userProgress[currentCard.id] = result;
-    saveProgress();
+        userProgress[currentCard.id] = result;
+        saveProgress();
 
-    if (result === 'perfect') {
-        deck.shift(); 
-    } else {
-        let missedCard = deck.shift();
-        let insertPos = Math.min(deck.length, Math.floor(Math.random() * 5) + 3);
-        deck.splice(insertPos, 0, missedCard);
+        if (result === 'perfect') {
+            deck.shift(); 
+        } else {
+            let missedCard = deck.shift();
+            let insertPos = Math.min(deck.length, Math.floor(Math.random() * 5) + 3);
+            deck.splice(insertPos, 0, missedCard);
+        }
+        loadNextCard();
+    } catch (e) {
+        alert("Errore tasto: " + e.message);
     }
-    loadNextCard();
 }
 
 // --- 3. FRASI ---
 function startSentenceMode() {
-    if (typeof sentenceBank === 'undefined') return alert("Errore DB Frasi");
+    try {
+        if (typeof sentenceBank === 'undefined') return alert("Errore DB Frasi");
 
-    let validSentences = sentenceBank.filter(s => {
-        if (!s.requires) return true;
-        return s.requires.every(reqId => userProgress[reqId] === 'perfect');
-    });
+        let validSentences = sentenceBank.filter(s => {
+            if (!s.requires) return true;
+            return s.requires.every(reqId => userProgress[reqId] === 'perfect');
+        });
 
-    if (validSentences.length === 0) {
-        alert("Nessuna frase disponibile!\nDevi sbloccare ('Perfetto') le parole nelle Flashcards (Fondamentali/Società) per vedere le frasi.");
-        return;
+        if (validSentences.length === 0) {
+            alert("Nessuna frase disponibile!\n\nDevi sbloccare ('Perfetto') le parole nelle Flashcards (Fondamentali/Società) per vedere le frasi.");
+            return;
+        }
+
+        sentenceDeck = shuffleArray(validSentences);
+        previousScreen = 'main-menu';
+        showScreen('sentence-screen');
+        loadNextSentence(); // Rimosso timeout anche qui
+    } catch (e) {
+        alert("Errore avvio frasi: " + e.message);
     }
-
-    sentenceDeck = shuffleArray(validSentences);
-    previousScreen = 'main-menu';
-    showScreen('sentence-screen');
-    setTimeout(() => loadNextSentence(), 50);
 }
 
 function loadNextSentence() {
-    if (sentenceDeck.length === 0) {
-        if(confirm("Frasi finite! Ricominciare?")) startSentenceMode();
-        else goToHome();
-        return;
-    }
-
-    currentSentence = sentenceDeck[0];
-    isSentFlipped = false;
-    
-    const cardEl = document.getElementById('sentFlashcard');
-    if(cardEl) cardEl.classList.remove('flipped');
-    
-    document.getElementById('s_instructionText').innerText = "Tocca per girare";
-
     try {
+        if (sentenceDeck.length === 0) {
+            if(confirm("Frasi finite! Ricominciare?")) startSentenceMode();
+            else goToHome();
+            return;
+        }
+
+        currentSentence = sentenceDeck[0];
+        isSentFlipped = false;
+        
+        const cardEl = document.getElementById('sentFlashcard');
+        if(cardEl) cardEl.classList.remove('flipped');
+        
+        document.getElementById('s_instructionText').innerText = "Tocca per girare";
+
         const langEl = document.getElementById('s_langTag');
         const frontEl = document.getElementById('s_wordDisplay');
         const backEl = document.getElementById('s_backWordDisplay');
@@ -232,8 +257,9 @@ function loadNextSentence() {
         if(pronEl) pronEl.innerText = currentSentence.pronunciation;
         if(meanEl) meanEl.innerText = currentSentence.translation;
         if(statusEl) statusEl.innerText = "Frasi: " + sentenceDeck.length;
-
-    } catch(e) { console.error(e); }
+    } catch(e) {
+        alert("Errore caricamento frase: " + e.message);
+    }
 }
 
 function flipSentenceCard() {
@@ -244,15 +270,18 @@ function flipSentenceCard() {
 }
 
 function handleSentenceResult(result) {
-    // Rimosso controllo isFlipped anche qui
-    userSentenceProgress[currentSentence.id] = result;
-    saveProgress();
-    if (result === 'perfect') sentenceDeck.shift();
-    else {
-        let missed = sentenceDeck.shift();
-        sentenceDeck.push(missed);
+    try {
+        userSentenceProgress[currentSentence.id] = result;
+        saveProgress();
+        if (result === 'perfect') sentenceDeck.shift();
+        else {
+            let missed = sentenceDeck.shift();
+            sentenceDeck.push(missed);
+        }
+        loadNextSentence();
+    } catch (e) {
+        alert("Errore tasto frase: " + e.message);
     }
-    loadNextSentence();
 }
 
 // --- UTILS ---
@@ -296,7 +325,7 @@ function closeSentProgress() {
     showScreen('sentence-screen'); 
 }
 
-// --- STANDARD FUNCTIONS (Settings, Save, Checkboxes) ---
+// --- STANDARD FUNCTIONS ---
 function showConfigMenu() { previousScreen = 'main-menu'; renderCheckboxes('topic-options', 'lang-options'); showScreen('config-menu'); }
 function showSettingsMenu() { 
     if(document.getElementById('sentence-screen').style.display==='flex') previousScreen='sentence-screen';
@@ -322,23 +351,4 @@ function performUnlock() {
 }
 function exportData() { let d = { flashcards: userProgress, sentences: userSentenceProgress }; let u = "data:text/json;charset=utf-8,"+encodeURIComponent(JSON.stringify(d)); let a=document.createElement('a'); a.href=u; a.download="go_backup.json"; document.body.appendChild(a); a.click(); a.remove(); }
 function importData(i) { const f=i.files[0]; if(!f)return; const r=new FileReader(); r.onload=e=>{ try { let d=JSON.parse(e.target.result); if(d.flashcards) { userProgress=d.flashcards; userSentenceProgress=d.sentences||{}; } else { userProgress=d; } saveProgress(); alert("Fatto!"); } catch(x){alert("Errore");} }; r.readAsText(f); }
-function showResetMenu(){renderCheckboxes('reset-topic-options', 'reset-lang-options'); showScreen('reset-menu');}
-function performReset(){ const c=document.getElementById('reset-menu'); let st=Array.from(c.querySelectorAll('input[name="topic"]:checked')).map(x=>x.value); let sl=Array.from(c.querySelectorAll('input[name="lang"]:checked')).map(x=>x.value); if(st.length===0&&sl.length===0)return alert("Seleziona!"); if(!confirm("Reset?"))return; Object.keys(decks).forEach(k=>{ let d=decks[k]; if(st.includes(d.tags[0])||sl.includes(d.tags[1])) d.cards.forEach(x=>{ delete userProgress[x.id]; delete userSentenceProgress[x.id]; }); }); saveProgress(); alert("Reset OK"); showSettingsMenu(); }
-function renderCheckboxes(tid, lid) { const tc=document.getElementById(tid); const lc=document.getElementById(lid); if(!tc||!lc)return; tc.innerHTML=""; lc.innerHTML=""; let t=new Set(); let l=new Set(); Object.keys(decks).forEach(k=>{let d=decks[k].tags; if(d){t.add(d[0]); l.add(d[1]);}}); let chk = !tid.includes('reset') ? 'checked' : ''; t.forEach(v=>tc.innerHTML+=`<label class="chk-label"><input type="checkbox" name="topic" value="${v}" ${chk}>${capitalize(v)}</label>`); l.forEach(v=>lc.innerHTML+=`<label class="chk-label"><input type="checkbox" name="lang" value="${v}" ${chk}>${getLangNameFull(v)}</label>`); }
-function showGlobalProgress(){let td=playDeck.length>0?playDeck:getAllCards(); let s={t:0,p:0,l:0,loc:0}; const lc=document.getElementById('progress-list'); lc.innerHTML=""; s.t=td.length; td.forEach(c=>{let loc=false; if(c.requires){let r=Array.isArray(c.requires)?c.requires:[c.requires]; if(!r.every(x=>userProgress[x]==='perfect'))loc=true;} let st=userProgress[c.id]; if(loc)s.loc++; else if(st==='perfect')s.p++; else if(st)s.l++; let i=loc?'🔒':(st==='perfect'?'<span class="dot dot-green"></span>':(st?'<span class="dot dot-blue"></span>':'<span class="dot dot-grey"></span>')); lc.innerHTML+=`<div class="prog-item ${loc?'status-locked':''}"><div class="prog-info"><div class="prog-word" style="color:${getLangColor(c.lang)}">${c.word}</div><div class="prog-meaning">${c.meaning}</div></div><div class="prog-status">${i}</div></div>`;}); document.getElementById('stat-total').innerText=s.t; document.getElementById('stat-perfect').innerText=s.p; document.getElementById('stat-learning').innerText=s.l; document.getElementById('stat-locked').innerText=s.loc; showScreen('progress-menu');}
-function closeProgress(){if(playDeck.length>0)showScreen('game-screen'); else showConfigMenu();}
-function getAllCards(){let a=[]; Object.keys(decks).forEach(k=>a=[...a,...decks[k].cards]); return a;}
-function saveProgress(){localStorage.setItem('go_flashcards_progress',JSON.stringify(userProgress)); localStorage.setItem('go_sentences_progress',JSON.stringify(userSentenceProgress));}
-function loadProgress(){const d=localStorage.getItem('go_flashcards_progress'); if(d)userProgress=JSON.parse(d); const s=localStorage.getItem('go_sentences_progress'); if(s)userSentenceProgress=JSON.parse(s);}
-function setTheme(m){localStorage.setItem('go_theme_mode',m); applyTheme(m); updateThemeButtons();}
-function applyTheme(m){const b=document.body; if(m==='auto'){if(window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches)b.classList.add('dark-mode');else b.classList.remove('dark-mode');}else if(m==='dark')b.classList.add('dark-mode');else b.classList.remove('dark-mode');}
-function updateThemeButtons(){const m=localStorage.getItem('go_theme_mode')||'auto'; ['light','dark','auto'].forEach(k=>{const b=document.getElementById('theme-'+k); if(b)(m===k)?b.classList.add('active'):b.classList.remove('active');});}
-function loadSettings(){const m=localStorage.getItem('go_theme_mode')||'auto'; applyTheme(m); window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change',e=>{if(localStorage.getItem('go_theme_mode')==='auto')applyTheme('auto');});}
-function shuffleArray(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
-function capitalize(s){return s.charAt(0).toUpperCase()+s.slice(1);}
-function getLangNameFull(c){if(c==='zh')return '🇨🇳 Cinese'; if(c==='ja')return '🇯🇵 Giapponese'; if(c==='ar')return '🇸🇦 Arabo'; return c;}
-function getLangName(c){if(c==='zh')return 'Cn'; if(c==='ar')return 'Ar'; if(c==='ja')return 'Jp'; return c;}
-function getLangColor(c){if(c==='zh')return '#e74c3c'; if(c==='ar')return '#27ae60'; if(c==='ja')return '#8e44ad'; return '#333';}
-function updateLangStyle(c){document.getElementById('langTag').style.color=getLangColor(c);}
-function updateCount(){document.getElementById('deckStatus').innerText="Carte: "+deck.length;}
-window.speakWordScript=function(){if(!currentCard)return; let t=currentCard.word; if(currentCard.lang==='ar')t=t.replace(/\s/g,''); let s=new SpeechSynthesisUtterance(t); if(currentCard.lang==='zh')s.lang='zh-CN'; if(currentCard.lang==='ja')s.lang='ja-JP'; if(currentCard.lang==='ar')s.lang='ar-SA'; window.speechSynthesis.speak(s);}
+function
