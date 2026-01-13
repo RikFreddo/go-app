@@ -108,8 +108,7 @@ body {
 .prog-status { font-size: 1.2rem; display:flex; align-items:center; justify-content: flex-end; }
 .btn-close { background: transparent; border: 2px solid var(--text-color); color: var(--text-color); width: 30px; height: 30px; border-radius: 50%; font-weight: bold; cursor: pointer; }
 
-/* --- QUI SONO I PUNTINI --- */
-/* Se mancavano queste righe, i puntini non si vedevano! */
+/* DOTS */
 .dot { display: inline-block; width: 12px; height: 12px; border-radius: 50%; margin-left: 5px; }
 .dot-green { background-color: #2ecc71; }
 .dot-blue { background-color: #3498db; }
@@ -133,9 +132,12 @@ header { width: 100%; box-sizing: border-box; margin-top: 40px; margin-bottom: 1
 .audio-btn { background:none; border:none; cursor:pointer; font-size: 1.4rem; }
 body.dark-mode .audio-btn { filter: invert(1); }
 
-/* CONTROLS */
-.controls-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; opacity: 0.3; pointer-events: none; transition: opacity 0.3s; }
-.controls-active { opacity: 1 !important; pointer-events: auto !important; }
+/* CONTROLS - MODIFICATO PER EVITARE BLOCCHI */
+.controls-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; 
+    /* RIMOSSO pointer-events: none e opacity per sicurezza */
+    opacity: 1; 
+    pointer-events: auto; 
+}
 .btn { padding: 12px; border: none; border-radius: 10px; font-size: 0.9rem; font-weight: bold; color: white; cursor: pointer; }
 .btn:active { transform: scale(0.96); }
 .btn-red { background-color: #e74c3c; }
