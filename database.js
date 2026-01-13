@@ -41,7 +41,7 @@ const decks = {
             { id: "tm_zh2", lang: "zh", level: 1, word: "月", pronunciation: "yuè", meaning: "Mese/Luna", type: "base", pos: "noun" },
             { id: "tm_zh3", lang: "zh", level: 1, word: "年", pronunciation: "nián", meaning: "Anno", type: "base", pos: "noun" },
             { id: "tm_zh4", lang: "zh", level: 2, word: "今天", pronunciation: "jīntiān", meaning: "Oggi", type: "derivato", requires: ["zh12"], pos: "noun" },
-            { id: "tm_zh5", lang: "zh", level: 2, word: "明天", pronunciation: "míngtiān", meaning: "Domani", type: "derivato", requires: ["zh12", "tm_zh2"], pos: "noun" } // Ming ha luna e sole
+            { id: "tm_zh5", lang: "zh", level: 2, word: "明天", pronunciation: "míngtiān", meaning: "Domani", type: "derivato", requires: ["zh12", "tm_zh2"], pos: "noun" }
         ]
     },
 
@@ -97,7 +97,7 @@ const decks = {
             { id: "root_fcl", lang: "ar", level: 1, word: "ف ع ل", pronunciation: "F-'-L", meaning: "Radice: Fare", type: "base", pos: "root" },
             { id: "root_kbr", lang: "ar", level: 1, word: "ك ب ر", pronunciation: "K-B-R", meaning: "Radice: Grande", type: "base", pos: "root" },
             { id: "root_hbb", lang: "ar", level: 1, word: "ح ب ب", pronunciation: "H-B-B", meaning: "Radice: Amore", type: "base", pos: "root" },
-            // Radici Natura/Viaggio spostate qui
+            // Radici Natura/Viaggio
             { id: "root_ard", lang: "ar", level: 1, word: "أ ر ض", pronunciation: "'-R-D", meaning: "Radice: Terra", type: "base", pos: "root" },
             { id: "root_shms", lang: "ar", level: 1, word: "ش م س", pronunciation: "Sh-M-S", meaning: "Radice: Sole", type: "base", pos: "root" },
             { id: "root_qmr", lang: "ar", level: 1, word: "ق م ر", pronunciation: "Q-M-R", meaning: "Radice: Luna", type: "base", pos: "root" },
@@ -129,17 +129,16 @@ const decks = {
     },
 
     // ==========================================
-    // 2. SOCIETA' & CASA (Espanso)
+    // 2. SOCIETA' & CASA
     // ==========================================
     "societa_zh": {
         title: "Società & Casa (Cinese)", tags: ["societa", "zh"],
         cards: [
-            // FAMIGLIA (Nuovo!)
+            // FAMIGLIA
             { id: "fam_zh1", lang: "zh", level: 2, word: "爸爸", pronunciation: "bàba", meaning: "Papà", type: "base", requires: ["rad_uomo"], pos: "noun" },
             { id: "fam_zh2", lang: "zh", level: 2, word: "妈妈", pronunciation: "māma", meaning: "Mamma", type: "base", requires: ["rad_donna"], pos: "noun" },
             { id: "fam_zh3", lang: "zh", level: 2, word: "哥哥", pronunciation: "gēge", meaning: "Fratello magg.", type: "base", pos: "noun" },
             { id: "fam_zh4", lang: "zh", level: 2, word: "姐姐", pronunciation: "jiějie", meaning: "Sorella magg.", type: "base", requires: ["rad_donna"], pos: "noun" },
-            
             // LUOGHI
             { id: "soc_zh1", lang: "zh", level: 2, word: "家", pronunciation: "jiā", meaning: "Casa/Famiglia", type: "derivato", requires: ["rad_tetto"], pos: "place" }, 
             { id: "soc_zh2", lang: "zh", level: 2, word: "学校", pronunciation: "xuéxiào", meaning: "Scuola", type: "derivato", requires: ["rad_bambino", "zh1"], pos: "place" },
@@ -149,16 +148,12 @@ const decks = {
             { id: "soc_zh6", lang: "zh", level: 2, word: "钱", pronunciation: "qián", meaning: "Soldi", type: "base", pos: "noun" }
         ]
     },
-    
     "societa_ja": {
         title: "Società & Casa (Giapponese)", tags: ["societa", "ja"],
         cards: [
-            // FAMIGLIA
             { id: "fam_ja1", lang: "ja", level: 2, word: "父", pronunciation: "ちち", meaning: "Padre", type: "base", pos: "noun" },
             { id: "fam_ja2", lang: "ja", level: 2, word: "母", pronunciation: "はは", meaning: "Madre", type: "base", requires: ["rad_donna_ja"], pos: "noun" },
             { id: "fam_ja3", lang: "ja", level: 2, word: "家族", pronunciation: "かぞく", meaning: "Famiglia", type: "derivato", requires: ["soc_ja1"], pos: "noun" },
-
-            // LUOGHI
             { id: "soc_ja1", lang: "ja", level: 2, word: "家", pronunciation: "いえ", meaning: "Casa", type: "base", requires: ["rad_tetto_ja"], pos: "place" }, 
             { id: "soc_ja2", lang: "ja", level: 2, word: "学校", pronunciation: "がっこう", meaning: "Scuola", type: "derivato", requires: ["rad_bambino_ja", "rad_albero_ja"], pos: "place" }, 
             { id: "soc_ja3", lang: "ja", level: 2, word: "本", pronunciation: "ほん", meaning: "Libro", type: "derivato", requires: ["rad_albero_ja"], pos: "noun" },
@@ -166,17 +161,13 @@ const decks = {
             { id: "soc_ja5", lang: "ja", level: 2, word: "先生", pronunciation: "せんせい", meaning: "Maestro", type: "derivato", requires: ["rad_uomo_ja"], pos: "noun" }
         ]
     },
-
     "societa_ar": {
         title: "Società & Casa (Arabo)", tags: ["societa", "ar"],
         cards: [
-            // FAMIGLIA
             { id: "fam_ar1", lang: "ar", level: 2, word: "أَب", pronunciation: "ab", meaning: "Padre", type: "base", pos: "noun" },
             { id: "fam_ar2", lang: "ar", level: 2, word: "أُمّ", pronunciation: "umm", meaning: "Madre", type: "base", pos: "noun" },
             { id: "fam_ar3", lang: "ar", level: 2, word: "أَخ", pronunciation: "akh", meaning: "Fratello", type: "base", pos: "noun" },
             { id: "fam_ar4", lang: "ar", level: 2, word: "أُخْت", pronunciation: "ukht", meaning: "Sorella", type: "base", pos: "noun" },
-
-            // LUOGHI
             { id: "soc_ar1", lang: "ar", level: 2, word: "بَيْت", pronunciation: "bayt", meaning: "Casa", type: "base", pos: "place" },
             { id: "soc_ar2", lang: "ar", level: 2, word: "كِتَاب", pronunciation: "kitāb", meaning: "Libro", type: "derivato", requires: ["root_ktb"], pos: "noun" },
             { id: "soc_ar3", lang: "ar", level: 2, word: "مَكْتَب", pronunciation: "maktab", meaning: "Ufficio", type: "derivato", requires: ["root_ktb"], pos: "place" },
@@ -187,14 +178,14 @@ const decks = {
     },
 
     // ==========================================
-    // 3. NATURA (I mazzi che già avevi, mantenuti e collegati)
+    // 3. NATURA
     // ==========================================
     "natura_zh": { title: "Natura (Cinese)", tags: ["natura", "zh"], cards: [ { id: "zh7", lang: "zh", level: 1, word: "山", pronunciation: "shān", meaning: "Montagna", type: "base", pos: "place" }, { id: "zh12", lang: "zh", level: 1, word: "天", pronunciation: "tiān", meaning: "Cielo", type: "base", pos: "place" }, { id: "zh13", lang: "zh", level: 2, word: "林", pronunciation: "lín", meaning: "Bosco", type: "derivato", requires: ["rad_albero"], pos: "place" }, { id: "zh14", lang: "zh", level: 2, word: "森", pronunciation: "sēn", meaning: "Foresta", type: "derivato", requires: ["rad_albero"], pos: "place" }, { id: "zh15", lang: "zh", level: 2, word: "河", pronunciation: "hé", meaning: "Fiume", type: "derivato", requires: ["rad_acqua"], pos: "place" }, { id: "zh16", lang: "zh", level: 2, word: "海", pronunciation: "hǎi", meaning: "Mare", type: "derivato", requires: ["rad_acqua"], pos: "place" }, { id: "zh17", lang: "zh", level: 2, word: "火山", pronunciation: "huǒshān", meaning: "Vulcano", type: "derivato", requires: ["rad_fuoco", "zh7"], pos: "place" }, { id: "zh19", lang: "zh", level: 2, word: "花", pronunciation: "huā", meaning: "Fiore", type: "derivato", requires: ["rad_albero"], pos: "noun" }, { id: "zh22", lang: "zh", level: 2, word: "雪", pronunciation: "xuě", meaning: "Neve", type: "derivato", requires: ["rad_pioggia"], pos: "noun" }, { id: "zh30", lang: "zh", level: 3, word: "电", pronunciation: "diàn", meaning: "Elettricità", type: "base", requires: ["rad_pioggia"], pos: "noun" }, { id: "zh31", lang: "zh", level: 3, word: "雷", pronunciation: "léi", meaning: "Tuono", type: "derivato", requires: ["rad_pioggia", "rad_campo"], pos: "noun" }, { id: "zh34", lang: "zh", level: 3, word: "春", pronunciation: "chūn", meaning: "Primavera", type: "base", requires: ["rad_sole"], pos: "noun" }, { id: "zh35", lang: "zh", level: 3, word: "夏", pronunciation: "xià", meaning: "Estate", type: "base", requires: ["rad_sole"], pos: "noun" }, { id: "zh36", lang: "zh", level: 3, word: "秋", pronunciation: "qiū", meaning: "Autunno", type: "base", requires: ["rad_fuoco"], pos: "noun" }, { id: "zh37", lang: "zh", level: 3, word: "冬", pronunciation: "dōng", meaning: "Inverno", type: "base", requires: ["zh22"], pos: "noun" } ] },
     "natura_ja": { title: "Natura (Giapponese)", tags: ["natura", "ja"], cards: [ { id: "ja1", lang: "ja", level: 1, word: "川", pronunciation: "かわ", meaning: "Fiume", type: "base", pos: "place" }, { id: "ja2", lang: "ja", level: 1, word: "山", pronunciation: "やま", meaning: "Montagna", type: "base", pos: "place" }, { id: "ja10", lang: "ja", level: 2, word: "森", pronunciation: "もり", meaning: "Foresta", type: "base", requires: ["rad_albero_ja"], pos: "place" }, { id: "ja15", lang: "ja", level: 2, word: "火山", pronunciation: "かざん", meaning: "Vulcano", type: "derivato", requires: ["rad_fuoco_ja", "ja2"], pos: "place" }, { id: "ja13", lang: "ja", level: 1, word: "花", pronunciation: "はな", meaning: "Fiore", type: "base", pos: "noun" }, { id: "ja18", lang: "ja", level: 2, word: "雲", pronunciation: "くも", meaning: "Nuvola", type: "base", requires: ["rad_pioggia_ja"], pos: "noun" }, { id: "ja35", lang: "ja", level: 3, word: "春", pronunciation: "はる", meaning: "Primavera", type: "base", requires: ["rad_sole_ja"], pos: "noun" }, { id: "ja36", lang: "ja", level: 3, word: "夏", pronunciation: "なつ", meaning: "Estate", type: "base", requires: ["rad_sole_ja"], pos: "noun" }, { id: "ja37", lang: "ja", level: 3, word: "秋", pronunciation: "あき", meaning: "Autunno", type: "base", requires: ["rad_albero_ja"], pos: "noun" }, { id: "ja38", lang: "ja", level: 3, word: "冬", pronunciation: "ふゆ", meaning: "Inverno", type: "base", requires: ["rad_pioggia_ja"], pos: "noun" } ] },
     "natura_ar": { title: "Natura (Arabo)", tags: ["natura", "ar"], cards: [ { id: "ar12", lang: "ar", level: 2, word: "أَرْض", pronunciation: "arḍ", meaning: "Terra/Suolo", type: "derivato", requires: ["root_ard"], pos: "place" }, { id: "ar14", lang: "ar", level: 2, word: "شَمْس", pronunciation: "shams", meaning: "Sole", type: "derivato", requires: ["root_shms"], pos: "noun" }, { id: "ar15", lang: "ar", level: 2, word: "قَمَر", pronunciation: "qamar", meaning: "Luna", type: "derivato", requires: ["root_qmr"], pos: "noun" }, { id: "ar17", lang: "ar", level: 2, word: "بَحْر", pronunciation: "baḥr", meaning: "Mare", type: "derivato", requires: ["root_bhr"], pos: "place" }, { id: "ar19", lang: "ar", level: 2, word: "جَبَل", pronunciation: "jabal", meaning: "Montagna", type: "derivato", requires: ["root_jbl"], pos: "place" }, { id: "ar23", lang: "ar", level: 3, word: "شَجَرَة", pronunciation: "shajara", meaning: "Albero", type: "derivato", requires: ["root_shjr"], pos: "noun" }, { id: "ar24", lang: "ar", level: 3, word: "غَابَة", pronunciation: "ghāba", meaning: "Foresta", type: "derivato", requires: ["ar23"], pos: "place" } ] },
 
     // ==========================================
-    // 4. VIAGGIO & CIBO & GRAMMATICA (Standard)
+    // 4. VIAGGIO & CIBO & GRAMMATICA
     // ==========================================
     "viaggio_zh": { title: "Viaggio (Cinese)", tags: ["viaggio", "zh"], cards: [ { id: "v_zh1", lang: "zh", level: 1, word: "去", pronunciation: "qù", meaning: "Andare", type: "base", pos: "verb_move" }, { id: "v_zh3", lang: "zh", level: 1, word: "飞", pronunciation: "fēi", meaning: "Volare", type: "base", pos: "verb" }, { id: "v_zh4", lang: "zh", level: 1, word: "机", pronunciation: "jī", meaning: "Macchina", type: "base", requires: ["rad_albero"], pos: "noun" }, { id: "v_zh5", lang: "zh", level: 2, word: "飞机", pronunciation: "fēijī", meaning: "Aereo", type: "base", pos: "noun" }, { id: "v_zh6", lang: "zh", level: 2, word: "火车", pronunciation: "huǒchē", meaning: "Treno", type: "derivato", requires: ["rad_fuoco", "rad_veicolo"], pos: "noun" }, { id: "v_zh7", lang: "zh", level: 2, word: "车站", pronunciation: "chēzhàn", meaning: "Stazione", type: "derivato", requires: ["rad_veicolo"], pos: "place" }, { id: "v_zh16", lang: "zh", level: 3, word: "门口", pronunciation: "ménkǒu", meaning: "Ingresso", type: "derivato", requires: ["rad_porta", "rad_bocca"], pos: "place" } ] },
     "viaggio_ja": { title: "Viaggio (Giapponese)", tags: ["viaggio", "ja"], cards: [ { id: "v_ja1", lang: "ja", level: 1, word: "行く", pronunciation: "いく", meaning: "Andare", type: "base", pos: "verb_move" }, { id: "v_ja4", lang: "ja", level: 1, word: "駅", pronunciation: "えき", meaning: "Stazione", type: "base", pos: "place" }, { id: "v_ja6", lang: "ja", level: 2, word: "電車", pronunciation: "でんしゃ", meaning: "Treno", type: "derivato", requires: ["rad_veicolo_ja"], pos: "noun" }, { id: "v_ja17", lang: "ja", level: 3, word: "入り口", pronunciation: "いりぐち", meaning: "Entrata", type: "base", requires: ["rad_bocca_ja"], pos: "place" } ] },
