@@ -1,5 +1,5 @@
 // ==========================================
-// GO SCRIPT v0.19 - NO SPOILER ANIMATION
+// GO SCRIPT v0.20 - TRUE SHUFFLE MIX
 // ==========================================
 
 // Variabili globali
@@ -17,7 +17,12 @@ let isSentFlipped = false;
 
 window.onload = function() {
     try {
-        // Nessun reset necessario per questo update grafico
+        // Pulizia una tantum per versione
+        if (!localStorage.getItem('v0.20_check')) {
+            localStorage.setItem('v0.20_check', 'true');
+            // Non resettiamo i progressi questa volta, è solo un update logico
+            console.log("Aggiornamento v0.20: shuffle migliorato.");
+        }
         loadSettings();
         loadProgress();
         goToHome(); 
@@ -57,6 +62,8 @@ function startCustomSession() {
 
 function prepareSessionDeck() {
     const SESSION_SIZE = 20; 
+
+    // 1. Filtra le carte sbloccabili (In corso + Nuove ma con requisiti ok)
     let unlockableCards = playDeck.filter(c => {
         if (userProgress[c.id] === 'perfect') return false; 
         if (c.requires) {
@@ -65,19 +72,49 @@ function prepareSessionDeck() {
         }
         return true;
     });
+
+    // 2. Separa "In Corso" da "Nuove" per mescolarle meglio
+    let learningCards = unlockableCards.filter(c => userProgress[c.id]); // Hanno già uno status (es. reading/meaning)
+    let newCards = unlockableCards.filter(c => !userProgress[c.id]);     // Non hanno status
+
+    // 3. Filtra carte per il Ripasso (Perfect)
     let reviewCards = playDeck.filter(c => userProgress[c.id] === 'perfect');
+
+    // 4. MESCOLAMENTO PREVENTIVO (Il segreto del mix linguistico)
+    // Mescoliamo i gruppi ORA, così l'ordine del database (zh -> ja -> ar) viene distrutto subito.
+    shuffleArray(learningCards);
+    shuffleArray(newCards);
     shuffleArray(reviewCards);
+
+    // 5. Costruzione del Mazzo Prioritario
+    // Priorità: Prima finisci quelle che hai iniziato (Learning), poi le Nuove (New)
+    let candidates = [...learningCards, ...newCards];
+    
     let deckBuilder = [];
-    if (unlockableCards.length > 0) {
-        unlockableCards.sort((a, b) => (userProgress[b.id] ? 1 : 0) - (userProgress[a.id] ? 1 : 0));
-        let maxNew = Math.min(unlockableCards.length, SESSION_SIZE - 5); 
-        if (reviewCards.length < 5) maxNew = SESSION_SIZE;
-        deckBuilder = unlockableCards.slice(0, maxNew);
+    let isReviewMode = false;
+
+    if (candidates.length > 0) {
+        // Prendiamo le prime X carte dal gruppo misto
+        let maxNew = Math.min(candidates.length, SESSION_SIZE - 5); 
+        if (reviewCards.length < 5) maxNew = SESSION_SIZE; // Se c'è poco ripasso, riempiamo di nuove
+        
+        deckBuilder = candidates.slice(0, maxNew);
+    } else {
+        isReviewMode = true;
     }
+
+    // 6. Riempimento con Ripasso
     let slotsLeft = SESSION_SIZE - deckBuilder.length;
-    if (slotsLeft > 0 && reviewCards.length > 0) deckBuilder = [...deckBuilder, ...reviewCards.slice(0, slotsLeft)];
-    if (deckBuilder.length === 0) return alert("Tutto completato!");
+    if (slotsLeft > 0 && reviewCards.length > 0) {
+        deckBuilder = [...deckBuilder, ...reviewCards.slice(0, slotsLeft)];
+    }
+
+    if (deckBuilder.length === 0) return alert("Tutto completato! Fai un Reset o aggiungi argomenti.");
+    if (isReviewMode) alert("Modalità RIPASSO attivata.");
+
+    // 7. Mescolata Finale (per mixare nuove e ripasso tra loro)
     deck = shuffleArray(deckBuilder);
+    
     showScreen('game-screen');
     loadNextCard();
 }
@@ -91,17 +128,13 @@ function loadNextCard() {
     
     const el = document.getElementById('flashcard');
     
-    // --- FIX ANIMAZIONE SPOILER ---
-    // 1. Disattiva l'animazione temporaneamente
+    // FIX ANIMAZIONE SPOILER
     el.style.transition = 'none';
-    // 2. Resetta la carta al fronte ISTANTANEAMENTE
     el.classList.remove('flipped');
-    // 3. Forza il browser a "disegnare" subito questo stato (Reflow Hack)
     void el.offsetWidth; 
     
     document.getElementById('instructionText').innerText = "Tocca";
     
-    // Ora possiamo cambiare i testi senza che l'utente veda il retro vecchio o nuovo
     document.getElementById('langTag').innerText = getLangName(currentCard.lang);
     document.getElementById('wordDisplay').innerText = currentCard.word;
     updateLangStyle(currentCard.lang);
@@ -117,10 +150,8 @@ function loadNextCard() {
     
     updateCount();
 
-    // 4. Riattiva l'animazione per quando l'utente girerà la carta
-    // Piccolo ritardo per assicurarsi che il reset sia avvenuto
     setTimeout(() => {
-        el.style.transition = ''; // Torna al valore del CSS (0.5s)
+        el.style.transition = ''; 
     }, 50);
 }
 
@@ -135,7 +166,10 @@ function startSentenceMode() {
         return s.requires.every(reqId => userProgress[reqId] === 'perfect');
     });
     if (validSentences.length === 0) return alert("Nessuna frase disponibile! Sblocca i fondamentali.");
+    
+    // Mescoliamo anche le frasi subito per evitare blocchi per lingua
     sentenceDeck = shuffleArray(validSentences);
+    
     previousScreen = 'main-menu';
     showScreen('sentence-screen');
     loadNextSentence();
@@ -147,11 +181,9 @@ function loadNextSentence() {
     isSentFlipped = false;
     
     const cardEl = document.getElementById('sentFlashcard');
-    
-    // --- FIX ANIMAZIONE SPOILER (Anche per le frasi) ---
     cardEl.style.transition = 'none';
     cardEl.classList.remove('flipped');
-    void cardEl.offsetWidth; // Force Reflow
+    void cardEl.offsetWidth;
 
     document.getElementById('s_instructionText').innerText = "Tocca";
     document.getElementById('s_langTag').innerText = getLangNameFull(currentSentence.lang);
@@ -165,7 +197,6 @@ function loadNextSentence() {
     document.getElementById('s_meaningDisplay').innerText = currentSentence.translation;
     document.getElementById('sentStatus').innerText = "Frasi: " + sentenceDeck.length;
 
-    // Riattiva animazione
     setTimeout(() => {
         cardEl.style.transition = ''; 
     }, 50);
