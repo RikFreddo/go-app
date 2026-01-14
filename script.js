@@ -1,3 +1,7 @@
+// ==========================================
+// GO SCRIPT v0.19 - NO SPOILER ANIMATION
+// ==========================================
+
 // Variabili globali
 let playDeck = [];
 let currentCard = null;
@@ -13,12 +17,7 @@ let isSentFlipped = false;
 
 window.onload = function() {
     try {
-        if (!localStorage.getItem('v0.18_clean')) {
-            console.log("Pulizia dati v0.18...");
-            localStorage.removeItem('go_flashcards_progress'); 
-            localStorage.setItem('v0.18_clean', 'true');
-            alert("App aggiornata alla v0.18 (IPA Edition)!\nDatabase ampliato con fonetica.");
-        }
+        // Nessun reset necessario per questo update grafico
         loadSettings();
         loadProgress();
         goToHome(); 
@@ -89,21 +88,26 @@ function loadNextCard() {
     }
     currentCard = deck[0];
     isFlipped = false;
+    
     const el = document.getElementById('flashcard');
+    
+    // --- FIX ANIMAZIONE SPOILER ---
+    // 1. Disattiva l'animazione temporaneamente
+    el.style.transition = 'none';
+    // 2. Resetta la carta al fronte ISTANTANEAMENTE
     el.classList.remove('flipped');
+    // 3. Forza il browser a "disegnare" subito questo stato (Reflow Hack)
+    void el.offsetWidth; 
+    
     document.getElementById('instructionText').innerText = "Tocca";
     
-    // Render immediato
+    // Ora possiamo cambiare i testi senza che l'utente veda il retro vecchio o nuovo
     document.getElementById('langTag').innerText = getLangName(currentCard.lang);
     document.getElementById('wordDisplay').innerText = currentCard.word;
     updateLangStyle(currentCard.lang);
     document.getElementById('backWordDisplay').innerText = currentCard.word;
-    
-    // FIX UNDEFINED & IPA RESTORE
     document.getElementById('pronunciationDisplay').innerText = currentCard.pronunciation || ""; 
-    // RIPRISTINATO IPA: Se c'è ipa nel DB, mostralo tra slash, altrimenti vuoto
     document.getElementById('ipaDisplay').innerText = currentCard.ipa ? `/${currentCard.ipa}/` : ""; 
-    
     document.getElementById('meaningDisplay').innerText = currentCard.meaning;
     
     let st = userProgress[currentCard.id];
@@ -112,6 +116,12 @@ function loadNextCard() {
     document.getElementById('typeTag').innerHTML = `<span style="${colorStyle} font-weight:bold;">${statusLabel}</span>`;
     
     updateCount();
+
+    // 4. Riattiva l'animazione per quando l'utente girerà la carta
+    // Piccolo ritardo per assicurarsi che il reset sia avvenuto
+    setTimeout(() => {
+        el.style.transition = ''; // Torna al valore del CSS (0.5s)
+    }, 50);
 }
 
 function flipCard(){ if(isFlipped)return; document.getElementById('flashcard').classList.add('flipped'); isFlipped=true; document.getElementById('instructionText').innerText="Esito?"; }
@@ -130,11 +140,19 @@ function startSentenceMode() {
     showScreen('sentence-screen');
     loadNextSentence();
 }
+
 function loadNextSentence() {
     if (sentenceDeck.length === 0) { if(confirm("Finite! Ancora?")) startSentenceMode(); else goToHome(); return; }
     currentSentence = sentenceDeck[0];
     isSentFlipped = false;
-    document.getElementById('sentFlashcard').classList.remove('flipped');
+    
+    const cardEl = document.getElementById('sentFlashcard');
+    
+    // --- FIX ANIMAZIONE SPOILER (Anche per le frasi) ---
+    cardEl.style.transition = 'none';
+    cardEl.classList.remove('flipped');
+    void cardEl.offsetWidth; // Force Reflow
+
     document.getElementById('s_instructionText').innerText = "Tocca";
     document.getElementById('s_langTag').innerText = getLangNameFull(currentSentence.lang);
     document.getElementById('s_langTag').style.color = getLangColor(currentSentence.lang);
@@ -146,12 +164,18 @@ function loadNextSentence() {
     document.getElementById('s_pronunciationDisplay').innerText = currentSentence.pronunciation || "";
     document.getElementById('s_meaningDisplay').innerText = currentSentence.translation;
     document.getElementById('sentStatus').innerText = "Frasi: " + sentenceDeck.length;
+
+    // Riattiva animazione
+    setTimeout(() => {
+        cardEl.style.transition = ''; 
+    }, 50);
 }
+
 function flipSentenceCard(){ if(isSentFlipped)return; document.getElementById('sentFlashcard').classList.add('flipped'); isSentFlipped=true; document.getElementById('s_instructionText').innerText="Esito?"; }
 function handleSentenceResult(r){ userSentenceProgress[currentSentence.id]=r; saveProgress(); if(r==='perfect')sentenceDeck.shift(); else {let m=sentenceDeck.shift(); sentenceDeck.push(m);} loadNextSentence(); }
 
 // Utils
-function showSentenceProgress(){ const list=document.getElementById('sent-progress-list'); list.innerHTML=""; let s={t:sentenceBank.length,p:0,h:0,l:0}; const d=document.createElement('div'); d.className='stats-dashboard'; d.style.marginTop="0"; sentenceBank.forEach(x=>{ let st=userSentenceProgress[x.id]; let loc=false; if(x.requires&&!x.requires.every(k=>userProgress[k]==='perfect')){loc=true;s.l++;} else if(st==='perfect')s.p++; else if(st)s.h++; if(st||!loc){const i=document.createElement('div'); i.className='prog-item'; if(loc)i.classList.add('status-locked'); let ic=loc?'🔒':(st==='perfect'?'<span class="dot dot-green"></span>':'<span class="dot dot-yellow"></span>'); i.innerHTML=`<div class="prog-info"><div class="prog-word" style="color:${getLangColor(x.lang)}">${x.text}</div><div class="prog-meaning">${x.translation}</div></div><div class="prog-status">${ic}</div>`; list.appendChild(i);} }); d.innerHTML=`<div class="stat-box"><span class="stat-num">${s.t}</span><span class="stat-label">Tot</span></div><div class="stat-box"><span class="stat-num" style="color:#2ecc71;">${s.p}</span><span class="stat-label">Perf</span></div><div class="stat-box"><span class="stat-num" style="color:#aaa;">${s.l}</span><span class="stat-label">Bloc</span></div>`; list.parentElement.insertBefore(d,list); showScreen('sent-progress-menu'); }
+function showSentenceProgress(){ const list=document.getElementById('sent-progress-list'); list.innerHTML=""; let s={t:sentenceBank.length,p:0,h:0,l:0}; const d=document.createElement('div'); d.className='stats-dashboard'; d.style.marginTop="0"; sentenceBank.forEach(x=>{ let st=userSentenceProgress[x.id]; let loc=false; if(x.requires&&!x.requires.every(k=>userProgress[k]==='perfect')){loc=true;s.l++;} else if(st==='perfect')s.p++; else if(st)s.h++; if(st||!loc){const i=document.createElement('div'); i.className='prog-item'; if(loc)i.classList.add('status-locked'); let ic=loc?'🔒':(st==='perfect'?'<span class="dot dot-green"></span>':'<span class="dot dot-yellow"></span>'); i.innerHTML=`<div class="prog-info"><div class="prog-word" style="color:${getLangColor(x.lang)}">${x.text}</div><div class="prog-meaning">${x.translation}</div></div><div class="prog-status">${ic}</div>`; list.appendChild(i);} }); d.innerHTML=`<div class="stat-box"><span class="stat-num">${s.t}</span><span class="stat-label">Tot</span></div><div class="stat-box"><span class="stat-num" style="color:#2ecc71;">${s.p}</span><span class="stat-label">Perf</span></div><div class="stat-box"><span class="stat-num" style="color:#f1c40f;">${s.h}</span><span class="stat-label">Difficili</span></div><div class="stat-box"><span class="stat-num" style="color:#aaa;">${s.l}</span><span class="stat-label">Bloc</span></div>`; list.parentElement.insertBefore(d,list); showScreen('sent-progress-menu'); }
 function closeSentProgress(){ const m=document.getElementById('sent-progress-menu'); const d=m.querySelector('.stats-dashboard'); if(d)d.remove(); showScreen('sentence-screen'); }
 
 // Standard
