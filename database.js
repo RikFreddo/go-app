@@ -1,6 +1,6 @@
 const decks = {
     // ============================================================
-    // 1. FONDAMENTALI (Espanso con Radicali per Natura/Viaggio)
+    // 1. FONDAMENTALI (Espanso con Radicali e Numeri 1-10)
     // ============================================================
     "fondamentali_zh": {
         title: "Fondamentali (Cinese)", tags: ["fondamentali", "zh"],
@@ -13,7 +13,7 @@ const decks = {
             { id: "rad_cuore", lang: "zh", level: 1, word: "心", pronunciation: "xīn", ipa: "ɕin⁵⁵", meaning: "Cuore", type: "base", pos: "noun" },
             { id: "rad_mano", lang: "zh", level: 1, word: "手", pronunciation: "shǒu", ipa: "ʂoʊ̯²¹⁴", meaning: "Mano", type: "base", pos: "noun" },
             
-            // --- RADICALI NATURA & VIAGGIO (NUOVI!) ---
+            // --- RADICALI NATURA & VIAGGIO ---
             { id: "rad_acqua", lang: "zh", level: 1, word: "水", pronunciation: "shuǐ", ipa: "ʂweɪ̯˨˩˦", meaning: "Acqua (Radicale)", type: "base", pos: "noun" },
             { id: "rad_fuoco", lang: "zh", level: 1, word: "火", pronunciation: "huǒ", ipa: "xwɔ˨˩˦", meaning: "Fuoco (Radicale)", type: "base", pos: "noun" },
             { id: "rad_terra", lang: "zh", level: 1, word: "土", pronunciation: "tǔ", ipa: "tʰu˨˩˦", meaning: "Terra (Radicale)", type: "base", pos: "noun" },
@@ -73,7 +73,7 @@ const decks = {
             { id: "rad_cuore_ja", lang: "ja", level: 1, word: "心", pronunciation: "こころ", ipa: "kokoɾo", meaning: "Cuore", type: "base", pos: "noun" },
             { id: "rad_mano_ja", lang: "ja", level: 1, word: "手", pronunciation: "て", ipa: "te", meaning: "Mano", type: "base", pos: "noun" },
             
-            // --- RADICALI NATURA & VIAGGIO (NUOVI!) ---
+            // --- RADICALI NATURA & VIAGGIO ---
             { id: "rad_acqua_ja", lang: "ja", level: 1, word: "水", pronunciation: "みず", ipa: "mizɯ", meaning: "Acqua", type: "base", pos: "noun" },
             { id: "rad_fuoco_ja", lang: "ja", level: 1, word: "火", pronunciation: "ひ", ipa: "çi", meaning: "Fuoco", type: "base", pos: "noun" },
             { id: "rad_terra_ja", lang: "ja", level: 1, word: "土", pronunciation: "つち", ipa: "tsɯtɕi", meaning: "Terra", type: "base", pos: "noun" },
@@ -116,10 +116,10 @@ const decks = {
         ]
     },
 
-   "fondamentali_ar": {
+    "fondamentali_ar": {
         title: "Fondamentali (Arabo)", tags: ["fondamentali", "ar"],
         cards: [
-            // --- RADICI DI BASE (Verbi e Concetti Comuni) ---
+            // --- RADICI DI BASE ---
             { id: "root_ktb", lang: "ar", level: 1, word: "ك ت ب", pronunciation: "K-T-B", ipa: "k-t-b", meaning: "Radice: Scrivere", type: "base", pos: "root" },
             { id: "root_drs", lang: "ar", level: 1, word: "د ر س", pronunciation: "D-R-S", ipa: "d-r-s", meaning: "Radice: Studiare", type: "base", pos: "root" },
             { id: "root_skn", lang: "ar", level: 1, word: "س ك ن", pronunciation: "S-K-N", ipa: "s-k-n", meaning: "Radice: Abitare", type: "base", pos: "root" },
@@ -146,7 +146,7 @@ const decks = {
             { id: "root_nql", lang: "ar", level: 1, word: "ن ق ل", pronunciation: "N-Q-L", ipa: "n-q-l", meaning: "Radice: Trasportare", type: "base", pos: "root" },
             { id: "root_rkb", lang: "ar", level: 1, word: "ر ك ب", pronunciation: "R-K-B", ipa: "r-k-b", meaning: "Radice: Cavalcare/Mezzo", type: "base", pos: "root" },
 
-            // --- NUMERI (1-10) ---
+            // --- NUMERI ---
             { id: "num_ar1", lang: "ar", level: 1, word: "وَاحِد", pronunciation: "wāḥid", ipa: "waːħid", meaning: "Uno", type: "base", pos: "num" },
             { id: "num_ar2", lang: "ar", level: 1, word: "اِثْنَان", pronunciation: "ithnān", ipa: "iθnaːn", meaning: "Due", type: "base", pos: "num" },
             { id: "num_ar3", lang: "ar", level: 1, word: "ثَلَاثَة", pronunciation: "thalātha", ipa: "θalaːθa", meaning: "Tre", type: "base", pos: "num" },
@@ -177,7 +177,7 @@ const decks = {
     // 2. SOCIETA' & CASA
     // ==========================================
     "societa_zh": {
-        title: "Società & Casa (Cinese)", tags: ["società", "zh"],
+        title: "Società & Casa (Cinese)", tags: ["societa", "zh"],
         cards: [
             { id: "fam_zh1", lang: "zh", level: 2, word: "爸爸", pronunciation: "bàba", ipa: "pa⁵¹ ba", meaning: "Papà", type: "base", requires: ["rad_uomo"], pos: "noun" },
             { id: "fam_zh2", lang: "zh", level: 2, word: "妈妈", pronunciation: "māma", ipa: "ma⁵⁵ ma", meaning: "Mamma", type: "base", requires: ["rad_donna"], pos: "noun" },
@@ -188,11 +188,11 @@ const decks = {
             { id: "soc_zh3", lang: "zh", level: 3, word: "学生", pronunciation: "xuésheng", ipa: "ɕɥɛ³⁵ ʂəŋ", meaning: "Studente", type: "derivato", requires: ["soc_zh2", "rad_uomo"], pos: "noun" },
             { id: "soc_zh4", lang: "zh", level: 2, word: "书", pronunciation: "shū", ipa: "ʂu⁵⁵", meaning: "Libro", type: "base", pos: "noun" },
             { id: "soc_zh5", lang: "zh", level: 2, word: "朋友", pronunciation: "péngyǒu", ipa: "pʰəŋ³⁵ joʊ̯", meaning: "Amico", type: "derivato", requires: ["rad_uomo"], pos: "noun" },
-            { id: "soc_zh6", lang: "zh", level: 2, word: "钱", pronunciation: "qián", ipa: "t͡ɕʰjɛn³⁵", meaning: "Soldi", type: "base", pos: "noun" }
+            { id: "soc_zh6", lang: "zh", level: 2, word: "钱", pronunciation: "qián", ipa: "t͡ɕʰjɛn³⁵", meaning: "Soldi", type: "base", pos: "noun" },
         ]
     },
     "societa_ja": {
-        title: "Società & Casa (Giapponese)", tags: ["società", "ja"],
+        title: "Società & Casa (Giapponese)", tags: ["societa", "ja"],
         cards: [
             { id: "fam_ja1", lang: "ja", level: 2, word: "父", pronunciation: "ちち", ipa: "t͡ɕi̥t͡ɕi", meaning: "Padre", type: "base", pos: "noun" },
             { id: "fam_ja2", lang: "ja", level: 2, word: "母", pronunciation: "はは", ipa: "haha", meaning: "Madre", type: "base", requires: ["rad_donna_ja"], pos: "noun" },
@@ -205,7 +205,7 @@ const decks = {
         ]
     },
     "societa_ar": {
-        title: "Società & Casa (Arabo)", tags: ["società", "ar"],
+        title: "Società & Casa (Arabo)", tags: ["societa", "ar"],
         cards: [
             { id: "fam_ar1", lang: "ar", level: 2, word: "أَب", pronunciation: "ab", ipa: "ʔab", meaning: "Padre", type: "base", pos: "noun" },
             { id: "fam_ar2", lang: "ar", level: 2, word: "أُمّ", pronunciation: "umm", ipa: "ʔumm", meaning: "Madre", type: "base", pos: "noun" },
@@ -220,7 +220,7 @@ const decks = {
         ]
     },
 
-   // ==========================================
+    // ==========================================
     // 3. NATURA (FUSIONE COMPLETA VECCHIO + NUOVO)
     // ==========================================
     
@@ -230,14 +230,14 @@ const decks = {
         cards: [
             // --- VECCHIE CARTE AGGIORNATE (ID Storici) ---
             { id: "zh7", lang: "zh", level: 1, word: "山", pronunciation: "shān", ipa: "ʂan˥", meaning: "Montagna", type: "base", pos: "place" },
-            { id: "zh12", lang: "zh", level: 1, word: "天空", pronunciation: "tiānkōng", ipa: "tʰjɛn˥ kʰʊŋ˥", meaning: "Cielo", type: "base", pos: "place" }, // Aggiornato da Tian a Tiankong
-            { id: "zh13", lang: "zh", level: 2, word: "森林", pronunciation: "sēnlín", ipa: "sən˥ lin˧˥", meaning: "Foresta", type: "derivato", requires: ["rad_albero"], pos: "place" }, // Ex Bosco
+            { id: "zh12", lang: "zh", level: 1, word: "天空", pronunciation: "tiānkōng", ipa: "tʰjɛn˥ kʰʊŋ˥", meaning: "Cielo", type: "base", pos: "place" },
+            { id: "zh13", lang: "zh", level: 2, word: "森林", pronunciation: "sēnlín", ipa: "sən˥ lin˧˥", meaning: "Foresta", type: "derivato", requires: ["rad_albero"], pos: "place" },
             { id: "zh15", lang: "zh", level: 2, word: "河", pronunciation: "hé", ipa: "xɤ˧˥", meaning: "Fiume", type: "derivato", requires: ["rad_acqua"], pos: "place" },
             { id: "zh16", lang: "zh", level: 2, word: "海 / 海洋", pronunciation: "hǎi / hǎiyáng", ipa: "xaɪ̯˨˩˦ / xaɪ̯˨˩˦ jɑŋ˧˥", meaning: "Mare / Oceano", type: "derivato", requires: ["rad_acqua"], pos: "place" },
             { id: "zh17", lang: "zh", level: 2, word: "火山", pronunciation: "huǒshān", ipa: "xwɔ˨˩˦ ʂan˥", meaning: "Vulcano", type: "derivato", requires: ["rad_fuoco", "zh7"], pos: "place" },
             { id: "zh19", lang: "zh", level: 2, word: "花", pronunciation: "huā", ipa: "xwa˥", meaning: "Fiore", type: "derivato", requires: ["rad_albero"], pos: "noun" },
             { id: "zh22", lang: "zh", level: 2, word: "雪", pronunciation: "xuě", ipa: "ɕɥɛ˨˩˦", meaning: "Neve", type: "derivato", requires: ["rad_pioggia"], pos: "noun" },
-            { id: "zh30", lang: "zh", level: 3, word: "风", pronunciation: "fēng", ipa: "fəŋ˥", meaning: "Vento", type: "base", pos: "noun" }, // Recuperato ID vecchio o sostituito
+            { id: "zh30", lang: "zh", level: 3, word: "风", pronunciation: "fēng", ipa: "fəŋ˥", meaning: "Vento", type: "base", pos: "noun" },
             { id: "zh31", lang: "zh", level: 3, word: "暴风雨", pronunciation: "bàofēngyǔ", ipa: "pɑʊ̯˥˩ fəŋ˥ y˨˩˦", meaning: "Tempesta", type: "derivato", requires: ["rad_pioggia"], pos: "noun" },
 
             // --- NUOVE CARTE (Natura Estesa) ---
@@ -417,7 +417,7 @@ const decks = {
             { id: "n_ar_ext_47", lang: "ar", level: 3, word: "حماية", pronunciation: "Ḥimāya", ipa: "ħiˈmaːja", meaning: "Protezione", type: "base", pos: "noun" },
             { id: "n_ar_ext_48", lang: "ar", level: 2, word: "ممر", pronunciation: "Mamarr", ipa: "maˈmarr", meaning: "Sentiero", type: "base", pos: "place" }
         ]
-    }
+    },
 
     // ==========================================
     // 4. VIAGGIO & CIBO & GRAMMATICA
@@ -623,52 +623,6 @@ const decks = {
             { id: "v_ar_ext_53", lang: "ar", level: 2, word: "كم السعر؟", pronunciation: "Kam as-si'r?", ipa: "kam asˈsiʔr", meaning: "Quanto costa?", type: "base", pos: "phrase" },
             { id: "v_ar_ext_54", lang: "ar", level: 2, word: "مفتوح", pronunciation: "Maftūḥ", ipa: "mafˈtuːħ", meaning: "Aperto", type: "base", pos: "adj" },
             { id: "v_ar_ext_55", lang: "ar", level: 2, word: "صرف العملات", pronunciation: "Ṣarf al-'umlāt", ipa: "sˤarf al ʕumˈlaːt", meaning: "Cambio valuta", type: "base", pos: "noun" }
-        ]
-    },
-    "cibo_zh": {
-        title: "Cibo (Cinese)", tags: ["cibo", "zh"],
-        cards: [
-            { id: "c_zh1", lang: "zh", level: 1, word: "饭", pronunciation: "fàn", ipa: "fan⁵¹", meaning: "Riso", type: "base", pos: "food" },
-            { id: "c_zh2", lang: "zh", level: 1, word: "茶", pronunciation: "chá", ipa: "t͡ʂʰa³⁵", meaning: "Tè", type: "base", pos: "drink" },
-            { id: "c_zh4", lang: "zh", level: 1, word: "苹果", pronunciation: "píngguǒ", ipa: "pʰiŋ³⁵ kwɔ²¹⁴", meaning: "Mela", type: "base", pos: "food" }
-        ]
-    },
-    "cibo_ar": {
-        title: "Cibo (Arabo)", tags: ["cibo", "ar"],
-        cards: [
-            { id: "c_ar1", lang: "ar", level: 1, word: "خُبْز", pronunciation: "khubz", ipa: "xubz", meaning: "Pane", type: "base", pos: "food" },
-            { id: "c_ar2", lang: "ar", level: 1, word: "شَاي", pronunciation: "shāy", ipa: "ʃaːj", meaning: "Tè", type: "base", pos: "drink" },
-            { id: "c_ar4", lang: "ar", level: 1, word: "تُفَّاح", pronunciation: "tuffāḥ", ipa: "tuffaːħ", meaning: "Mela", type: "base", pos: "food" }
-        ]
-    },
-    "cibo_ja": {
-        title: "Cibo (Giapponese)", tags: ["cibo", "ja"],
-        cards: [
-            { id: "c_ja1", lang: "ja", level: 1, word: "ご飯", pronunciation: "ごはん", ipa: "ɡohaɴ", meaning: "Riso", type: "base", pos: "food" },
-            { id: "c_ja2", lang: "ja", level: 1, word: "お茶", pronunciation: "おちゃ", ipa: "ot͡ɕa", meaning: "Tè", type: "base", pos: "drink" },
-            { id: "c_ja4", lang: "ja", level: 1, word: "りんご", pronunciation: "りんご", ipa: "ɾiŋɡo", meaning: "Mela", type: "base", pos: "food" }
-        ]
-    },
-    "grammatica_zh": {
-        title: "Grammatica (Cinese)", tags: ["grammatica", "zh"],
-        cards: [
-            { id: "g_zh1", lang: "zh", level: 1, word: "我", pronunciation: "wǒ", ipa: "wɔ²¹⁴", meaning: "Io", type: "base", pos: "pronoun" },
-            { id: "g_zh2", lang: "zh", level: 2, word: "你", pronunciation: "nǐ", ipa: "ni²¹⁴", meaning: "Tu", type: "derivato", requires: ["rad_uomo"], pos: "pronoun" },
-            { id: "g_zh6", lang: "zh", level: 1, word: "吃", pronunciation: "chī", ipa: "t͡ʂʰɻ̩⁵⁵", meaning: "Mangiare", type: "derivato", requires: ["rad_bocca"], pos: "verb_eat" }
-        ]
-    },
-    "grammatica_ar": {
-        title: "Grammatica (Arabo)", tags: ["grammatica", "ar"],
-        cards: [
-            { id: "g_ar1", lang: "ar", level: 1, word: "أَنَا", pronunciation: "ana", ipa: "ʔana", meaning: "Io", type: "base", pos: "pronoun" },
-            { id: "g_ar7", lang: "ar", level: 1, word: "يَأْكُلُ", pronunciation: "ya'kulu", ipa: "jaʔkulu", meaning: "Mangia", type: "derivato", requires: ["root_akl"], pos: "verb_eat" }
-        ]
-    },
-    "grammatica_ja": {
-        title: "Grammatica (Giapponese)", tags: ["grammatica", "ja"],
-        cards: [
-            { id: "g_ja1", lang: "ja", level: 1, word: "私", pronunciation: "わたし", ipa: "wataɕi", meaning: "Io", type: "base", pos: "pronoun" },
-            { id: "g_ja4", lang: "ja", level: 1, word: "食べる", pronunciation: "たべる", ipa: "tabeɾɯ", meaning: "Mangiare", type: "base", pos: "verb_eat" }
         ]
     }
 };
