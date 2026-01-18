@@ -994,7 +994,8 @@ const decks = {
             { id: "v_ar_top_99", lang: "ar", level: 2, word: "خسر", pronunciation: "Khasira", ipa: "ˈxasira", meaning: "Perdere (sconfitta)", type: "base", pos: "verb" },
             { id: "v_ar_top_100", lang: "ar", level: 2, word: "ولد", pronunciation: "Wulida", ipa: "ˈwulida", meaning: "Nascere", type: "base", pos: "verb" }
         ]
-    };
+    }
+};
 
 
 const sentenceBank = [
