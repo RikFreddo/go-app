@@ -173,6 +173,165 @@ const decks = {
         ]
     },
 
+// ==========================================
+    // 5. GRAMMATICA & PARTICELLE (Cinese)
+    // ==========================================
+    "grammatica_zh": {
+        title: "Grammatica Base (Cinese)", 
+        tags: ["grammatica", "zh"],
+        cards: [
+            // --- PRONOMI PERSONALI ---
+            { id: "g_zh_pron_1", lang: "zh", level: 1, word: "我", pronunciation: "wǒ", ipa: "wɔ˨˩˦", meaning: "Io", type: "grammatica", pos: "pronoun" },
+            { id: "g_zh_pron_2", lang: "zh", level: 1, word: "你", pronunciation: "nǐ", ipa: "ni˨˩˦", meaning: "Tu", type: "grammatica", pos: "pronoun" },
+            { id: "g_zh_pron_3", lang: "zh", level: 1, word: "他", pronunciation: "tā", ipa: "tʰa⁵⁵", meaning: "Lui", type: "grammatica", pos: "pronoun" },
+            { id: "g_zh_pron_4", lang: "zh", level: 1, word: "她", pronunciation: "tā", ipa: "tʰa⁵⁵", meaning: "Lei", type: "grammatica", pos: "pronoun" },
+            { id: "g_zh_pron_5", lang: "zh", level: 1, word: "我们", pronunciation: "wǒmen", ipa: "wɔ˨˩˦ mən", meaning: "Noi", type: "grammatica", pos: "pronoun" },
+            { id: "g_zh_pron_6", lang: "zh", level: 1, word: "你们", pronunciation: "nǐmen", ipa: "ni˨˩˦ mən", meaning: "Voi", type: "grammatica", pos: "pronoun" },
+            { id: "g_zh_pron_7", lang: "zh", level: 1, word: "他们", pronunciation: "tāmen", ipa: "tʰa⁵⁵ mən", meaning: "Loro", type: "grammatica", pos: "pronoun" },
+
+            // --- NEGAZIONI ---
+            { id: "g_zh_neg_1", lang: "zh", level: 1, word: "不", pronunciation: "bù", ipa: "pu⁵¹", meaning: "Non (generale/futuro)", type: "grammatica", pos: "adverb" },
+            { id: "g_zh_neg_2", lang: "zh", level: 1, word: "没", pronunciation: "méi", ipa: "meɪ̯˧˥", meaning: "Non (passato/avere)", type: "grammatica", pos: "adverb" },
+
+            // --- PARTICELLE STRUTTURALI ---
+            { id: "g_zh_part_1", lang: "zh", level: 1, word: "的", pronunciation: "de", ipa: "tə", meaning: "Particella possessiva (di/il mio)", type: "grammatica", pos: "particle" },
+            { id: "g_zh_part_2", lang: "zh", level: 1, word: "吗", pronunciation: "ma", ipa: "ma", meaning: "Particella interrogativa (?)", type: "grammatica", pos: "particle" },
+            { id: "g_zh_part_3", lang: "zh", level: 2, word: "了", pronunciation: "le", ipa: "lə", meaning: "Particella azione completata/cambiamento", type: "grammatica", pos: "particle" },
+            { id: "g_zh_part_4", lang: "zh", level: 1, word: "很", pronunciation: "hěn", ipa: "xən˨˩˦", meaning: "Molto (lega agg. al soggetto)", type: "grammatica", pos: "adverb" },
+            { id: "g_zh_part_5", lang: "zh", level: 1, word: "和", pronunciation: "hé", ipa: "xɤ˧˥", meaning: "E (congiunzione)", type: "grammatica", pos: "conjunction" },
+
+            // --- CLASSIFICATORI (MISURATORI) ---
+            { id: "g_zh_cl_1", lang: "zh", level: 1, word: "个", pronunciation: "gè", ipa: "kɤ⁵¹", meaning: "Classificatore generico (persone/cose)", type: "grammatica", pos: "classifier" },
+            { id: "g_zh_cl_2", lang: "zh", level: 2, word: "只", pronunciation: "zhī", ipa: "ʈʂʐ̩⁵⁵", meaning: "Classificatore animali piccoli", type: "grammatica", pos: "classifier" },
+            { id: "g_zh_cl_3", lang: "zh", level: 2, word: "条", pronunciation: "tiáo", ipa: "tʰjɑʊ̯˧˥", meaning: "Classificatore cose lunghe (pesci/strade)", type: "grammatica", pos: "classifier" },
+            { id: "g_zh_cl_4", lang: "zh", level: 2, word: "本", pronunciation: "běn", ipa: "pən˨˩˦", meaning: "Classificatore libri/volumi", type: "grammatica", pos: "classifier" },
+
+            // --- DIMOSTRATIVI & INTERROGATIVI ---
+            { id: "g_zh_dem_1", lang: "zh", level: 1, word: "这", pronunciation: "zhè", ipa: "ʈʂɤ⁵¹", meaning: "Questo", type: "grammatica", pos: "pronoun" },
+            { id: "g_zh_dem_2", lang: "zh", level: 1, word: "那", pronunciation: "nà", ipa: "na⁵¹", meaning: "Quello", type: "grammatica", pos: "pronoun" },
+            { id: "g_zh_dem_3", lang: "zh", level: 1, word: "这里", pronunciation: "zhèlǐ", ipa: "ʈʂɤ⁵¹ li˨˩˦", meaning: "Qui", type: "grammatica", pos: "place" },
+            { id: "g_zh_dem_4", lang: "zh", level: 1, word: "那里", pronunciation: "nàlǐ", ipa: "na⁵¹ li˨˩˦", meaning: "Lì / Là", type: "grammatica", pos: "place" },
+            { id: "g_zh_int_1", lang: "zh", level: 1, word: "什么", pronunciation: "shénme", ipa: "ʂən˧˥ mə", meaning: "Cosa? / Che?", type: "grammatica", pos: "pronoun" },
+            { id: "g_zh_int_2", lang: "zh", level: 1, word: "哪儿", pronunciation: "nǎr", ipa: "na˨˩˦ ɑɻ", meaning: "Dove?", type: "grammatica", pos: "pronoun" },
+            { id: "g_zh_int_3", lang: "zh", level: 1, word: "谁", pronunciation: "shéi", ipa: "ʂeɪ̯˧˥", meaning: "Chi?", type: "grammatica", pos: "pronoun" }
+        ]
+    },
+
+// ==========================================
+    // 5. GRAMMATICA & PARTICELLE (Giapponese)
+    // ==========================================
+    "grammatica_ja": {
+        title: "Grammatica Base (Giapponese)", 
+        tags: ["grammatica", "ja"],
+        cards: [
+            // --- PRONOMI PERSONALI ---
+            { id: "g_ja_pron_1", lang: "ja", level: 1, word: "私", pronunciation: "watashi", ipa: "wataɕi", meaning: "Io", type: "grammatica", pos: "pronoun" },
+            { id: "g_ja_pron_2", lang: "ja", level: 1, word: "あなた", pronunciation: "anata", ipa: "anata", meaning: "Tu", type: "grammatica", pos: "pronoun" },
+            { id: "g_ja_pron_3", lang: "ja", level: 1, word: "彼", pronunciation: "kare", ipa: "kaɾe", meaning: "Lui", type: "grammatica", pos: "pronoun" },
+            { id: "g_ja_pron_4", lang: "ja", level: 1, word: "彼女", pronunciation: "kanojo", ipa: "kanodʑo", meaning: "Lei", type: "grammatica", pos: "pronoun" },
+
+            // --- PARTICELLE FONDAMENTALI ---
+            { id: "g_ja_part_1", lang: "ja", level: 1, word: "は", pronunciation: "wa", ipa: "wa", meaning: "Marcatore del TEMA (Parlando di...)", type: "grammatica", pos: "particle" },
+            { id: "g_ja_part_2", lang: "ja", level: 1, word: "を", pronunciation: "o", ipa: "o", meaning: "Marcatore OGGETTO (Cosa mangi/vedi?)", type: "grammatica", pos: "particle" },
+            { id: "g_ja_part_3", lang: "ja", level: 1, word: "に", pronunciation: "ni", ipa: "ɲi", meaning: "A / In (Destinazione o Tempo)", type: "grammatica", pos: "particle" },
+            { id: "g_ja_part_4", lang: "ja", level: 1, word: "で", pronunciation: "de", ipa: "de", meaning: "Con / Presso (Mezzo o Luogo azione)", type: "grammatica", pos: "particle" },
+            { id: "g_ja_part_5", lang: "ja", level: 1, word: "の", pronunciation: "no", ipa: "no", meaning: "Di (Possesso)", type: "grammatica", pos: "particle" },
+            { id: "g_ja_part_6", lang: "ja", level: 2, word: "が", pronunciation: "ga", ipa: "ɡa", meaning: "Soggetto specifico (per 'esserci'/'piacere')", type: "grammatica", pos: "particle" },
+            { id: "g_ja_part_7", lang: "ja", level: 1, word: "か", pronunciation: "ka", ipa: "ka", meaning: "Particella interrogativa (?)", type: "grammatica", pos: "particle" },
+            { id: "g_ja_part_8", lang: "ja", level: 1, word: "と", pronunciation: "to", ipa: "to", meaning: "E (congiunzione tra nomi)", type: "grammatica", pos: "particle" },
+            { id: "g_ja_part_9", lang: "ja", level: 1, word: "も", pronunciation: "mo", ipa: "mo", meaning: "Anche", type: "grammatica", pos: "particle" },
+
+            // --- VERBI AUSILIARI (Essere/Esistere) ---
+            { id: "g_ja_aux_1", lang: "ja", level: 1, word: "です", pronunciation: "desu", ipa: "desɯ", meaning: "Essere (cortese)", type: "grammatica", pos: "auxiliary" },
+            { id: "g_ja_aux_2", lang: "ja", level: 1, word: "ます", pronunciation: "masu", ipa: "masɯ", meaning: "Suffisso verbo cortese (presente/futuro)", type: "grammatica", pos: "suffix" },
+            { id: "g_ja_aux_3", lang: "ja", level: 1, word: "あります", pronunciation: "arimasu", ipa: "aɾimasɯ", meaning: "Esserci (cose inanimate)", type: "grammatica", pos: "verb" },
+            { id: "g_ja_aux_4", lang: "ja", level: 1, word: "います", pronunciation: "imasu", ipa: "imasɯ", meaning: "Esserci (persone/animali)", type: "grammatica", pos: "verb" },
+            { id: "g_ja_aux_5", lang: "ja", level: 1, word: "ません", pronunciation: "masen", ipa: "maseɴ", meaning: "Non (Negazione cortese)", type: "grammatica", pos: "suffix" },
+
+            // --- DIMOSTRATIVI (Serie Ko-So-A-Do) ---
+            { id: "g_ja_dem_1", lang: "ja", level: 1, word: "これ", pronunciation: "kore", ipa: "koɾe", meaning: "Questo (vicino a me)", type: "grammatica", pos: "pronoun" },
+            { id: "g_ja_dem_2", lang: "ja", level: 1, word: "それ", pronunciation: "sore", ipa: "soɾe", meaning: "Codesto (vicino a te)", type: "grammatica", pos: "pronoun" },
+            { id: "g_ja_dem_3", lang: "ja", level: 1, word: "あれ", pronunciation: "are", ipa: "aɾe", meaning: "Quello (lontano)", type: "grammatica", pos: "pronoun" },
+            { id: "g_ja_dem_4", lang: "ja", level: 1, word: "ここ", pronunciation: "koko", ipa: "koko", meaning: "Qui", type: "grammatica", pos: "place" },
+            { id: "g_ja_dem_5", lang: "ja", level: 1, word: "そこ", pronunciation: "soko", ipa: "soko", meaning: "Lì", type: "grammatica", pos: "place" },
+            { id: "g_ja_dem_6", lang: "ja", level: 1, word: "あそこ", pronunciation: "asoko", ipa: "asoko", meaning: "Laggiù", type: "grammatica", pos: "place" },
+            
+            // --- INTERROGATIVI ---
+            { id: "g_ja_int_1", lang: "ja", level: 1, word: "何", pronunciation: "nani", ipa: "naɲi", meaning: "Cosa?", type: "grammatica", pos: "pronoun" },
+            { id: "g_ja_int_2", lang: "ja", level: 1, word: "誰", pronunciation: "dare", ipa: "daɾe", meaning: "Chi?", type: "grammatica", pos: "pronoun" },
+            { id: "g_ja_int_3", lang: "ja", level: 1, word: "どこ", pronunciation: "doko", ipa: "doko", meaning: "Dove?", type: "grammatica", pos: "pronoun" },
+            { id: "g_ja_int_4", lang: "ja", level: 1, word: "いつ", pronunciation: "itsu", ipa: "itsɯ", meaning: "Quando?", type: "grammatica", pos: "pronoun" }
+        ]
+    },
+
+// ==========================================
+    // 5. GRAMMATICA & PARTICELLE (Arabo) - VERSIONE ESTESA
+    // ==========================================
+    "grammatica_ar": {
+        title: "Grammatica Base (Arabo)", 
+        tags: ["grammatica", "ar"],
+        cards: [
+            // --- PRONOMI PERSONALI (ISOLATI - Soggetto) ---
+            { id: "g_ar_pron_1", lang: "ar", level: 1, word: "أَنَا", pronunciation: "ana", ipa: "ʔana", meaning: "Io", type: "grammatica", pos: "pronoun" },
+            { id: "g_ar_pron_2", lang: "ar", level: 1, word: "أَنْتَ", pronunciation: "anta", ipa: "ʔanta", meaning: "Tu (maschile)", type: "grammatica", pos: "pronoun" },
+            { id: "g_ar_pron_3", lang: "ar", level: 1, word: "أَنْتِ", pronunciation: "anti", ipa: "ʔanti", meaning: "Tu (femminile)", type: "grammatica", pos: "pronoun" },
+            { id: "g_ar_pron_4", lang: "ar", level: 1, word: "هُوَ", pronunciation: "huwa", ipa: "huwa", meaning: "Lui", type: "grammatica", pos: "pronoun" },
+            { id: "g_ar_pron_5", lang: "ar", level: 1, word: "هِيَ", pronunciation: "hiya", ipa: "hija", meaning: "Lei", type: "grammatica", pos: "pronoun" },
+            { id: "g_ar_pron_6", lang: "ar", level: 1, word: "نَحْنُ", pronunciation: "naḥnu", ipa: "naħnu", meaning: "Noi", type: "grammatica", pos: "pronoun" },
+            { id: "g_ar_pron_7", lang: "ar", level: 1, word: "هُمْ", pronunciation: "hum", ipa: "hum", meaning: "Loro", type: "grammatica", pos: "pronoun" },
+
+            // --- PRONOMI SUFFISSI (POSSESSIVI / OGGETTO) ---
+            // Questi si attaccano alla fine: Kitāb (libro) + ī = Kitābī (Il mio libro)
+            { id: "g_ar_suff_1", lang: "ar", level: 1, word: "ـي", pronunciation: "-ī", ipa: "iː", meaning: "Mio / Me (suffisso)", type: "grammatica", pos: "suffix" },
+            { id: "g_ar_suff_2", lang: "ar", level: 1, word: "ـكَ", pronunciation: "-ka", ipa: "ka", meaning: "Tuo / Te (maschile, suffisso)", type: "grammatica", pos: "suffix" },
+            { id: "g_ar_suff_3", lang: "ar", level: 1, word: "ـكِ", pronunciation: "-ki", ipa: "ki", meaning: "Tuo / Te (femminile, suffisso)", type: "grammatica", pos: "suffix" },
+            { id: "g_ar_suff_4", lang: "ar", level: 1, word: "ـهُ", pronunciation: "-hu", ipa: "hu", meaning: "Suo / Lui (suffisso)", type: "grammatica", pos: "suffix" },
+            { id: "g_ar_suff_5", lang: "ar", level: 1, word: "ـهَا", pronunciation: "-hā", ipa: "haː", meaning: "Suo / Lei (suffisso)", type: "grammatica", pos: "suffix" },
+            { id: "g_ar_suff_6", lang: "ar", level: 1, word: "ـنَا", pronunciation: "-nā", ipa: "naː", meaning: "Nostro / Ci (suffisso)", type: "grammatica", pos: "suffix" },
+
+            // --- PSEUDO-VERBI (AVERE/POSSEDERE) ---
+            // Si usano con i suffissi sopra: 'Ind + ī = 'Indī (Ho)
+            { id: "g_ar_have_1", lang: "ar", level: 1, word: "عِنْدَ", pronunciation: "'inda", ipa: "ʕinda", meaning: "Presso / Avere (con suffissi)", type: "grammatica", pos: "preposition" },
+            { id: "g_ar_have_2", lang: "ar", level: 1, word: "لِـ", pronunciation: "li-", ipa: "li", meaning: "A / Per / Avere (con suffissi)", type: "grammatica", pos: "preposition" },
+
+            // --- DIMOSTRATIVI ---
+            { id: "g_ar_dem_1", lang: "ar", level: 1, word: "هَذَا", pronunciation: "hādhā", ipa: "haːðaː", meaning: "Questo (maschile)", type: "grammatica", pos: "pronoun" },
+            { id: "g_ar_dem_2", lang: "ar", level: 1, word: "هَذِهِ", pronunciation: "hādhihi", ipa: "haːðihi", meaning: "Questa (femminile)", type: "grammatica", pos: "pronoun" },
+            { id: "g_ar_dem_3", lang: "ar", level: 1, word: "ذَلِكَ", pronunciation: "dhālika", ipa: "ðaːlika", meaning: "Quello (lontano)", type: "grammatica", pos: "pronoun" },
+            { id: "g_ar_dem_4", lang: "ar", level: 1, word: "تِلْكَ", pronunciation: "tilka", ipa: "tilka", meaning: "Quella (lontano)", type: "grammatica", pos: "pronoun" },
+            { id: "g_ar_dem_5", lang: "ar", level: 1, word: "هُنَا", pronunciation: "hunā", ipa: "hunaː", meaning: "Qui", type: "grammatica", pos: "place" },
+            { id: "g_ar_dem_6", lang: "ar", level: 1, word: "هُنَاكَ", pronunciation: "hunāka", ipa: "hunaːka", meaning: "Lì / Là", type: "grammatica", pos: "place" },
+
+            // --- PREPOSIZIONI & PARTICELLE ---
+            { id: "g_ar_prep_1", lang: "ar", level: 1, word: "فِي", pronunciation: "fī", ipa: "fiː", meaning: "In / Dentro", type: "grammatica", pos: "preposition" },
+            { id: "g_ar_prep_2", lang: "ar", level: 1, word: "إِلَى", pronunciation: "ilā", ipa: "ʔilaː", meaning: "A / Verso (moto)", type: "grammatica", pos: "preposition" },
+            { id: "g_ar_prep_3", lang: "ar", level: 1, word: "مِنْ", pronunciation: "min", ipa: "min", meaning: "Da (provenienza)", type: "grammatica", pos: "preposition" },
+            { id: "g_ar_prep_4", lang: "ar", level: 1, word: "عَلَى", pronunciation: "alā", ipa: "ʕalaː", meaning: "Su / Sopra", type: "grammatica", pos: "preposition" },
+            { id: "g_ar_prep_5", lang: "ar", level: 1, word: "بِـ", pronunciation: "bi", ipa: "bi", meaning: "Con (mezzo) / In", type: "grammatica", pos: "preposition" },
+            { id: "g_ar_prep_6", lang: "ar", level: 1, word: "مَعَ", pronunciation: "ma'a", ipa: "maʕa", meaning: "Con (compagnia)", type: "grammatica", pos: "preposition" },
+            { id: "g_ar_part_1", lang: "ar", level: 1, word: "الـ", pronunciation: "al-", ipa: "al", meaning: "Il / Lo / La (Articolo)", type: "grammatica", pos: "article" },
+            
+            // --- CONGIUNZIONI & AVVERBI ---
+            { id: "g_ar_conj_1", lang: "ar", level: 1, word: "وَ", pronunciation: "wa", ipa: "wa", meaning: "E (congiunzione)", type: "grammatica", pos: "conjunction" },
+            { id: "g_ar_conj_2", lang: "ar", level: 1, word: "لَكِنْ", pronunciation: "lākin", ipa: "laːkin", meaning: "Ma / Tuttavia", type: "grammatica", pos: "conjunction" },
+            { id: "g_ar_conj_3", lang: "ar", level: 1, word: "أَوْ", pronunciation: "aw", ipa: "ʔaw", meaning: "O / Oppure", type: "grammatica", pos: "conjunction" },
+            { id: "g_ar_conj_4", lang: "ar", level: 1, word: "لِأَنَّ", pronunciation: "li'anna", ipa: "liʔanna", meaning: "Perché (poiché)", type: "grammatica", pos: "conjunction" },
+            { id: "g_ar_adv_1", lang: "ar", level: 1, word: "الْآن", pronunciation: "al-ān", ipa: "al ʔaːn", meaning: "Adesso / Ora", type: "grammatica", pos: "adverb" },
+            { id: "g_ar_adv_2", lang: "ar", level: 1, word: "دَائِمًا", pronunciation: "dā'iman", ipa: "daːʔiman", meaning: "Sempre", type: "grammatica", pos: "adverb" },
+            
+            // --- NEGAZIONI & INTERROGATIVI ---
+            { id: "g_ar_neg_1", lang: "ar", level: 1, word: "لَا", pronunciation: "lā", ipa: "laː", meaning: "No / Non (presente)", type: "grammatica", pos: "adverb" },
+            { id: "g_ar_neg_2", lang: "ar", level: 1, word: "لَيْسَ", pronunciation: "laysa", ipa: "lajsa", meaning: "Non è (negazione nominale)", type: "grammatica", pos: "verb" },
+            { id: "g_ar_int_1", lang: "ar", level: 1, word: "مَا / مَاذَا", pronunciation: "mā / mādhā", ipa: "maː / maːðaː", meaning: "Cosa?", type: "grammatica", pos: "pronoun" },
+            { id: "g_ar_int_2", lang: "ar", level: 1, word: "مَنْ", pronunciation: "man", ipa: "man", meaning: "Chi?", type: "grammatica", pos: "pronoun" },
+            { id: "g_ar_int_3", lang: "ar", level: 1, word: "أَيْنَ", pronunciation: "ayna", ipa: "ʔajna", meaning: "Dove?", type: "grammatica", pos: "pronoun" },
+            { id: "g_ar_int_4", lang: "ar", level: 1, word: "كَيْفَ", pronunciation: "kayfa", ipa: "kajfa", meaning: "Come?", type: "grammatica", pos: "pronoun" },
+            { id: "g_ar_int_5", lang: "ar", level: 1, word: "هَل", pronunciation: "hal", ipa: "hal", meaning: "Particella interrogativa (Si/No)", type: "grammatica", pos: "particle" },
+            { id: "g_ar_int_6", lang: "ar", level: 1, word: "لِمَاذَا", pronunciation: "limādhā", ipa: "limaːðaː", meaning: "Perché? (Domanda)", type: "grammatica", pos: "pronoun" },
+            { id: "g_ar_int_7", lang: "ar", level: 1, word: "كَم", pronunciation: "kam", ipa: "kam", meaning: "Quanto?", type: "grammatica", pos: "pronoun" }
+        ]
+    },
+    
     // ==========================================
     // 2. SOCIETA' & CASA
     // ==========================================
