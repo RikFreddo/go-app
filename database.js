@@ -1158,6 +1158,145 @@ const decks = {
 
 
 const sentenceBank = [
+    // ==========================================
+    // FRASI CINESE (LIVELLI 1-5)
+    // ==========================================
+    
+    // --- LIVELLO 1: Descrizioni Semplici (Soggetto + 很 + Aggettivo) ---
+    // Nota: In cinese "essere" non si usa con gli aggettivi. Si usa "hěn" (molto).
+    { id: "s_zh_1", lang: "zh", text: "山很大", pronunciation: "Shān hěn dà", translation: "La montagna è grande", requires: ["zh7", "g_zh_part_4", "base_grande"] },
+    { id: "s_zh_2", lang: "zh", text: "花很红", pronunciation: "Huā hěn hóng", translation: "Il fiore è rosso", requires: ["zh19", "g_zh_part_4", "col_zh3"] },
+    { id: "s_zh_3", lang: "zh", text: "月亮很白", pronunciation: "Yuèliang hěn bái", translation: "La luna è bianca", requires: ["n_zh_ext_24", "g_zh_part_4", "col_zh1"] },
+    { id: "s_zh_4", lang: "zh", text: "我很小", pronunciation: "Wǒ hěn xiǎo", translation: "Io sono piccolo", requires: ["g_zh_pron_1", "g_zh_part_4", "base_piccolo"] },
+    { id: "s_zh_5", lang: "zh", text: "天很蓝", pronunciation: "Tiān hěn lán", translation: "Il cielo è blu", requires: ["zh12", "g_zh_part_4", "col_zh4"] },
+    { id: "s_zh_6", lang: "zh", text: "这很贵", pronunciation: "Zhè hěn guì", translation: "Questo è costoso", requires: ["g_zh_dem_1", "g_zh_part_4"] }, // "guì" non è nel deck, ma la struttura è questa. Se manca l'agg, usa "Zhè hěn hǎo" (Questo è molto buono).
+
+    // --- LIVELLO 2: Azioni Base (Soggetto + Verbo + Oggetto) ---
+    { id: "s_zh_7", lang: "zh", text: "我吃水果", pronunciation: "Wǒ chī shuǐguǒ", translation: "Io mangio frutta", requires: ["g_zh_pron_1", "v_zh_top_51", "n_zh_ext_21"] },
+    { id: "s_zh_8", lang: "zh", text: "他喝水", pronunciation: "Tā hē shuǐ", translation: "Lui beve acqua", requires: ["g_zh_pron_3", "v_zh_top_52", "rad_acqua"] },
+    { id: "s_zh_9", lang: "zh", text: "你看书", pronunciation: "Nǐ kàn shū", translation: "Tu leggi (guardi) un libro", requires: ["g_zh_pron_2", "v_zh_top_23", "soc_zh4"] },
+    { id: "s_zh_10", lang: "zh", text: "我们去学校", pronunciation: "Wǒmen qù xuéxiào", translation: "Noi andiamo a scuola", requires: ["g_zh_pron_5", "v_zh_top_9", "soc_zh2"] },
+    { id: "s_zh_11", lang: "zh", text: "鸟飞", pronunciation: "Niǎo fēi", translation: "L'uccello vola", requires: ["n_zh_ext_33", "v_zh_top_14"] },
+    { id: "s_zh_12", lang: "zh", text: "她爱大自然", pronunciation: "Tā ài dàzìrán", translation: "Lei ama la natura", requires: ["g_zh_pron_4", "v_zh_top_31", "n_zh_ext_42"] },
+
+    // --- LIVELLO 3: Possesso e Classificatori (的, 个, 本) ---
+    { id: "s_zh_13", lang: "zh", text: "这是我的书", pronunciation: "Zhè shì wǒ de shū", translation: "Questo è il mio libro", requires: ["g_zh_dem_1", "v_zh_top_1", "g_zh_pron_1", "g_zh_part_1", "soc_zh4"] },
+    { id: "s_zh_14", lang: "zh", text: "她是我的朋友", pronunciation: "Tā shì wǒ de péngyǒu", translation: "Lei è mia amica", requires: ["g_zh_pron_4", "v_zh_top_1", "g_zh_pron_1", "g_zh_part_1", "soc_zh5"] },
+    { id: "s_zh_15", lang: "zh", text: "我有三个哥哥", pronunciation: "Wǒ yǒu sān gè gēge", translation: "Ho tre fratelli maggiori", requires: ["g_zh_pron_1", "v_zh_top_2", "num_zh3", "g_zh_cl_1", "fam_zh3"] },
+    { id: "s_zh_16", lang: "zh", text: "我要两本书", pronunciation: "Wǒ yào liǎng běn shū", translation: "Voglio due libri", requires: ["g_zh_pron_1", "v_zh_top_30", "num_zh2", "g_zh_cl_4", "soc_zh4"] }, // Nota: "Due" per quantità si dice "liǎng" non "èr", ma per ora va bene capire il concetto.
+    { id: "s_zh_17", lang: "zh", text: "这里有一只鸟", pronunciation: "Zhèlǐ yǒu yī zhī niǎo", translation: "Qui c'è un uccello", requires: ["g_zh_dem_3", "v_zh_top_2", "num_zh1", "g_zh_cl_2", "n_zh_ext_33"] },
+
+    // --- LIVELLO 4: Negazioni e Domande (不, 没, 吗) ---
+    { id: "s_zh_18", lang: "zh", text: "我不去", pronunciation: "Wǒ bù qù", translation: "Io non vado", requires: ["g_zh_pron_1", "g_zh_neg_1", "v_zh_top_9"] },
+    { id: "s_zh_19", lang: "zh", text: "他没钱", pronunciation: "Tā méi qián", translation: "Lui non ha soldi", requires: ["g_zh_pron_3", "g_zh_neg_2", "soc_zh6"] },
+    { id: "s_zh_20", lang: "zh", text: "你不吃肉吗？", pronunciation: "Nǐ bù chī ròu ma?", translation: "Non mangi carne?", requires: ["g_zh_pron_2", "g_zh_neg_1", "v_zh_top_51", "g_zh_part_2"] }, // "ròu" (carne) extra
+    { id: "s_zh_21", lang: "zh", text: "这是什么？", pronunciation: "Zhè shì shénme?", translation: "Che cos'è questo?", requires: ["g_zh_dem_1", "v_zh_top_1", "g_zh_int_1"] },
+    { id: "s_zh_22", lang: "zh", text: "学校在哪儿？", pronunciation: "Xuéxiào zài nǎr?", translation: "Dov'è la scuola?", requires: ["soc_zh2", "v_zh_top_5", "g_zh_int_2"] },
+    { id: "s_zh_23", lang: "zh", text: "你喜欢书吗？", pronunciation: "Nǐ xǐhuān shū ma?", translation: "Ti piacciono i libri?", requires: ["g_zh_pron_2", "v_zh_top_32", "soc_zh4", "g_zh_part_2"] },
+
+    // --- LIVELLO 5: Frasi Complesse (Tempo, Luogo, Passato) ---
+    { id: "s_zh_24", lang: "zh", text: "明天我去北京", pronunciation: "Míngtiān wǒ qù Běijīng", translation: "Domani vado a Pechino", requires: ["tm_zh5", "g_zh_pron_1", "v_zh_top_9"] },
+    { id: "s_zh_25", lang: "zh", text: "我买了一张票", pronunciation: "Wǒ mǎi le yī zhāng piào", translation: "Ho comprato un biglietto", requires: ["g_zh_pron_1", "v_zh_top_55", "g_zh_part_3", "num_zh1", "v_zh_ext_7"] },
+    { id: "s_zh_26", lang: "zh", text: "爸爸和妈妈在家", pronunciation: "Bàba hé māma zài jiā", translation: "Papà e mamma sono a casa", requires: ["fam_zh1", "g_zh_part_5", "fam_zh2", "v_zh_top_5", "soc_zh1"] },
+    { id: "s_zh_27", lang: "zh", text: "我看海和山", pronunciation: "Wǒ kàn hǎi hé shān", translation: "Guardo il mare e la montagna", requires: ["g_zh_pron_1", "v_zh_top_23", "zh16", "g_zh_part_5", "zh7"] },
+    { id: "s_zh_28", lang: "zh", text: "天在下雨", pronunciation: "Tiān zài xià yǔ", translation: "Sta piovendo (Il cielo sta piovendo)", requires: ["zh12", "v_zh_top_5", "rad_pioggia"] },
+    { id: "s_zh_29", lang: "zh", text: "我们要坐火车", pronunciation: "Wǒmen yào zuò huǒchē", translation: "Vogliamo prendere il treno", requires: ["g_zh_pron_5", "v_zh_top_30", "v_zh_top_19", "v_zh6"] },
+    { id: "s_zh_30", lang: "zh", text: "森林里有很多树", pronunciation: "Sēnlín lǐ yǒu hěnduō shù", translation: "Nella foresta ci sono molti alberi", requires: ["zh13", "v_zh_top_2", "g_zh_part_4", "n_zh_ext_12"] }, // "lǐ" (dentro) e "duō" (molti) sono concetti impliciti qui
+
+    // ==========================================
+    // FRASI GIAPPONESE (LIVELLI 1-5)
+    // ==========================================
+
+    // --- LIVELLO 1: Identità e Descrizioni Semplici (X wa Y desu) ---
+    { id: "s_ja_1", lang: "ja", text: "これは山です", pronunciation: "Kore wa yama desu", translation: "Questa è una montagna", requires: ["g_ja_dem_1", "g_ja_part_1", "ja2", "g_ja_aux_1"] },
+    { id: "s_ja_2", lang: "ja", text: "私はイタリア人です", pronunciation: "Watashi wa Itaria-jin desu", translation: "Io sono italiano", requires: ["g_ja_pron_1", "g_ja_part_1", "rad_uomo_ja", "g_ja_aux_1"] }, // "jin" usa il radicale uomo
+    { id: "s_ja_3", lang: "ja", text: "花は赤です", pronunciation: "Hana wa aka desu", translation: "Il fiore è rosso", requires: ["ja13", "g_ja_part_1", "col_ja3", "g_ja_aux_1"] },
+    { id: "s_ja_4", lang: "ja", text: "あれは月です", pronunciation: "Are wa tsuki desu", translation: "Quella è la luna", requires: ["g_ja_dem_3", "g_ja_part_1", "rad_luna_ja", "g_ja_aux_1"] },
+    { id: "s_ja_5", lang: "ja", text: "彼は先生です", pronunciation: "Kare wa sensei desu", translation: "Lui è un insegnante", requires: ["g_ja_pron_3", "g_ja_part_1", "soc_ja5", "g_ja_aux_1"] },
+    { id: "s_ja_6", lang: "ja", text: "空は青です", pronunciation: "Sora wa ao desu", translation: "Il cielo è blu", requires: ["n_ja_ext_27", "g_ja_part_1", "col_ja4", "g_ja_aux_1"] },
+
+    // --- LIVELLO 2: Azioni Base (Soggetto + Wa + Oggetto + O + Verbo) ---
+    { id: "s_ja_7", lang: "ja", text: "私は水を飲みます", pronunciation: "Watashi wa mizu o nomimasu", translation: "Io bevo acqua", requires: ["g_ja_pron_1", "rad_acqua_ja", "g_ja_part_2", "v_ja_top_22", "g_ja_aux_2"] },
+    { id: "s_ja_8", lang: "ja", text: "彼は果物を食べます", pronunciation: "Kare wa kudamono o tabemasu", translation: "Lui mangia frutta", requires: ["g_ja_pron_3", "n_ja_ext_22", "g_ja_part_2", "v_ja_top_21", "g_ja_aux_2"] },
+    { id: "s_ja_9", lang: "ja", text: "彼女は本を読みます", pronunciation: "Kanojo wa hon o yomimasu", translation: "Lei legge un libro", requires: ["g_ja_pron_4", "soc_ja3", "g_ja_part_2", "v_ja_top_54", "g_ja_aux_2"] },
+    { id: "s_ja_10", lang: "ja", text: "母は魚を買います", pronunciation: "Haha wa sakana o kaimasu", translation: "La mamma compra il pesce", requires: ["fam_ja2", "n_ja_ext_38", "g_ja_part_2", "v_ja_top_35", "g_ja_aux_2"] },
+    { id: "s_ja_11", lang: "ja", text: "鳥は空を飛びます", pronunciation: "Tori wa sora o tobimasu", translation: "L'uccello vola nel cielo", requires: ["n_ja_ext_37", "n_ja_ext_27", "g_ja_part_2", "v_ja_top_13", "g_ja_aux_2"] }, // "O" si usa anche per "attraversare" uno spazio
+
+    // --- LIVELLO 3: Movimento e Luoghi (Destinazione + Ni) ---
+    { id: "s_ja_12", lang: "ja", text: "明日、学校に行きます", pronunciation: "Ashita, gakkou ni ikimasu", translation: "Domani vado a scuola", requires: ["tm_ja5", "soc_ja2", "g_ja_part_3", "v_ja_top_7", "g_ja_aux_2"] },
+    { id: "s_ja_13", lang: "ja", text: "家に帰ります", pronunciation: "Ie ni kaerimasu", translation: "Torno a casa", requires: ["soc_ja1", "g_ja_part_3", "v_ja_top_9", "g_ja_aux_2"] },
+    { id: "s_ja_14", lang: "ja", text: "海に来ます", pronunciation: "Umi ni kimasu", translation: "Vengo al mare", requires: ["n_ja_ext_4", "g_ja_part_3", "v_ja_top_8", "g_ja_aux_2"] },
+    { id: "s_ja_15", lang: "ja", text: "山に登ります", pronunciation: "Yama ni noborimasu", translation: "Scalo (salgo su) la montagna", requires: ["ja2", "g_ja_part_3", "v_ja_top_16", "g_ja_aux_2"] }, // v_ja_top_16 è "salire" (noru/noboru)
+
+    // --- LIVELLO 4: Esistenza e Possesso (Arimasu/Imasu/No) ---
+    { id: "s_ja_16", lang: "ja", text: "これは私の本です", pronunciation: "Kore wa watashi no hon desu", translation: "Questo è il mio libro", requires: ["g_ja_dem_1", "g_ja_pron_1", "g_ja_part_5", "soc_ja3", "g_ja_aux_1"] },
+    { id: "s_ja_17", lang: "ja", text: "ここに木があります", pronunciation: "Koko ni ki ga arimasu", translation: "Qui c'è un albero", requires: ["g_ja_dem_4", "g_ja_part_3", "rad_albero_ja", "g_ja_part_6", "g_ja_aux_3"] },
+    { id: "s_ja_18", lang: "ja", text: "あそこに川があります", pronunciation: "Asoko ni kawa ga arimasu", translation: "Laggiù c'è un fiume", requires: ["g_ja_dem_6", "ja1", "g_ja_part_6", "g_ja_aux_3"] },
+    { id: "s_ja_19", lang: "ja", text: "虫がいます", pronunciation: "Mushi ga imasu", translation: "C'è un insetto", requires: ["n_ja_ext_39", "g_ja_part_6", "g_ja_aux_4"] }, // "Imasu" per esseri viventi
+    { id: "s_ja_20", lang: "ja", text: "私はお金があります", pronunciation: "Watashi wa okane ga arimasu", translation: "Io ho (i) soldi", requires: ["g_ja_pron_1", "v_ja_ext_51", "g_ja_part_6", "g_ja_aux_3"] }, // Avere si esprime con "esistere" (arimasu)
+
+    // --- LIVELLO 5: Domande, Mezzi e Congiunzioni (Ka, De, To) ---
+    { id: "s_ja_21", lang: "ja", text: "駅はどこですか？", pronunciation: "Eki wa doko desu ka?", translation: "Dov'è la stazione?", requires: ["v_ja4", "g_ja_int_3", "g_ja_aux_1", "g_ja_part_7"] },
+    { id: "s_ja_22", lang: "ja", text: "これは何ですか？", pronunciation: "Kore wa nani desu ka?", translation: "Cos'è questo?", requires: ["g_ja_dem_1", "g_ja_int_1", "g_ja_part_7"] },
+    { id: "s_ja_23", lang: "ja", text: "電車で行きます", pronunciation: "Densha de ikimasu", translation: "Vado in treno", requires: ["v_ja6", "g_ja_part_4", "v_ja_top_7"] },
+    { id: "s_ja_24", lang: "ja", text: "友達と話します", pronunciation: "Tomodachi to hanashimasu", translation: "Parlo con un amico", requires: ["soc_ja4", "g_ja_part_8", "v_ja_top_51"] },
+    { id: "s_ja_25", lang: "ja", text: "父と母", pronunciation: "Chichi to haha", translation: "Papà e mamma", requires: ["fam_ja1", "g_ja_part_8", "fam_ja2"] },
+    { id: "s_ja_26", lang: "ja", text: "あなたも行きますか？", pronunciation: "Anata mo ikimasu ka?", translation: "Vai anche tu?", requires: ["g_ja_pron_2", "g_ja_part_9", "v_ja_top_7", "g_ja_part_7"] },
+    
+    // --- LIVELLO 6: Frasi Complesse / Viaggio ---
+    { id: "s_ja_27", lang: "ja", text: "チケットを買います", pronunciation: "Chiketto o kaimasu", translation: "Compro un biglietto", requires: ["v_ja_ext_7", "g_ja_part_2", "v_ja_top_35"] },
+    { id: "s_ja_28", lang: "ja", text: "パスポートを見せます", pronunciation: "Pasupooto o misemasu", translation: "Mostro il passaporto", requires: ["v_ja_ext_8", "g_ja_part_2", "v_ja_top_66"] },
+    { id: "s_ja_29", lang: "ja", text: "トイレはどこですか？", pronunciation: "Toire wa doko desu ka?", translation: "Dov'è il bagno?", requires: ["v_ja_ext_50", "g_ja_int_3", "g_ja_part_7"] },
+    { id: "s_ja_30", lang: "ja", text: "助けて！", pronunciation: "Tasukete!", translation: "Aiuto!", requires: ["v_ja_ext_46"] },
+
+    // ==========================================
+    // FRASI ARABO (LIVELLI 1-6)
+    // ==========================================
+
+    // --- LIVELLO 1: Frasi Nominali (Senza verbo "essere") ---
+    { id: "s_ar_1", lang: "ar", text: "هَذَا بَيْت", pronunciation: "Hādhā bayt", translation: "Questa è una casa", requires: ["g_ar_dem_1", "soc_ar1"] },
+    { id: "s_ar_2", lang: "ar", text: "أَنَا أَب", pronunciation: "Ana ab", translation: "Io sono un padre", requires: ["g_ar_pron_1", "fam_ar1"] },
+    { id: "s_ar_3", lang: "ar", text: "الْكِتَاب كَبِير", pronunciation: "Al-kitāb kabīr", translation: "Il libro è grande", requires: ["g_ar_part_1", "soc_ar2", "root_kbr"] },
+    { id: "s_ar_4", lang: "ar", text: "هَذِهِ أُمّ", pronunciation: "Hādhihi umm", translation: "Questa è una madre", requires: ["g_ar_dem_2", "fam_ar2"] },
+    { id: "s_ar_5", lang: "ar", text: "الْبَحْر أَزْرَق", pronunciation: "Al-baḥr azraq", translation: "Il mare è blu", requires: ["g_ar_part_1", "n_ar_ext_17", "col_ar4"] }, // Baḥr era ar17 o root_bhr, uso l'estensione o derivato
+
+    // --- LIVELLO 2: Preposizioni e Luoghi (Fi, Ila, Min, Ala) ---
+    { id: "s_ar_6", lang: "ar", text: "هُوَ فِي الْمَدْرَسَة", pronunciation: "Huwa fī al-madrasa", translation: "Lui è nella scuola", requires: ["g_ar_pron_4", "g_ar_prep_1", "g_ar_part_1", "soc_ar4"] },
+    { id: "s_ar_7", lang: "ar", text: "الْقَلَم عَلَى الْمَكْتَب", pronunciation: "Al-qalam 'alā al-maktab", translation: "La penna è sulla scrivania", requires: ["g_ar_part_1", "root_ktb", "g_ar_prep_4", "soc_ar3"] }, // "Qalam" non c'è, uso "Kitāb" o assumo vocabolario base. Uso: Il libro è sulla scrivania -> Al-kitāb 'alā al-maktab
+    { id: "s_ar_7_fix", lang: "ar", text: "الْكِتَاب عَلَى الْمَكْتَب", pronunciation: "Al-kitāb 'alā al-maktab", translation: "Il libro è sulla scrivania", requires: ["soc_ar2", "g_ar_prep_4", "soc_ar3"] },
+    { id: "s_ar_8", lang: "ar", text: "أَنَا مِنْ إِيطَالِيَا", pronunciation: "Ana min Īṭāliyā", translation: "Io sono (vengo) dall'Italia", requires: ["g_ar_pron_1", "g_ar_prep_3"] }, // Italia parola extra semplice
+    { id: "s_ar_9", lang: "ar", text: "الْوَلَد مَعَ الْأَب", pronunciation: "Al-walad ma'a al-ab", translation: "Il bambino è con il padre", requires: ["v_ar_top_100", "g_ar_prep_6", "g_ar_part_1", "fam_ar1"] }, // Walad da verbo "Wulida" o radicale
+
+    // --- LIVELLO 3: Possesso (Suffissi e 'Inda) ---
+    { id: "s_ar_10", lang: "ar", text: "هَذَا كِتَابِي", pronunciation: "Hādhā kitābī", translation: "Questo è il mio libro", requires: ["g_ar_dem_1", "soc_ar2", "g_ar_suff_1"] },
+    { id: "s_ar_11", lang: "ar", text: "أَيْنَ بَيْتُكَ؟", pronunciation: "Ayna baytuka?", translation: "Dov'è la tua casa?", requires: ["g_ar_int_3", "soc_ar1", "g_ar_suff_2"] },
+    { id: "s_ar_12", lang: "ar", text: "عِنْدِي تِذْكَرَة", pronunciation: "'Indī tadhkira", translation: "Ho un biglietto", requires: ["g_ar_have_1", "g_ar_suff_1", "v_ar_ext_7"] },
+    { id: "s_ar_13", lang: "ar", text: "لَيْسَ عِنْدِي مَال", pronunciation: "Laysa 'indī māl", translation: "Non ho soldi", requires: ["g_ar_neg_2", "g_ar_have_1", "g_ar_suff_1", "root_mlk"] }, // Māl (soldi) o uso Nuqūd (v_ar_ext_51)
+    { id: "s_ar_13_fix", lang: "ar", text: "لَيْسَ عِنْدِي نُقُود", pronunciation: "Laysa 'indī nuqūd", translation: "Non ho soldi", requires: ["g_ar_neg_2", "g_ar_have_1", "g_ar_suff_1", "v_ar_ext_51"] },
+    { id: "s_ar_14", lang: "ar", text: "اِسْمُهُ مُحَمَّد", pronunciation: "Ismuhu Muḥammad", translation: "Il suo nome è Muhammad", requires: ["root_sm", "g_ar_suff_4"] }, // "Ism" (nome) concetto base
+
+    // --- LIVELLO 4: Verbi al Presente (Soggetto implicito o esplicito) ---
+    { id: "s_ar_15", lang: "ar", text: "أَنَا أَشْرَبُ الْمَاء", pronunciation: "Ana ashrabu al-mā'", translation: "Io bevo l'acqua", requires: ["g_ar_pron_1", "v_ar_top_58", "g_ar_part_1", "base_ma"] },
+    { id: "s_ar_16", lang: "ar", text: "هُوَ يَأْكُلُ فَاكِهَة", pronunciation: "Huwa ya'kulu fākiha", translation: "Lui mangia frutta", requires: ["g_ar_pron_4", "v_ar_top_57", "n_ar_ext_22"] },
+    { id: "s_ar_17", lang: "ar", text: "نَحْنُ نَذْهَبُ إِلَى الْمَطَار", pronunciation: "Naḥnu nadhhabu ilā al-maṭār", translation: "Noi andiamo all'aeroporto", requires: ["g_ar_pron_6", "v_ar_top_11", "g_ar_prep_2", "g_ar_part_1", "v_ar5"] },
+    { id: "s_ar_18", lang: "ar", text: "هِيَ تَقْرَأُ كِتَاب", pronunciation: "Hiya taqra'u kitāb", translation: "Lei legge un libro", requires: ["g_ar_pron_5", "v_ar_top_52", "soc_ar2"] },
+    { id: "s_ar_19", lang: "ar", text: "هُم يَسْكُنُونَ هُنَا", pronunciation: "Hum yaskunūna hunā", translation: "Loro abitano qui", requires: ["g_ar_pron_7", "v_ar_top_70", "g_ar_dem_5"] },
+
+    // --- LIVELLO 5: Domande e Negazioni ---
+    { id: "s_ar_20", lang: "ar", text: "مَا هَذَا؟", pronunciation: "Mā hādhā?", translation: "Cos'è questo?", requires: ["g_ar_int_1", "g_ar_dem_1"] },
+    { id: "s_ar_21", lang: "ar", text: "مَنْ أَنْتَ؟", pronunciation: "Man anta?", translation: "Chi sei tu?", requires: ["g_ar_int_2", "g_ar_pron_2"] },
+    { id: "s_ar_22", lang: "ar", text: "هَلْ أَنْتَ طَالِب؟", pronunciation: "Hal anta ṭālib?", translation: "Sei uno studente?", requires: ["g_ar_int_5", "g_ar_pron_2", "root_drs"] }, // Ṭālib deriva da radice DRS
+    { id: "s_ar_23", lang: "ar", text: "لِمَاذَا لَا تَأْكُلُ؟", pronunciation: "Limādhā lā ta'kulu?", translation: "Perché non mangi?", requires: ["g_ar_int_6", "g_ar_neg_1", "v_ar_top_57"] },
+    { id: "s_ar_24", lang: "ar", text: "كَمْ السِّعْر؟", pronunciation: "Kam as-si'r?", translation: "Quanto costa? (Qual è il prezzo)", requires: ["g_ar_int_7", "g_ar_part_1", "v_ar_ext_53"] },
+
+    // --- LIVELLO 6: Viaggio e Natura (Frasi Complesse) ---
+    { id: "s_ar_25", lang: "ar", text: "الشَّمْس وَ الْقَمَر", pronunciation: "Ash-shams wa al-qamar", translation: "Il sole e la luna", requires: ["g_ar_part_1", "ar14", "g_ar_conj_1", "ar15"] },
+    { id: "s_ar_26", lang: "ar", text: "أُرِيدُ فُنْدُق قَرِيب", pronunciation: "Urīdu funduq qarīb", translation: "Voglio un hotel vicino", requires: ["v_ar_top_37", "v_ar_ext_14", "v_ar_ext_29"] },
+    { id: "s_ar_27", lang: "ar", text: "أَسَافِرُ بِالْقِطَار", pronunciation: "Usāfiru bi-l-qiṭār", translation: "Viaggio in treno", requires: ["v_ar_top_22", "g_ar_prep_5", "g_ar_part_1", "v_ar_ext_10"] },
+    { id: "s_ar_28", lang: "ar", text: "الْجَوّ جَمِيل الْيَوْم", pronunciation: "Al-jaww jamīl al-yawm", translation: "Il tempo è bello oggi", requires: ["g_ar_part_1", "n_ar_ext_33", "tm_ar4"] }, // Jaww (clima/tempo), Jamīl (bello - extra base)
+    { id: "s_ar_29", lang: "ar", text: "هَلْ يُمكِنُنِي الدُّخُول؟", pronunciation: "Hal yumkinunī ad-dukhūl?", translation: "Posso entrare?", requires: ["g_ar_int_5", "v_ar_top_5", "v_ar_top_14"] }, // Yumkin (potere), Dukhul (entrare)
+    { id: "s_ar_30", lang: "ar", text: "أَيْنَ الْحَمَّام؟", pronunciation: "Ayna al-ḥammām?", translation: "Dov'è il bagno?", requires: ["g_ar_int_3", "g_ar_part_1", "v_ar_ext_50"] },
+    
     { id: "s_zh1", lang: "zh", text: "我吃苹果", pronunciation: "Wǒ chī píngguǒ", translation: "Io mangio la mela", requires: ["g_zh1", "g_zh6", "c_zh4"] },
     { id: "s_zh2", lang: "zh", text: "你是我的朋友", pronunciation: "Nǐ shì wǒ de péngyǒu", translation: "Tu sei mio amico", requires: ["g_zh2", "soc_zh5"] },
     { id: "s_zh3", lang: "zh", text: "我有三个哥哥", pronunciation: "Wǒ yǒu sān gè gēge", translation: "Ho tre fratelli maggiori", requires: ["g_zh1", "num_zh3", "fam_zh3"] },
