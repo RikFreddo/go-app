@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="it">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Go</title>
     <link rel="icon" type="image/png" href="icon.png">
     <link rel="apple-touch-icon" href="icon.png">
-    <link rel="stylesheet" href="style.css?v=0.21.2">
+    <link rel="stylesheet" href="style.css?v=0.23_en">
 </head>
 <body>
 
@@ -25,17 +25,17 @@
         </div>
         <div class="menu-buttons">
             <button onclick="showConfigMenu()" class="main-btn primary-btn">🎴 Flashcards</button>
-            <button onclick="startSentenceMode()" class="main-btn" style="background-color:#9b59b6; color:white;">📝 Frasi</button>
-            <button onclick="showSettingsMenu()" class="main-btn secondary-btn">⚙️ Impostazioni</button>
+            <button onclick="startSentenceMode()" class="main-btn" style="background-color:#9b59b6; color:white;">📝 Sentences</button>
+            <button onclick="showSettingsMenu()" class="main-btn secondary-btn">⚙️ Settings</button>
         </div>
-        <p class="footer-ver">v=0.21.2</p>
+        <p class="footer-ver">v=0.23 - English Edition</p>
     </div>
 
     <div id="settings-menu" class="menu-overlay full-center" style="display:none;">
         <div class="settings-panel">
-            <h2>Impostazioni</h2>
+            <h2>Settings</h2>
             <div class="setting-group">
-                <h3>Tema</h3>
+                <h3>Theme</h3>
                 <div class="theme-switcher">
                     <button onclick="setTheme('light')" id="theme-light" class="theme-btn">☀️ Light</button>
                     <button onclick="setTheme('dark')" id="theme-dark" class="theme-btn">🌙 Dark</button>
@@ -43,78 +43,78 @@
                 </div>
             </div>
             <div class="setting-group">
-                <h3>Gestione Dati</h3>
+                <h3>Data Management</h3>
                 <div class="data-buttons">
-                    <button onclick="exportData()" class="data-btn">⬇️ Esporta Backup</button>
-                    <button onclick="document.getElementById('fileInput').click()" class="data-btn">⬆️ Importa Backup</button>
-                    <button onclick="showUnlockMenu()" class="data-btn" style="background-color:#f39c12; color:white;">🔓 Sblocca Tutto (Cheat)</button>
-                    <button onclick="showResetMenu()" class="data-btn btn-danger">🗑️ Reset...</button>
+                    <button onclick="exportData()" class="data-btn">⬇️ Export Backup</button>
+                    <button onclick="document.getElementById('fileInput').click()" class="data-btn">⬆️ Import Backup</button>
+                    <button onclick="showUnlockMenu()" class="data-btn" style="background-color:#f39c12; color:white;">🔓 Unlock All (Cheat)</button>
+                    <button onclick="showResetMenu()" class="data-btn btn-danger">🗑️ Reset Progress...</button>
                 </div>
                 <input type="file" id="fileInput" style="display:none" onchange="importData(this)">
             </div>
-            <button onclick="goBack()" class="main-btn secondary-btn" style="margin-top:20px;">Indietro</button>
+            <button onclick="goBack()" class="main-btn secondary-btn" style="margin-top:20px;">Back</button>
         </div>
     </div>
 
     <div id="config-menu" class="menu-overlay center-top" style="display:none;">
-        <h1 style="margin-top: 60px;">Crea Sessione</h1>
+        <h1 style="margin-top: 60px;">Start Session</h1>
         <div class="scroll-container">
-            <div class="config-section"><h3>Argomenti</h3><div id="topic-options" class="options-grid"></div></div>
-            <div class="config-section"><h3>Lingue</h3><div id="lang-options" class="options-grid"></div></div>
+            <div class="config-section"><h3>Topics</h3><div id="topic-options" class="options-grid"></div></div>
+            <div class="config-section"><h3>Languages</h3><div id="lang-options" class="options-grid"></div></div>
         </div>
-        <button onclick="startCustomSession()" class="start-btn">INIZIA</button>
+        <button onclick="startCustomSession()" class="start-btn">START</button>
     </div>
 
     <div id="unlock-menu" class="menu-overlay center-top" style="display:none;">
-        <h1 style="margin-top: 60px; color:#f39c12;">Sblocca Carte</h1>
+        <h1 style="margin-top: 60px; color:#f39c12;">Unlock Cards</h1>
         <div class="scroll-container">
-            <div class="config-section"><h3>Argomenti</h3><div id="unlock-topic-options" class="options-grid"></div></div>
-            <div class="config-section"><h3>Lingue</h3><div id="unlock-lang-options" class="options-grid"></div></div>
+            <div class="config-section"><h3>Topics</h3><div id="unlock-topic-options" class="options-grid"></div></div>
+            <div class="config-section"><h3>Languages</h3><div id="unlock-lang-options" class="options-grid"></div></div>
         </div>
-        <button onclick="performUnlock()" class="start-btn" style="background-color:#f39c12;">SBLOCCA ORA</button>
-        <button onclick="showSettingsMenu()" class="main-btn secondary-btn" style="margin-top:10px;">Annulla</button>
+        <button onclick="performUnlock()" class="start-btn" style="background-color:#f39c12;">UNLOCK NOW</button>
+        <button onclick="showSettingsMenu()" class="main-btn secondary-btn" style="margin-top:10px;">Cancel</button>
     </div>
 
     <div id="reset-menu" class="menu-overlay center-top" style="display:none;">
-        <h1 style="margin-top: 60px; color:#e74c3c;">Reset Progressi</h1>
+        <h1 style="margin-top: 60px; color:#e74c3c;">Reset Progress</h1>
         <div class="scroll-container">
-            <div class="config-section"><h3>Argomenti</h3><div id="reset-topic-options" class="options-grid"></div></div>
-            <div class="config-section"><h3>Lingue</h3><div id="reset-lang-options" class="options-grid"></div></div>
+            <div class="config-section"><h3>Topics</h3><div id="reset-topic-options" class="options-grid"></div></div>
+            <div class="config-section"><h3>Languages</h3><div id="reset-lang-options" class="options-grid"></div></div>
         </div>
-        <button onclick="performReset()" class="start-btn" style="background-color:#e74c3c;">CONFERMA RESET</button>
-        <button onclick="showSettingsMenu()" class="main-btn secondary-btn" style="margin-top:10px;">Annulla</button>
+        <button onclick="performReset()" class="start-btn" style="background-color:#e74c3c;">CONFIRM RESET</button>
+        <button onclick="showSettingsMenu()" class="main-btn secondary-btn" style="margin-top:10px;">Cancel</button>
     </div>
 
     <div id="progress-menu" class="menu-overlay center-top" style="display:none;">
-        <div class="progress-header"><h2>Progressi Cards</h2><button onclick="closeProgress()" class="btn-close">X</button></div>
+        <div class="progress-header"><h2>Card Stats</h2><button onclick="closeProgress()" class="btn-close">X</button></div>
         <div class="stats-dashboard">
-            <div class="stat-box"><span id="stat-total" class="stat-num">0</span><span class="stat-label">Totali</span></div>
-            <div class="stat-box"><span id="stat-perfect" class="stat-num" style="color:#2ecc71;">0</span><span class="stat-label">Perfette</span></div>
-            <div class="stat-box"><span id="stat-learning" class="stat-num" style="color:#f1c40f;">0</span><span class="stat-label">In Corso</span></div>
-            <div class="stat-box"><span id="stat-locked" class="stat-num" style="color:#aaa;">0</span><span class="stat-label">Bloccate</span></div>
+            <div class="stat-box"><span id="stat-total" class="stat-num">0</span><span class="stat-label">Total</span></div>
+            <div class="stat-box"><span id="stat-perfect" class="stat-num" style="color:#2ecc71;">0</span><span class="stat-label">Mastered</span></div>
+            <div class="stat-box"><span id="stat-learning" class="stat-num" style="color:#f1c40f;">0</span><span class="stat-label">Learning</span></div>
+            <div class="stat-box"><span id="stat-locked" class="stat-num" style="color:#aaa;">0</span><span class="stat-label">Locked</span></div>
         </div>
         <div id="progress-list" class="progress-list-container"></div>
     </div>
 
     <div id="sent-progress-menu" class="menu-overlay center-top" style="display:none;">
-        <div class="progress-header"><h2>Progressi Frasi</h2><button onclick="closeSentProgress()" class="btn-close">X</button></div>
-        <p style="color:#666; font-size:0.9rem; margin-top:-10px;">Frasi completate correttamente</p>
+        <div class="progress-header"><h2>Sentence Stats</h2><button onclick="closeSentProgress()" class="btn-close">X</button></div>
+        <p style="color:#666; font-size:0.9rem; margin-top:-10px;">Sentences completed perfectly</p>
         <div id="sent-progress-list" class="progress-list-container" style="margin-top:20px;"></div>
     </div>
 
     <div class="app-container" id="game-screen" style="display:none;">
         <header>
              <div class="header-row">
-                <h1 id="deckTitle">Sessione</h1>
-                <p id="deckStatus">Carte: 0</p>
+                <h1 id="deckTitle">Session</h1>
+                <p id="deckStatus">Cards: 0</p>
             </div>
         </header>
         <div class="card-container">
             <div class="card" id="flashcard" onclick="flipCard()">
                 <div class="card-front">
-                    <span class="lang-tag" id="langTag">Lingua</span>
+                    <span class="lang-tag" id="langTag">Lang</span>
                     <h2 id="wordDisplay">...</h2>
-                    <p class="hint">Tocca per girare</p>
+                    <p class="hint">Tap to flip</p>
                 </div>
                 <div class="card-back">
                     <div class="back-content">
@@ -132,21 +132,21 @@
             </div>
         </div>
         <div class="controls-grid" id="controls">
-            <button class="btn btn-red" onclick="handleResult('none')">Non so</button>
-            <button class="btn btn-blue" onclick="handleResult('reading')">Lettura</button>
-            <button class="btn btn-yellow" onclick="handleResult('meaning')">Senso</button>
-            <button class="btn btn-green" onclick="handleResult('perfect')">Perfetto</button>
+            <button class="btn btn-red" onclick="handleResult('none')">Again</button>
+            <button class="btn btn-blue" onclick="handleResult('reading')">Reading</button>
+            <button class="btn btn-yellow" onclick="handleResult('meaning')">Meaning</button>
+            <button class="btn btn-green" onclick="handleResult('perfect')">Perfect</button>
         </div>
-        <p class="instruction" id="instructionText">Tocca la carta per vedere la soluzione</p>
+        <p class="instruction" id="instructionText">Tap card to see answer</p>
     </div>
 
     <div class="app-container" id="sentence-screen" style="display:none;">
         <header>
             <div class="header-row">
-                <h1>Frasi</h1>
-                <button onclick="showSentenceProgress()" class="icon-btn" style="font-size:0.8rem;">📊 Stat</button>
+                <h1>Sentences</h1>
+                <button onclick="showSentenceProgress()" class="icon-btn" style="font-size:0.8rem;">📊 Stats</button>
             </div>
-            <p id="sentStatus" style="text-align:left; color:#666; font-size:0.9rem;">Frasi disponibili: 0</p>
+            <p id="sentStatus" style="text-align:left; color:#666; font-size:0.9rem;">Available: 0</p>
         </header>
 
         <div class="card-container">
@@ -154,7 +154,7 @@
                 <div class="card-front" style="padding:20px;">
                     <span class="lang-tag" id="s_langTag">...</span>
                     <h2 id="s_wordDisplay" style="font-size: 2rem; line-height:1.4;">...</h2>
-                    <p class="hint">Tocca per soluzione</p>
+                    <p class="hint">Tap for solution</p>
                 </div>
                 
                 <div class="card-back">
@@ -167,29 +167,27 @@
                         </div>
                         
                         <p id="s_meaningDisplay" style="margin-top:15px; font-size:1.2rem;">...</p>
-                        <div class="type-tag">FRASE REALE</div>
+                        <div class="type-tag">REAL SENTENCE</div>
                     </div>
                 </div>
             </div>
         </div>
 
         <div class="controls-grid" id="sentControls">
-            <button class="btn btn-red" onclick="handleSentenceResult('none')">Non so</button>
-            <button class="btn btn-yellow" onclick="handleSentenceResult('hard')">Difficile</button>
-            <button class="btn btn-green" onclick="handleSentenceResult('perfect')">Perfetto</button>
+            <button class="btn btn-red" onclick="handleSentenceResult('none')">Missed</button>
+            <button class="btn btn-yellow" onclick="handleSentenceResult('hard')">Hard</button>
+            <button class="btn btn-green" onclick="handleSentenceResult('perfect')">Perfect</button>
         </div>
-        <p class="instruction" id="s_instructionText">Tocca per girare</p>
+        <p class="instruction" id="s_instructionText">Tap to flip</p>
     </div>
 
-    <script src="database.js?v=0.21.2"></script>
-    <script src="script.js?v=0.21.2"></script>
+    <script src="database.js?v=0.23_en"></script>
+    <script src="script.js?v=0.23_en"></script>
     <script>
-        // Funzione globale per l'audio delle parole singole (Flashcards)
         function speakWord(event) {
             event.stopPropagation();
             if (window.speakWordScript) window.speakWordScript();
         }
-        // Funzione globale per l'audio delle frasi
         function speakSentenceAudio(event) {
             event.stopPropagation();
             if (window.speakSentenceScript) window.speakSentenceScript();
