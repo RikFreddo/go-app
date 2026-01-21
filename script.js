@@ -1,5 +1,5 @@
 // ==========================================
-// GO SCRIPT v0.20 - TRUE SHUFFLE MIX
+// GO SCRIPT v0.23 - ENGLISH EDITION
 // ==========================================
 
 // Variabili globali
@@ -17,17 +17,15 @@ let isSentFlipped = false;
 
 window.onload = function() {
     try {
-        // Pulizia una tantum per versione
-        if (!localStorage.getItem('v0.20_check')) {
-            localStorage.setItem('v0.20_check', 'true');
-            // Non resettiamo i progressi questa volta, è solo un update logico
-            console.log("Aggiornamento v0.20: shuffle migliorato.");
+        if (!localStorage.getItem('v0.23_en_check')) {
+            localStorage.setItem('v0.23_en_check', 'true');
+            console.log("Update v0.23: English version loaded.");
         }
         loadSettings();
         loadProgress();
         goToHome(); 
     } catch(e) {
-        console.error("Errore avvio:", e);
+        console.error("Startup Error:", e);
     }
 };
 
@@ -45,25 +43,25 @@ function goToHome() { showScreen('main-menu'); }
 function goBack() { showScreen(previousScreen); }
 
 function startCustomSession() {
-    if (typeof decks === 'undefined') return alert("Errore DB");
+    if (typeof decks === 'undefined') return alert("Database Error");
     const c = document.getElementById('config-menu');
     let st = Array.from(c.querySelectorAll('input[name="topic"]:checked')).map(x => x.value);
     let sl = Array.from(c.querySelectorAll('input[name="lang"]:checked')).map(x => x.value);
-    if (st.length === 0 || sl.length === 0) return alert("Seleziona opzioni!");
+    if (st.length === 0 || sl.length === 0) return alert("Please select options!");
     
     playDeck = [];
     Object.keys(decks).forEach(k => {
         let d = decks[k];
         if (st.includes(d.tags[0]) && sl.includes(d.tags[1])) playDeck = [...playDeck, ...d.cards];
     });
-    if (playDeck.length === 0) return alert("Nessuna carta.");
+    if (playDeck.length === 0) return alert("No cards found for this selection.");
     prepareSessionDeck();
 }
 
 function prepareSessionDeck() {
     const SESSION_SIZE = 20; 
 
-    // 1. Filtra le carte sbloccabili (In corso + Nuove ma con requisiti ok)
+    // 1. Filtra le carte sbloccabili
     let unlockableCards = playDeck.filter(c => {
         if (userProgress[c.id] === 'perfect') return false; 
         if (c.requires) {
@@ -73,67 +71,58 @@ function prepareSessionDeck() {
         return true;
     });
 
-    // 2. Separa "In Corso" da "Nuove" per mescolarle meglio
-    let learningCards = unlockableCards.filter(c => userProgress[c.id]); // Hanno già uno status (es. reading/meaning)
-    let newCards = unlockableCards.filter(c => !userProgress[c.id]);     // Non hanno status
+    // 2. Separa "In Corso" da "Nuove"
+    let learningCards = unlockableCards.filter(c => userProgress[c.id]); 
+    let newCards = unlockableCards.filter(c => !userProgress[c.id]);     
 
-    // 3. Filtra carte per il Ripasso (Perfect)
+    // 3. Filtra carte per il Ripasso
     let reviewCards = playDeck.filter(c => userProgress[c.id] === 'perfect');
 
-    // 4. MESCOLAMENTO PREVENTIVO (Il segreto del mix linguistico)
-    // Mescoliamo i gruppi ORA, così l'ordine del database (zh -> ja -> ar) viene distrutto subito.
+    // 4. Shuffle Mix
     shuffleArray(learningCards);
     shuffleArray(newCards);
     shuffleArray(reviewCards);
 
-    // 5. Costruzione del Mazzo Prioritario
-    // Priorità: Prima finisci quelle che hai iniziato (Learning), poi le Nuove (New)
+    // 5. Build Deck
     let candidates = [...learningCards, ...newCards];
-    
     let deckBuilder = [];
     let isReviewMode = false;
 
     if (candidates.length > 0) {
-        // Prendiamo le prime X carte dal gruppo misto
         let maxNew = Math.min(candidates.length, SESSION_SIZE - 5); 
-        if (reviewCards.length < 5) maxNew = SESSION_SIZE; // Se c'è poco ripasso, riempiamo di nuove
-        
+        if (reviewCards.length < 5) maxNew = SESSION_SIZE; 
         deckBuilder = candidates.slice(0, maxNew);
     } else {
         isReviewMode = true;
     }
 
-    // 6. Riempimento con Ripasso
+    // 6. Fill with Review
     let slotsLeft = SESSION_SIZE - deckBuilder.length;
     if (slotsLeft > 0 && reviewCards.length > 0) {
         deckBuilder = [...deckBuilder, ...reviewCards.slice(0, slotsLeft)];
     }
 
-    if (deckBuilder.length === 0) return alert("Tutto completato! Fai un Reset o aggiungi argomenti.");
-    if (isReviewMode) alert("Modalità RIPASSO attivata.");
+    if (deckBuilder.length === 0) return alert("All completed! Please Reset or add topics.");
+    if (isReviewMode) alert("REVIEW MODE activated.");
 
-    // 7. Mescolata Finale (per mixare nuove e ripasso tra loro)
     deck = shuffleArray(deckBuilder);
-    
     showScreen('game-screen');
     loadNextCard();
 }
 
 function loadNextCard() {
     if (deck.length === 0) {
-        if(confirm("Ancora?")) prepareSessionDeck(); else showConfigMenu(); return;
+        if(confirm("Session finished! Another one?")) prepareSessionDeck(); else showConfigMenu(); return;
     }
     currentCard = deck[0];
     isFlipped = false;
     
     const el = document.getElementById('flashcard');
-    
-    // FIX ANIMAZIONE SPOILER
     el.style.transition = 'none';
     el.classList.remove('flipped');
     void el.offsetWidth; 
     
-    document.getElementById('instructionText').innerText = "Tocca";
+    document.getElementById('instructionText').innerText = "Tap card to flip";
     
     document.getElementById('langTag').innerText = getLangName(currentCard.lang);
     document.getElementById('wordDisplay').innerText = currentCard.word;
@@ -144,7 +133,8 @@ function loadNextCard() {
     document.getElementById('meaningDisplay').innerText = currentCard.meaning;
     
     let st = userProgress[currentCard.id];
-    let statusLabel = st === 'perfect' ? "RIPASSO" : (st ? "IN CORSO" : "NUOVA");
+    // TRADUZIONE STATI
+    let statusLabel = st === 'perfect' ? "MASTERED" : (st ? "LEARNING" : "NEW");
     let colorStyle = st === 'perfect' ? "color:#2ecc71;" : (st ? "color:#3498db;" : "color:#e67e22;");
     document.getElementById('typeTag').innerHTML = `<span style="${colorStyle} font-weight:bold;">${statusLabel}</span>`;
     
@@ -155,28 +145,26 @@ function loadNextCard() {
     }, 50);
 }
 
-function flipCard(){ if(isFlipped)return; document.getElementById('flashcard').classList.add('flipped'); isFlipped=true; document.getElementById('instructionText').innerText="Esito?"; }
+function flipCard(){ if(isFlipped)return; document.getElementById('flashcard').classList.add('flipped'); isFlipped=true; document.getElementById('instructionText').innerText="How well did you know it?"; }
 function handleResult(r){ if(!currentCard)return; userProgress[currentCard.id]=r; saveProgress(); if(r==='perfect')deck.shift(); else {let m=deck.shift(); deck.splice(Math.min(deck.length,3),0,m);} loadNextCard(); }
 
 // Frasi
 function startSentenceMode() {
-    if (typeof sentenceBank === 'undefined') return alert("Errore DB");
+    if (typeof sentenceBank === 'undefined') return alert("Database Error");
     let validSentences = sentenceBank.filter(s => {
         if (!s.requires) return true;
         return s.requires.every(reqId => userProgress[reqId] === 'perfect');
     });
-    if (validSentences.length === 0) return alert("Nessuna frase disponibile! Sblocca i fondamentali.");
+    if (validSentences.length === 0) return alert("No sentences available! Unlock fundamental words first.");
     
-    // Mescoliamo anche le frasi subito per evitare blocchi per lingua
     sentenceDeck = shuffleArray(validSentences);
-    
     previousScreen = 'main-menu';
     showScreen('sentence-screen');
     loadNextSentence();
 }
 
 function loadNextSentence() {
-    if (sentenceDeck.length === 0) { if(confirm("Finite! Ancora?")) startSentenceMode(); else goToHome(); return; }
+    if (sentenceDeck.length === 0) { if(confirm("Sentences finished! Restart?")) startSentenceMode(); else goToHome(); return; }
     currentSentence = sentenceDeck[0];
     isSentFlipped = false;
     
@@ -185,7 +173,7 @@ function loadNextSentence() {
     cardEl.classList.remove('flipped');
     void cardEl.offsetWidth;
 
-    document.getElementById('s_instructionText').innerText = "Tocca";
+    document.getElementById('s_instructionText').innerText = "Tap card to translate";
     document.getElementById('s_langTag').innerText = getLangNameFull(currentSentence.lang);
     document.getElementById('s_langTag').style.color = getLangColor(currentSentence.lang);
     let dir = (currentSentence.lang === 'ar') ? 'rtl' : 'ltr';
@@ -195,29 +183,29 @@ function loadNextSentence() {
     document.getElementById('s_backWordDisplay').style.direction = dir;
     document.getElementById('s_pronunciationDisplay').innerText = currentSentence.pronunciation || "";
     document.getElementById('s_meaningDisplay').innerText = currentSentence.translation;
-    document.getElementById('sentStatus').innerText = "Frasi: " + sentenceDeck.length;
+    document.getElementById('sentStatus').innerText = "Sentences: " + sentenceDeck.length;
 
     setTimeout(() => {
         cardEl.style.transition = ''; 
     }, 50);
 }
 
-function flipSentenceCard(){ if(isSentFlipped)return; document.getElementById('sentFlashcard').classList.add('flipped'); isSentFlipped=true; document.getElementById('s_instructionText').innerText="Esito?"; }
+function flipSentenceCard(){ if(isSentFlipped)return; document.getElementById('sentFlashcard').classList.add('flipped'); isSentFlipped=true; document.getElementById('s_instructionText').innerText="Did you understand?"; }
 function handleSentenceResult(r){ userSentenceProgress[currentSentence.id]=r; saveProgress(); if(r==='perfect')sentenceDeck.shift(); else {let m=sentenceDeck.shift(); sentenceDeck.push(m);} loadNextSentence(); }
 
 // Utils
-function showSentenceProgress(){ const list=document.getElementById('sent-progress-list'); list.innerHTML=""; let s={t:sentenceBank.length,p:0,h:0,l:0}; const d=document.createElement('div'); d.className='stats-dashboard'; d.style.marginTop="0"; sentenceBank.forEach(x=>{ let st=userSentenceProgress[x.id]; let loc=false; if(x.requires&&!x.requires.every(k=>userProgress[k]==='perfect')){loc=true;s.l++;} else if(st==='perfect')s.p++; else if(st)s.h++; if(st||!loc){const i=document.createElement('div'); i.className='prog-item'; if(loc)i.classList.add('status-locked'); let ic=loc?'🔒':(st==='perfect'?'<span class="dot dot-green"></span>':'<span class="dot dot-yellow"></span>'); i.innerHTML=`<div class="prog-info"><div class="prog-word" style="color:${getLangColor(x.lang)}">${x.text}</div><div class="prog-meaning">${x.translation}</div></div><div class="prog-status">${ic}</div>`; list.appendChild(i);} }); d.innerHTML=`<div class="stat-box"><span class="stat-num">${s.t}</span><span class="stat-label">Tot</span></div><div class="stat-box"><span class="stat-num" style="color:#2ecc71;">${s.p}</span><span class="stat-label">Perf</span></div><div class="stat-box"><span class="stat-num" style="color:#f1c40f;">${s.h}</span><span class="stat-label">Difficili</span></div><div class="stat-box"><span class="stat-num" style="color:#aaa;">${s.l}</span><span class="stat-label">Bloc</span></div>`; list.parentElement.insertBefore(d,list); showScreen('sent-progress-menu'); }
+function showSentenceProgress(){ const list=document.getElementById('sent-progress-list'); list.innerHTML=""; let s={t:sentenceBank.length,p:0,h:0,l:0}; const d=document.createElement('div'); d.className='stats-dashboard'; d.style.marginTop="0"; sentenceBank.forEach(x=>{ let st=userSentenceProgress[x.id]; let loc=false; if(x.requires&&!x.requires.every(k=>userProgress[k]==='perfect')){loc=true;s.l++;} else if(st==='perfect')s.p++; else if(st)s.h++; if(st||!loc){const i=document.createElement('div'); i.className='prog-item'; if(loc)i.classList.add('status-locked'); let ic=loc?'🔒':(st==='perfect'?'<span class="dot dot-green"></span>':'<span class="dot dot-yellow"></span>'); i.innerHTML=`<div class="prog-info"><div class="prog-word" style="color:${getLangColor(x.lang)}">${x.text}</div><div class="prog-meaning">${x.translation}</div></div><div class="prog-status">${ic}</div>`; list.appendChild(i);} }); d.innerHTML=`<div class="stat-box"><span class="stat-num">${s.t}</span><span class="stat-label">Tot</span></div><div class="stat-box"><span class="stat-num" style="color:#2ecc71;">${s.p}</span><span class="stat-label">Perf</span></div><div class="stat-box"><span class="stat-num" style="color:#f1c40f;">${s.h}</span><span class="stat-label">Hard</span></div><div class="stat-box"><span class="stat-num" style="color:#aaa;">${s.l}</span><span class="stat-label">Lock</span></div>`; list.parentElement.insertBefore(d,list); showScreen('sent-progress-menu'); }
 function closeSentProgress(){ const m=document.getElementById('sent-progress-menu'); const d=m.querySelector('.stats-dashboard'); if(d)d.remove(); showScreen('sentence-screen'); }
 
 // Standard
 function showConfigMenu() { previousScreen = 'main-menu'; renderCheckboxes('topic-options', 'lang-options'); showScreen('config-menu'); }
 function showSettingsMenu() { previousScreen='main-menu'; updateThemeButtons(); showScreen('settings-menu'); }
 function showUnlockMenu() { renderCheckboxes('unlock-topic-options', 'unlock-lang-options'); showScreen('unlock-menu'); }
-function performUnlock() { const c=document.getElementById('unlock-menu'); let st=Array.from(c.querySelectorAll('input[name="topic"]:checked')).map(x=>x.value); let sl=Array.from(c.querySelectorAll('input[name="lang"]:checked')).map(x=>x.value); if(st.length===0&&sl.length===0)return alert("Seleziona!"); if(!confirm("Sbloccare tutto?"))return; let cnt=0; Object.keys(decks).forEach(k=>{let d=decks[k]; if(st.includes(d.tags[0])||sl.includes(d.tags[1])) d.cards.forEach(x=>{ userProgress[x.id]='perfect'; cnt++; });}); saveProgress(); alert(cnt+" carte sbloccate."); showSettingsMenu(); }
-function exportData() { let d={f:userProgress,s:userSentenceProgress}; const a=document.createElement('a'); a.href="data:text/json;charset=utf-8,"+encodeURIComponent(JSON.stringify(d)); a.download="backup.json"; document.body.appendChild(a); a.click(); a.remove(); }
-function importData(i) { const f=i.files[0]; if(!f)return; const r=new FileReader(); r.onload=e=>{ try{ let d=JSON.parse(e.target.result); if(d.f){userProgress=d.f; userSentenceProgress=d.s||{};} else userProgress=d; saveProgress(); alert("Fatto"); }catch(x){alert("Errore");}}; r.readAsText(f); }
+function performUnlock() { const c=document.getElementById('unlock-menu'); let st=Array.from(c.querySelectorAll('input[name="topic"]:checked')).map(x=>x.value); let sl=Array.from(c.querySelectorAll('input[name="lang"]:checked')).map(x=>x.value); if(st.length===0&&sl.length===0)return alert("Select items!"); if(!confirm("Unlock all selected?"))return; let cnt=0; Object.keys(decks).forEach(k=>{let d=decks[k]; if(st.includes(d.tags[0])||sl.includes(d.tags[1])) d.cards.forEach(x=>{ userProgress[x.id]='perfect'; cnt++; });}); saveProgress(); alert(cnt+" cards unlocked."); showSettingsMenu(); }
+function exportData() { let d={f:userProgress,s:userSentenceProgress}; const a=document.createElement('a'); a.href="data:text/json;charset=utf-8,"+encodeURIComponent(JSON.stringify(d)); a.download="go_backup.json"; document.body.appendChild(a); a.click(); a.remove(); }
+function importData(i) { const f=i.files[0]; if(!f)return; const r=new FileReader(); r.onload=e=>{ try{ let d=JSON.parse(e.target.result); if(d.f){userProgress=d.f; userSentenceProgress=d.s||{};} else userProgress=d; saveProgress(); alert("Import Successful"); }catch(x){alert("Import Error");}}; r.readAsText(f); }
 function showResetMenu(){renderCheckboxes('reset-topic-options', 'reset-lang-options'); showScreen('reset-menu');}
-function performReset(){ const c=document.getElementById('reset-menu'); let st=Array.from(c.querySelectorAll('input[name="topic"]:checked')).map(x=>x.value); let sl=Array.from(c.querySelectorAll('input[name="lang"]:checked')).map(x=>x.value); if(st.length===0&&sl.length===0)return alert("Seleziona!"); if(!confirm("Reset?"))return; Object.keys(decks).forEach(k=>{ let d=decks[k]; if(st.includes(d.tags[0])||sl.includes(d.tags[1])) d.cards.forEach(x=>{ delete userProgress[x.id]; delete userSentenceProgress[x.id]; }); }); saveProgress(); alert("Reset OK"); showSettingsMenu(); }
+function performReset(){ const c=document.getElementById('reset-menu'); let st=Array.from(c.querySelectorAll('input[name="topic"]:checked')).map(x=>x.value); let sl=Array.from(c.querySelectorAll('input[name="lang"]:checked')).map(x=>x.value); if(st.length===0&&sl.length===0)return alert("Select items!"); if(!confirm("Reset progress?"))return; Object.keys(decks).forEach(k=>{ let d=decks[k]; if(st.includes(d.tags[0])||sl.includes(d.tags[1])) d.cards.forEach(x=>{ delete userProgress[x.id]; delete userSentenceProgress[x.id]; }); }); saveProgress(); alert("Reset Complete"); showSettingsMenu(); }
 function renderCheckboxes(tid, lid) { const tc=document.getElementById(tid); const lc=document.getElementById(lid); if(!tc||!lc)return; tc.innerHTML=""; lc.innerHTML=""; let t=new Set(); let l=new Set(); Object.keys(decks).forEach(k=>{let d=decks[k].tags; if(d){t.add(d[0]); l.add(d[1]);}}); let chk = !tid.includes('reset') ? 'checked' : ''; t.forEach(v=>tc.innerHTML+=`<label class="chk-label"><input type="checkbox" name="topic" value="${v}" ${chk}>${capitalize(v)}</label>`); l.forEach(v=>lc.innerHTML+=`<label class="chk-label"><input type="checkbox" name="lang" value="${v}" ${chk}>${getLangNameFull(v)}</label>`); }
 function showGlobalProgress(){let td=playDeck.length>0?playDeck:getAllCards(); let s={t:td.length,p:0,l:0,loc:0}; const lc=document.getElementById('progress-list'); lc.innerHTML=""; td.forEach(c=>{let loc=false; if(c.requires&&!c.requires.every(x=>userProgress[x]==='perfect'))loc=true; let st=userProgress[c.id]; if(loc)s.loc++; else if(st==='perfect')s.p++; else if(st)s.l++; let i=loc?'🔒':(st==='perfect'?'<span class="dot dot-green"></span>':(st?'<span class="dot dot-blue"></span>':'<span class="dot dot-grey"></span>')); lc.innerHTML+=`<div class="prog-item ${loc?'status-locked':''}"><div class="prog-info"><div class="prog-word" style="color:${getLangColor(c.lang)}">${c.word}</div><div class="prog-meaning">${c.meaning}</div></div><div class="prog-status">${i}</div></div>`;}); document.getElementById('stat-total').innerText=s.t; document.getElementById('stat-perfect').innerText=s.p; document.getElementById('stat-learning').innerText=s.l; document.getElementById('stat-locked').innerText=s.loc; showScreen('progress-menu');}
 function closeProgress(){if(playDeck.length>0)showScreen('game-screen'); else showConfigMenu();}
@@ -230,9 +218,10 @@ function updateThemeButtons(){const m=localStorage.getItem('go_theme_mode')||'au
 function loadSettings(){const m=localStorage.getItem('go_theme_mode')||'auto'; applyTheme(m); window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change',e=>{if(localStorage.getItem('go_theme_mode')==='auto')applyTheme('auto');});}
 function shuffleArray(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
 function capitalize(s){return s.charAt(0).toUpperCase()+s.slice(1);}
-function getLangNameFull(c){if(c==='zh')return '🇨🇳 Cinese'; if(c==='ja')return '🇯🇵 Giapponese'; if(c==='ar')return '🇸🇦 Arabo'; return c;}
+// TRADUZIONE LINGUE
+function getLangNameFull(c){if(c==='zh')return '🇨🇳 Chinese'; if(c==='ja')return '🇯🇵 Japanese'; if(c==='ar')return '🇸🇦 Arabic'; return c;}
 function getLangName(c){if(c==='zh')return 'Cn'; if(c==='ar')return 'Ar'; if(c==='ja')return 'Jp'; return c;}
 function getLangColor(c){if(c==='zh')return '#e74c3c'; if(c==='ar')return '#27ae60'; if(c==='ja')return '#8e44ad'; return '#333';}
 function updateLangStyle(c){document.getElementById('langTag').style.color=getLangColor(c);}
-function updateCount(){document.getElementById('deckStatus').innerText="Carte: "+deck.length;}
+function updateCount(){document.getElementById('deckStatus').innerText="Cards: "+deck.length;}
 window.speakWordScript=function(){if(!currentCard)return; let t=currentCard.word; if(currentCard.lang==='ar')t=t.replace(/\s/g,''); let s=new SpeechSynthesisUtterance(t); if(currentCard.lang==='zh')s.lang='zh-CN'; if(currentCard.lang==='ja')s.lang='ja-JP'; if(currentCard.lang==='ar')s.lang='ar-SA'; window.speechSynthesis.speak(s);}
