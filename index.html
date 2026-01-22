@@ -163,7 +163,7 @@
                         
                         <div style="display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 5px;">
                             <h3 id="s_pronunciationDisplay" style="margin: 0; color: #555; font-size:1rem;">...</h3>
-                            <button onclick="speakSentenceAudio(event)" class="audio-btn">🔊</button>
+                            <button onclick="event.stopPropagation(); speakWordScript()" class="audio-btn">🔊</button>
                         </div>
                         
                         <p id="s_meaningDisplay" style="margin-top:15px; font-size:1.2rem;">...</p>

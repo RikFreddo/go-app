@@ -224,4 +224,40 @@ function getLangName(c){if(c==='zh')return 'Cn'; if(c==='ar')return 'Ar'; if(c==
 function getLangColor(c){if(c==='zh')return '#e74c3c'; if(c==='ar')return '#27ae60'; if(c==='ja')return '#8e44ad'; return '#333';}
 function updateLangStyle(c){document.getElementById('langTag').style.color=getLangColor(c);}
 function updateCount(){document.getElementById('deckStatus').innerText="Cards: "+deck.length;}
-window.speakWordScript=function(){if(!currentCard)return; let t=currentCard.word; if(currentCard.lang==='ar')t=t.replace(/\s/g,''); let s=new SpeechSynthesisUtterance(t); if(currentCard.lang==='zh')s.lang='zh-CN'; if(currentCard.lang==='ja')s.lang='ja-JP'; if(currentCard.lang==='ar')s.lang='ar-SA'; window.speechSynthesis.speak(s);}
+// ==========================================
+// FUNZIONE AUDIO AGGIORNATA (Gestisce sia Parole che Frasi)
+// ==========================================
+window.speakWordScript = function() {
+    // CASO 1: Siamo nella schermata delle FRASI (Sentence Mode)
+    // Controlliamo se la schermata 'sentence-screen' è visibile
+    const sentScreen = document.getElementById('sentence-screen');
+    if (sentScreen && sentScreen.style.display === 'flex') {
+        if (!currentSentence) return; // Se non c'è una frase caricata, esci
+        
+        let t = currentSentence.text; // Prende il testo della frase
+        let s = new SpeechSynthesisUtterance(t);
+        
+        // Imposta la lingua corretta per la frase
+        if (currentSentence.lang === 'zh') s.lang = 'zh-CN';
+        else if (currentSentence.lang === 'ja') s.lang = 'ja-JP';
+        else if (currentSentence.lang === 'ar') s.lang = 'ar-SA';
+        else s.lang = 'en-US'; // Fallback per altre lingue
+        
+        window.speechSynthesis.speak(s);
+        return; // IMPORTANTE: Esce qui per non eseguire il codice delle carte sotto
+    }
+
+    // CASO 2: Siamo nella schermata delle CARTE (Flashcard Mode)
+    if (!currentCard) return;
+    
+    let t = currentCard.word;
+    // Fix specifico per l'arabo (rimuove spazi extra che a volte bloccano l'audio su mobile)
+    if (currentCard.lang === 'ar') t = t.replace(/\s/g, ''); 
+    
+    let s = new SpeechSynthesisUtterance(t);
+    if (currentCard.lang === 'zh') s.lang = 'zh-CN';
+    else if (currentCard.lang === 'ja') s.lang = 'ja-JP';
+    else if (currentCard.lang === 'ar') s.lang = 'ar-SA';
+    
+    window.speechSynthesis.speak(s);
+}

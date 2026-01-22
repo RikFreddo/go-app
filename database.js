@@ -1245,7 +1245,7 @@ const sentenceBank = [
     { id: "s_ja_27", lang: "ja", text: "チケットを買います", pronunciation: "Chiketto o kaimasu", translation: "I buy a ticket", requires: ["v_ja_ext_7", "g_ja_part_2", "v_ja_top_35"] },
     { id: "s_ja_28", lang: "ja", text: "パスポートを見せます", pronunciation: "Pasupooto o misemasu", translation: "I show the passport", requires: ["v_ja_ext_8", "g_ja_part_2", "v_ja_top_66"] },
     { id: "s_ja_29", lang: "ja", text: "トイレはどこですか？", pronunciation: "Toire wa doko desu ka?", translation: "Where is the bathroom?", requires: ["v_ja_ext_50", "g_ja_int_3", "g_ja_part_7"] },
-    { id: "s_ja_30", lang: "ja", text: "助けて！", pronunciation: "Tasukete!", translation: "Help!", requires: ["v_ja_ext_46"] }
+    { id: "s_ja_30", lang: "ja", text: "助けて！", pronunciation: "Tasukete!", translation: "Help!", requires: ["v_ja_ext_46"] },
 
     // ==========================================
     // ARABIC SENTENCES (LEVELS 1-6)
