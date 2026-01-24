@@ -30,7 +30,8 @@ window.onload = function() {
 };
 
 function showScreen(screenId) {
-    const screens = ['main-menu', 'config-menu', 'settings-menu', 'game-screen', 'progress-menu', 'sent-progress-menu', 'reset-menu', 'sentence-screen', 'unlock-menu'];
+    const screens = ['main-menu', 'config-menu', 'settings-menu', 'game-screen', 'progress-menu', 'sent-progress-menu', 'reset-menu', 'sentence-screen', 'unlock-menu', 'tree-screen', 'cheat-menu'];
+    
     screens.forEach(s => { const el = document.getElementById(s); if(el) el.style.display = 'none'; });
     const target = document.getElementById(screenId);
     if(target) {
@@ -344,13 +345,134 @@ function renderProgressList(filterLang) {
         list.appendChild(div);
     });
 }
-function performUnlock() { const c=document.getElementById('unlock-menu'); let st=Array.from(c.querySelectorAll('input[name="topic"]:checked')).map(x=>x.value); let sl=Array.from(c.querySelectorAll('input[name="lang"]:checked')).map(x=>x.value); if(st.length===0&&sl.length===0)return alert("Select items!"); if(!confirm("Unlock all selected?"))return; let cnt=0; Object.keys(decks).forEach(k=>{let d=decks[k]; if(st.includes(d.tags[0])||sl.includes(d.tags[1])) d.cards.forEach(x=>{ userProgress[x.id]='perfect'; cnt++; });}); saveProgress(); alert(cnt+" cards unlocked."); showSettingsMenu(); }
+// Funzione per aprire il menu Cheat
+function showCheatMenu() {
+    renderCheckboxes('cheat-topic-options', 'cheat-lang-options');
+    showScreen('cheat-menu');
+}
+
+// Funzione che esegue lo sblocco (aggiornata per puntare al nuovo ID)
+function performUnlock() { 
+    const c = document.getElementById('cheat-menu'); 
+    let st = Array.from(c.querySelectorAll('input[name="topic"]:checked')).map(x => x.value); 
+    let sl = Array.from(c.querySelectorAll('input[name="lang"]:checked')).map(x => x.value); 
+    
+    if (st.length === 0 && sl.length === 0) return alert("Select items!"); 
+    if (!confirm("Unlock all selected?")) return; 
+    
+    let cnt = 0; 
+    Object.keys(decks).forEach(k => {
+        let d = decks[k]; 
+        if (st.includes(d.tags[0]) || sl.includes(d.tags[1])) {
+            d.cards.forEach(x => { 
+                userProgress[x.id] = 'perfect'; 
+                cnt++; 
+            });
+        }
+    }); 
+    
+    saveProgress(); 
+    alert(cnt + " cards unlocked."); 
+    closeMenu('cheat-menu');
+    showSettingsMenu(); 
+}
 function exportData() { let d={f:userProgress,s:userSentenceProgress}; const a=document.createElement('a'); a.href="data:text/json;charset=utf-8,"+encodeURIComponent(JSON.stringify(d)); a.download="go_backup.json"; document.body.appendChild(a); a.click(); a.remove(); }
 function importData(i) { const f=i.files[0]; if(!f)return; const r=new FileReader(); r.onload=e=>{ try{ let d=JSON.parse(e.target.result); if(d.f){userProgress=d.f; userSentenceProgress=d.s||{};} else userProgress=d; saveProgress(); alert("Import Successful"); }catch(x){alert("Import Error");}}; r.readAsText(f); }
 function showResetMenu(){renderCheckboxes('reset-topic-options', 'reset-lang-options'); showScreen('reset-menu');}
 function performReset(){ const c=document.getElementById('reset-menu'); let st=Array.from(c.querySelectorAll('input[name="topic"]:checked')).map(x=>x.value); let sl=Array.from(c.querySelectorAll('input[name="lang"]:checked')).map(x=>x.value); if(st.length===0&&sl.length===0)return alert("Select items!"); if(!confirm("Reset progress?"))return; Object.keys(decks).forEach(k=>{ let d=decks[k]; if(st.includes(d.tags[0])||sl.includes(d.tags[1])) d.cards.forEach(x=>{ delete userProgress[x.id]; delete userSentenceProgress[x.id]; }); }); saveProgress(); alert("Reset Complete"); showSettingsMenu(); }
 function renderCheckboxes(tid, lid) { const tc=document.getElementById(tid); const lc=document.getElementById(lid); if(!tc||!lc)return; tc.innerHTML=""; lc.innerHTML=""; let t=new Set(); let l=new Set(); Object.keys(decks).forEach(k=>{let d=decks[k].tags; if(d){t.add(d[0]); l.add(d[1]);}}); let chk = !tid.includes('reset') ? 'checked' : ''; t.forEach(v=>tc.innerHTML+=`<label class="chk-label"><input type="checkbox" name="topic" value="${v}" ${chk}>${capitalize(v)}</label>`); l.forEach(v=>lc.innerHTML+=`<label class="chk-label"><input type="checkbox" name="lang" value="${v}" ${chk}>${getLangNameFull(v)}</label>`); }
-function showGlobalProgress(){let td=playDeck.length>0?playDeck:getAllCards(); let s={t:td.length,p:0,l:0,loc:0}; const lc=document.getElementById('progress-list'); lc.innerHTML=""; td.forEach(c=>{let loc=false; if(c.requires&&!c.requires.every(x=>userProgress[x]==='perfect'))loc=true; let st=userProgress[c.id]; if(loc)s.loc++; else if(st==='perfect')s.p++; else if(st)s.l++; let i=loc?'🔒':(st==='perfect'?'<span class="dot dot-green"></span>':(st?'<span class="dot dot-blue"></span>':'<span class="dot dot-grey"></span>')); lc.innerHTML+=`<div class="prog-item ${loc?'status-locked':''}"><div class="prog-info"><div class="prog-word" style="color:${getLangColor(c.lang)}">${c.word}</div><div class="prog-meaning">${c.meaning}</div></div><div class="prog-status">${i}</div></div>`;}); document.getElementById('stat-total').innerText=s.t; document.getElementById('stat-perfect').innerText=s.p; document.getElementById('stat-learning').innerText=s.l; document.getElementById('stat-locked').innerText=s.loc; showScreen('progress-menu');}
+// Funzione Progressi "Super" (Statistiche + Filtri + Pallini Colorati)
+function showGlobalProgress(filterLang = 'all') {
+    // 1. Aggiorna stile bottoni
+    document.querySelectorAll('#progress-menu .filter-btn').forEach(b => b.classList.remove('active'));
+    let btnId = 'btn-stats-' + filterLang;
+    if(document.getElementById(btnId)) document.getElementById(btnId).classList.add('active');
+
+    // 2. Recupera e Filtra
+    let allCards = getAllCards();
+    let displayCards = allCards;
+    
+    if (filterLang !== 'all') {
+        displayCards = allCards.filter(c => c.lang === filterLang);
+    }
+
+    // --- NUOVO ORDINAMENTO LOGICO ---
+    displayCards.sort((a, b) => {
+        // Prima ordina per Lingua (Arabo -> Cinese -> Giapponese)
+        if (a.lang !== b.lang) return a.lang.localeCompare(b.lang);
+        // Poi ordina alfabeticamente dentro la lingua
+        return a.word.localeCompare(b.word);
+    });
+    // -------------------------------
+
+    // 3. Calcola statistiche
+    let stats = { t: displayCards.length, p: 0, l: 0, loc: 0 };
+    const listContainer = document.getElementById('progress-list');
+    listContainer.innerHTML = "";
+
+    displayCards.forEach(c => {
+        // Controlla se è bloccata (Genitori non perfect)
+        // NOTA: Qui c'è il trucco per i 21 bloccati (vedi spiegazione sotto)
+        let parentsOk = true;
+        if (c.requires) {
+             parentsOk = c.requires.every(reqId => userProgress[reqId] === 'perfect');
+        }
+        
+        let st = userProgress[c.id];
+        let isLocked = !parentsOk; // È bloccata SOLO se i genitori non sono pronti
+
+        // Aggiorna contatori
+        if (isLocked) stats.loc++;
+        else if (st === 'perfect') stats.p++;
+        else if (st) stats.l++;
+        
+        // Icone
+        let iconHtml = '';
+        let itemClass = 'prog-item';
+        
+        if (isLocked) {
+            iconHtml = '🔒';
+            itemClass += ' status-locked';
+        } else if (st === 'perfect') {
+            iconHtml = '<span class="dot dot-green"></span>';
+        } else if (st) {
+            iconHtml = '<span class="dot dot-yellow"></span>';
+        } else {
+            iconHtml = '<span class="dot dot-grey"></span>';
+        }
+
+        let div = document.createElement('div');
+        div.className = itemClass;
+        div.innerHTML = `
+            <div class="prog-info">
+                <div class="prog-word" style="color:${getLangColor(c.lang)}">
+                    ${c.word} 
+                    <span style="font-size:0.7em; opacity:0.7;">${isLocked ? '' : (c.pronunciation || '')}</span>
+                </div>
+                <div class="prog-meaning">${c.meaning}</div>
+            </div>
+            <div class="prog-status">${iconHtml}</div>
+        `;
+        
+        if (!isLocked) {
+            div.onclick = () => {
+                let s = new SpeechSynthesisUtterance(c.word);
+                if(c.lang === 'zh') s.lang = 'zh-CN';
+                if(c.lang === 'ja') s.lang = 'ja-JP';
+                if(c.lang === 'ar') s.lang = 'ar-SA';
+                window.speechSynthesis.speak(s);
+            };
+        }
+        listContainer.appendChild(div);
+    });
+
+    document.getElementById('stat-total').innerText = stats.t;
+    document.getElementById('stat-perfect').innerText = stats.p;
+    document.getElementById('stat-learning').innerText = stats.l;
+    document.getElementById('stat-locked').innerText = stats.loc;
+
+    showScreen('progress-menu');
+}
 function closeProgress(){if(playDeck.length>0)showScreen('game-screen'); else showConfigMenu();}
 function getAllCards(){let a=[]; Object.keys(decks).forEach(k=>a=[...a,...decks[k].cards]); return a;}
 function saveProgress(){localStorage.setItem('go_flashcards_progress',JSON.stringify(userProgress)); localStorage.setItem('go_sentences_progress',JSON.stringify(userSentenceProgress));}

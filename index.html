@@ -6,14 +6,14 @@
     <title>Go</title>
     <link rel="icon" type="image/png" href="icon.png">
     <link rel="apple-touch-icon" href="icon.png">
-    <link rel="stylesheet" href="style.css?v=0.25.6">
+    <link rel="stylesheet" href="style.css?v=0.25.10">
 </head>
 <body>
 
     <div class="top-bar" id="topBar" style="display:none;">
         <button onclick="goToHome()" class="icon-btn">🏠 Home</button>
         <div style="display:flex; gap:10px;">
-            <button onclick="showGlobalProgress()" class="icon-btn" id="btnProgress">📊 Cards</button>
+            <button onclick="showGlobalProgress('all')" class="icon-btn" id="btnProgress">📊 Cards</button>
             <button onclick="showSettingsMenu()" class="icon-btn">⚙️</button>
         </div>
     </div>
@@ -29,7 +29,7 @@
             <button onclick="showTreeMode()" class="main-btn" style="background-color:#27ae60; color:white;">🌳 Knowledge Tree</button>
             <button onclick="showSettingsMenu()" class="main-btn secondary-btn">⚙️ Settings</button>
         </div>
-        <p class="footer-ver">v=0.25.6 - Knowledge Tree</p>
+        <p class="footer-ver">v=0.25.10 - Knowledge Tree</p>
     </div>
 
     <div id="settings-menu" class="menu-overlay full-center" style="display:none;">
@@ -48,7 +48,7 @@
                 <div class="data-buttons">
                     <button onclick="exportData()" class="data-btn">⬇️ Export Backup</button>
                     <button onclick="document.getElementById('fileInput').click()" class="data-btn">⬆️ Import Backup</button>
-                    <button onclick="showUnlockMenu()" class="data-btn" style="background-color:#f39c12; color:white;">🔓 Unlock All (Cheat)</button>
+                    <button onclick="showCheatMenu()" class="data-btn" style="background-color:#f39c12; color:white;">🔓 Unlock All (Cheat)</button>
                     <button onclick="showResetMenu()" class="data-btn btn-danger">🗑️ Reset Progress...</button>
                 </div>
                 <input type="file" id="fileInput" style="display:none" onchange="importData(this)">
@@ -66,21 +66,14 @@
         <button onclick="startCustomSession()" class="start-btn">START</button>
     </div>
 
-    <div id="unlock-menu" class="menu-overlay center-top" style="display:none;">
-        <div class="progress-header">
-            <h2 style="margin:0;">Unlocked Cards</h2>
-            <button onclick="closeMenu('unlock-menu')" class="btn-close">X</button>
+    <div id="cheat-menu" class="menu-overlay center-top" style="display:none;">
+        <h1 style="margin-top: 60px; color:#f39c12;">Cheat Unlock</h1>
+        <div class="scroll-container">
+            <div class="config-section"><h3>Topics</h3><div id="cheat-topic-options" class="options-grid"></div></div>
+            <div class="config-section"><h3>Languages</h3><div id="cheat-lang-options" class="options-grid"></div></div>
         </div>
-        
-        <div class="filter-row" style="display:flex; gap:10px; margin-top:15px; margin-bottom:15px; overflow-x:auto;">
-            <button onclick="renderProgressList('all')" class="filter-btn active" id="btn-prog-all">🌍 All</button>
-            <button onclick="renderProgressList('zh')" class="filter-btn" id="btn-prog-zh">🇨🇳 CH</button>
-            <button onclick="renderProgressList('ja')" class="filter-btn" id="btn-prog-ja">🇯🇵 JP</button>
-            <button onclick="renderProgressList('ar')" class="filter-btn" id="btn-prog-ar">🇸🇦 AR</button>
-        </div>
-
-        <p id="total-progress" style="color:#666; font-size:0.9rem;">Total: 0</p>
-        <div id="unlock-list" class="progress-list-container"></div>
+        <button onclick="performUnlock()" class="start-btn" style="background-color:#f39c12;">UNLOCK SELECTED</button>
+        <button onclick="closeMenu('cheat-menu')" class="main-btn secondary-btn" style="margin-top:10px;">Cancel</button>
     </div>
 
     <div id="reset-menu" class="menu-overlay center-top" style="display:none;">
@@ -93,14 +86,26 @@
         <button onclick="showSettingsMenu()" class="main-btn secondary-btn" style="margin-top:10px;">Cancel</button>
     </div>
 
-    <div id="progress-menu" class="menu-overlay center-top" style="display:none;">
-        <div class="progress-header"><h2>Card Stats</h2><button onclick="closeProgress()" class="btn-close">X</button></div>
+  <div id="progress-menu" class="menu-overlay center-top" style="display:none;">
+        <div class="progress-header">
+            <h2 style="margin:0;">Card Stats</h2>
+            <button onclick="closeProgress()" class="btn-close">X</button>
+        </div>
+
+        <div class="filter-row" style="display:flex; gap:10px; margin-top:15px; margin-bottom:15px; overflow-x:auto; width:100%; max-width:500px;">
+            <button onclick="showGlobalProgress('all')" class="filter-btn active" id="btn-stats-all">🌍 All</button>
+            <button onclick="showGlobalProgress('zh')" class="filter-btn" id="btn-stats-zh">🇨🇳 CH</button>
+            <button onclick="showGlobalProgress('ja')" class="filter-btn" id="btn-stats-ja">🇯🇵 JP</button>
+            <button onclick="showGlobalProgress('ar')" class="filter-btn" id="btn-stats-ar">🇸🇦 AR</button>
+        </div>
+
         <div class="stats-dashboard">
             <div class="stat-box"><span id="stat-total" class="stat-num">0</span><span class="stat-label">Total</span></div>
             <div class="stat-box"><span id="stat-perfect" class="stat-num" style="color:#2ecc71;">0</span><span class="stat-label">Mastered</span></div>
             <div class="stat-box"><span id="stat-learning" class="stat-num" style="color:#f1c40f;">0</span><span class="stat-label">Learning</span></div>
             <div class="stat-box"><span id="stat-locked" class="stat-num" style="color:#aaa;">0</span><span class="stat-label">Locked</span></div>
         </div>
+
         <div id="progress-list" class="progress-list-container"></div>
     </div>
 
@@ -210,8 +215,8 @@
             </div>
     </div>
 
-    <script src="database.js?v=0.25.6"></script>
-    <script src="script.js?v=0.25.6"></script>
+    <script src="database.js?v=0.25.10"></script>
+    <script src="script.js?v=0.25.10"></script>
     <script>
         function speakWord(event) {
             event.stopPropagation();

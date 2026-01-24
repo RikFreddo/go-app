@@ -132,7 +132,17 @@ body {
 .start-btn { padding: 15px 50px; background-color: var(--primary-color); color: white; border: none; border-radius: 30px; font-size: 1.2rem; font-weight: bold; cursor: pointer; margin-bottom: 30px; box-shadow: 0 4px 15px rgba(52, 152, 219, 0.4); }
 
 /* STATS */
-.stats-dashboard { width: 100%; max-width: 500px; display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 10px; margin: 60px 0 20px 0; }
+.stats-dashboard { 
+    /* ...altre regole restano uguali... */
+    width: 100%; 
+    max-width: 500px; 
+    display: grid; 
+    grid-template-columns: 1fr 1fr 1fr 1fr; 
+    gap: 10px; 
+    
+    /* MODIFICA QUESTO MARGINE: */
+    margin: 10px 0 20px 0; /* Ridotto da 60px a 10px perché ora c'è la bandiera sopra */
+}
 .stat-box { background-color: var(--card-bg); border-radius: 10px; padding: 10px 5px; border: 1px solid var(--border-color); display: flex; flex-direction: column; align-items: center; }
 .stat-num { font-size: 1.3rem; font-weight: bold; }
 .stat-label { font-size: 0.7rem; color: var(--header-p); margin-top: 5px; }
@@ -291,6 +301,20 @@ ul.tree ul li:last-child:before {
 .node-meaning { font-weight: normal; font-size: 0.85em; color: var(--header-p); margin-left: 5px; }
 
 /* FILTRI ALBERO */
+/* FILTRI UNIVERSALI (Albero e Progressi) */
+.filter-row {
+    width: 100%;
+    overflow-x: auto;
+    padding-bottom: 5px;
+    display: flex;
+    gap: 10px;
+    
+    /* AGGIUNGI QUESTI PER DARE ARIA SOPRA E SOTTO */
+    margin-top: 20px;
+    margin-bottom: 10px;
+    flex-shrink: 0; /* Importante: impedisce che si schiacci se manca spazio */
+}
+
 .filter-btn {
     padding: 8px 16px;
     border: 1px solid var(--border-color);
@@ -300,7 +324,7 @@ ul.tree ul li:last-child:before {
     cursor: pointer;
     font-size: 0.9rem;
     font-weight: bold;
-    flex-shrink: 0;
+    flex-shrink: 0; /* Impedisce che si schiaccino */
     transition: all 0.2s;
 }
 
