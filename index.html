@@ -6,7 +6,7 @@
     <title>Go</title>
     <link rel="icon" type="image/png" href="icon.png">
     <link rel="apple-touch-icon" href="icon.png">
-    <link rel="stylesheet" href="style.css?v=0.23.2_en">
+    <link rel="stylesheet" href="style.css?v=0.25.4">
 </head>
 <body>
 
@@ -26,9 +26,10 @@
         <div class="menu-buttons">
             <button onclick="showConfigMenu()" class="main-btn primary-btn">🎴 Flashcards</button>
             <button onclick="startSentenceMode()" class="main-btn" style="background-color:#9b59b6; color:white;">📝 Sentences</button>
+            <button onclick="showTreeMode()" class="main-btn" style="background-color:#27ae60; color:white;">🌳 Knowledge Tree</button>
             <button onclick="showSettingsMenu()" class="main-btn secondary-btn">⚙️ Settings</button>
         </div>
-        <p class="footer-ver">v=0.23.2 - English Edition</p>
+        <p class="footer-ver">v=0.25.4 - Knowledge Tree</p>
     </div>
 
     <div id="settings-menu" class="menu-overlay full-center" style="display:none;">
@@ -181,8 +182,25 @@
         <p class="instruction" id="s_instructionText">Tap to flip</p>
     </div>
 
-    <script src="database.js?v=0.23.2_en"></script>
-    <script src="script.js?v=0.23.2_en"></script>
+    <div class="app-container" id="tree-screen" style="display:none; overflow-y: auto; align-items: flex-start;">
+        <header style="width:100%; margin-top:60px; margin-bottom:10px;">
+            <div class="header-row">
+                <h1>My Network</h1>
+                <p id="tree-stats" style="font-size:0.9rem; color:#666;">Loading...</p>
+            </div>
+            <div class="filter-row" style="display:flex; gap:10px; margin-top:15px; overflow-x:auto;">
+                <button onclick="renderTree('zh')" class="filter-btn active" id="btn-tree-zh">🇨🇳 CH</button>
+                <button onclick="renderTree('ja')" class="filter-btn" id="btn-tree-ja">🇯🇵 JP</button>
+                <button onclick="renderTree('ar')" class="filter-btn" id="btn-tree-ar">🇸🇦 AR</button>
+                <button onclick="renderTree('all')" class="filter-btn" id="btn-tree-all">🌍 All</button>
+            </div>
+        </header>
+        <div id="tree-container" class="tree-wrapper">
+            </div>
+    </div>
+
+    <script src="database.js?v=0.25.4"></script>
+    <script src="script.js?v=0.25.4"></script>
     <script>
         function speakWord(event) {
             event.stopPropagation();

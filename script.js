@@ -146,7 +146,93 @@ function loadNextCard() {
 }
 
 function flipCard(){ if(isFlipped)return; document.getElementById('flashcard').classList.add('flipped'); isFlipped=true; document.getElementById('instructionText').innerText="How well did you know it?"; }
-function handleResult(r){ if(!currentCard)return; userProgress[currentCard.id]=r; saveProgress(); if(r==='perfect')deck.shift(); else {let m=deck.shift(); deck.splice(Math.min(deck.length,3),0,m);} loadNextCard(); }
+// ==========================================
+// LOGICA DI INIEZIONE DINAMICA (CROSS-MAZZO)
+// ==========================================
+
+function handleResult(r) {
+    if (!currentCard) return;
+
+    // 1. Salva il progresso
+    userProgress[currentCard.id] = r;
+    saveProgress();
+
+    // 2. Gestione del mazzo
+    if (r === 'perfect') {
+        // Rimuovi la carta corrente
+        deck.shift();
+
+        // --- ATTIVAZIONE INIEZIONE DINAMICA ---
+        // Se la carta è "mastered", cerchiamo subito i suoi "figli" in TUTTI i mazzi
+        injectRelatedCards(currentCard.id);
+        
+    } else {
+        // Se sbagli o è difficile, rimettila poco dopo (index 3)
+        let m = deck.shift();
+        deck.splice(Math.min(deck.length, 3), 0, m);
+    }
+
+    // 3. Carica la prossima
+    loadNextCard();
+}
+
+// Funzione che cerca in TUTTO il database (decks) le carte derivate
+function injectRelatedCards(motherId) {
+    // Range di inserimento: tra la 2° e la 6° carta da ora
+    const MIN_DIST = 2;
+    const MAX_DIST = 6;
+
+    console.log(`Searching children for: ${motherId}...`);
+
+    // Scansioniamo tutti i mazzi nel database globale 'decks'
+    Object.keys(decks).forEach(deckKey => {
+        const d = decks[deckKey];
+        
+        d.cards.forEach(card => {
+            // Se la carta richiede la "madre" appena imparata
+            if (card.requires && card.requires.includes(motherId)) {
+                
+                // Controlliamo se ora è DAVVERO sbloccabile (tutti i requisiti soddisfatti)
+                if (isCardUnlocked(card)) {
+                    
+                    // Se l'utente la conosce già "perfect", ignorala (non serve iniettarla)
+                    if (userProgress[card.id] === 'perfect') return;
+
+                    // --- LOGICA DI INIEZIONE ---
+                    
+                    // 1. Cerchiamo se è già nel mazzo corrente
+                    let existingIndex = deck.findIndex(c => c.id === card.id);
+
+                    // Calcola una posizione casuale vicina
+                    let insertIndex = Math.floor(Math.random() * (MAX_DIST - MIN_DIST + 1)) + MIN_DIST;
+                    // Assicuriamoci che l'indice non superi la lunghezza del mazzo
+                    if (insertIndex > deck.length) insertIndex = deck.length;
+
+                    if (existingIndex !== -1) {
+                        // CASO A: È già nel mazzo
+                        // Se è troppo lontana (> insertIndex), la spostiamo vicino
+                        if (existingIndex > insertIndex) {
+                            console.log(`PULLING CLOSER: ${card.word} (from ${existingIndex} to ${insertIndex})`);
+                            deck.splice(existingIndex, 1); // Rimuovi da là
+                            deck.splice(insertIndex, 0, card); // Inserisci qua
+                        }
+                    } else {
+                        // CASO B: Non è nel mazzo (Sorpresa!)
+                        console.log(`INJECTING NEW: ${card.word} at ${insertIndex}`);
+                        deck.splice(insertIndex, 0, card);
+                    }
+                }
+            }
+        });
+    });
+}
+
+// Helper per verificare se una carta ha TUTTI i requisiti soddisfatti
+function isCardUnlocked(card) {
+    if (!card.requires) return true;
+    // Controlla se ogni ID nell'array 'requires' ha stato 'perfect'
+    return card.requires.every(reqId => userProgress[reqId] === 'perfect');
+}
 
 // Frasi
 function startSentenceMode() {
@@ -260,4 +346,131 @@ window.speakWordScript = function() {
     else if (currentCard.lang === 'ar') s.lang = 'ar-SA';
     
     window.speechSynthesis.speak(s);
+}
+
+// ==========================================
+// FUNZIONI ALBERO DELLA CONOSCENZA (TREE VIEW)
+// ==========================================
+
+// ==========================================
+// FUNZIONI ALBERO CON FILTRO LINGUA
+// ==========================================
+
+function showTreeMode() {
+    const unlockedIds = Object.keys(userProgress).filter(id => userProgress[id] === 'perfect');
+    if (unlockedIds.length === 0) return alert("Unlock some cards perfectly first!");
+
+    previousScreen = 'main-menu';
+    showScreen('tree-screen');
+    
+    // Di default apriamo il Cinese (o la lingua che preferisci, es 'zh')
+    renderTree('zh');
+}
+
+function renderTree(filterLang) {
+    const container = document.getElementById('tree-container');
+    container.innerHTML = "";
+    
+    // Aggiorna lo stile dei bottoni
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    let btnId = 'btn-tree-' + filterLang;
+    if(document.getElementById(btnId)) document.getElementById(btnId).classList.add('active');
+
+    const allCards = getAllCards();
+    const unlockedIds = Object.keys(userProgress).filter(id => userProgress[id] === 'perfect');
+
+    // 1. Filtra le RADICI in base alla lingua scelta
+    let rootCards = allCards.filter(c => {
+        // Controllo Lingua
+        if (filterLang !== 'all' && c.lang !== filterLang) return false;
+
+        // Controllo Sblocco
+        if (!unlockedIds.includes(c.id)) return false; 
+        
+        // Controllo se è una radice (Base o Genitori non sbloccati)
+        if (!c.requires) return true; 
+        let parentsUnlocked = c.requires.some(req => unlockedIds.includes(req));
+        return !parentsUnlocked; 
+    });
+
+    // Ordina alfabetico
+    rootCards.sort((a,b) => a.word.localeCompare(b.word));
+
+    const ul = document.createElement('ul');
+    ul.className = 'tree';
+
+    let totalNodes = 0;
+
+    if (rootCards.length === 0) {
+        container.innerHTML = `<p style="text-align:center; margin-top:20px; color:#999;">No mastered roots found for this language.</p>`;
+        document.getElementById('tree-stats').innerText = "Roots: 0";
+        return;
+    }
+
+    // 2. Genera l'albero
+    rootCards.forEach(root => {
+        let li = document.createElement('li');
+        li.appendChild(createNodeElement(root));
+        
+        let childrenHTML = findChildrenRecursive(root.id, allCards, unlockedIds);
+        if (childrenHTML) {
+            li.appendChild(childrenHTML);
+        }
+        
+        ul.appendChild(li);
+        totalNodes++;
+    });
+
+    container.appendChild(ul);
+    document.getElementById('tree-stats').innerText = `Roots: ${rootCards.length} (Tap items to listen)`;
+}
+
+// Crea l'elemento grafico del nodo
+function createNodeElement(card) {
+    let span = document.createElement('span');
+    span.className = 'tree-node';
+    span.innerHTML = `<span class="node-lang">${getLangFlag(card.lang)}</span> ${card.word} <span class="node-meaning">(${card.meaning})</span>`;
+    // Click per sentire l'audio (opzionale)
+    span.onclick = () => {
+        let s = new SpeechSynthesisUtterance(card.word);
+        if(card.lang === 'zh') s.lang = 'zh-CN';
+        if(card.lang === 'ja') s.lang = 'ja-JP';
+        if(card.lang === 'ar') s.lang = 'ar-SA';
+        window.speechSynthesis.speak(s);
+    };
+    return span;
+}
+
+// Funzione ricorsiva per trovare i figli
+function findChildrenRecursive(parentId, allCards, unlockedIds) {
+    // Trova tutte le carte sbloccate che richiedono QUESTO parentId
+    let children = allCards.filter(c => 
+        unlockedIds.includes(c.id) && 
+        c.requires && 
+        c.requires.includes(parentId)
+    );
+
+    if (children.length === 0) return null;
+
+    let ul = document.createElement('ul');
+    children.forEach(child => {
+        let li = document.createElement('li');
+        li.appendChild(createNodeElement(child));
+        
+        // Ricorsione: il figlio ha a sua volta figli?
+        let grandChildren = findChildrenRecursive(child.id, allCards, unlockedIds);
+        if (grandChildren) {
+            li.appendChild(grandChildren);
+        }
+        ul.appendChild(li);
+    });
+    return ul;
+}
+
+// Helper piccola per le bandiere
+function getLangFlag(lang) {
+    if(lang === 'zh') return '🇨🇳';
+    if(lang === 'ja') return '🇯🇵';
+    if(lang === 'ar') return '🇸🇦';
+    return lang;
 }
