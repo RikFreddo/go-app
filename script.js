@@ -286,7 +286,64 @@ function closeSentProgress(){ const m=document.getElementById('sent-progress-men
 // Standard
 function showConfigMenu() { previousScreen = 'main-menu'; renderCheckboxes('topic-options', 'lang-options'); showScreen('config-menu'); }
 function showSettingsMenu() { previousScreen='main-menu'; updateThemeButtons(); showScreen('settings-menu'); }
-function showUnlockMenu() { renderCheckboxes('unlock-topic-options', 'unlock-lang-options'); showScreen('unlock-menu'); }
+// Mostra il menu progressi e inizializza con "Tutti"
+function showUnlockMenu() {
+    document.getElementById('unlock-menu').style.display = 'flex'; // Usa flex per centrare o block
+    renderProgressList('all'); // Default: mostra tutto
+}
+
+// Nuova funzione intelligente con filtri
+function renderProgressList(filterLang) {
+    const list = document.getElementById('unlock-list');
+    list.innerHTML = "";
+    
+    // Aggiorna stile bottoni filtri
+    document.querySelectorAll('#unlock-menu .filter-btn').forEach(b => b.classList.remove('active'));
+    let btnId = 'btn-prog-' + filterLang;
+    if(document.getElementById(btnId)) document.getElementById(btnId).classList.add('active');
+
+    // Prepara i dati
+    const unlockedIds = Object.keys(userProgress).filter(id => userProgress[id] === 'perfect');
+    const allCards = getAllCards();
+
+    // Filtra le carte
+    let validCards = allCards.filter(c => unlockedIds.includes(c.id));
+    
+    if (filterLang !== 'all') {
+        validCards = validCards.filter(c => c.lang === filterLang);
+    }
+
+    // Aggiorna conteggio
+    document.getElementById('total-progress').innerText = `Showing: ${validCards.length} / Total Unlocked: ${unlockedIds.length}`;
+
+    // Ordina (per lingua poi alfabetico)
+    validCards.sort((a,b) => a.lang.localeCompare(b.lang) || a.word.localeCompare(b.word));
+
+    if (validCards.length === 0) {
+        list.innerHTML = "<p style='text-align:center; color:#999;'>No cards found for this filter.</p>";
+        return;
+    }
+
+    // Genera la lista
+    validCards.forEach(card => {
+        let div = document.createElement('div');
+        div.className = 'progress-item';
+        div.innerHTML = `
+            <span class="p-lang">${getLangFlag(card.lang)}</span>
+            <span class="p-word">${card.word}</span>
+            <span class="p-mean">${card.meaning}</span>
+        `;
+        // Click per audio
+        div.onclick = () => {
+            let s = new SpeechSynthesisUtterance(card.word);
+            if(card.lang === 'zh') s.lang = 'zh-CN';
+            if(card.lang === 'ja') s.lang = 'ja-JP';
+            if(card.lang === 'ar') s.lang = 'ar-SA';
+            window.speechSynthesis.speak(s);
+        };
+        list.appendChild(div);
+    });
+}
 function performUnlock() { const c=document.getElementById('unlock-menu'); let st=Array.from(c.querySelectorAll('input[name="topic"]:checked')).map(x=>x.value); let sl=Array.from(c.querySelectorAll('input[name="lang"]:checked')).map(x=>x.value); if(st.length===0&&sl.length===0)return alert("Select items!"); if(!confirm("Unlock all selected?"))return; let cnt=0; Object.keys(decks).forEach(k=>{let d=decks[k]; if(st.includes(d.tags[0])||sl.includes(d.tags[1])) d.cards.forEach(x=>{ userProgress[x.id]='perfect'; cnt++; });}); saveProgress(); alert(cnt+" cards unlocked."); showSettingsMenu(); }
 function exportData() { let d={f:userProgress,s:userSentenceProgress}; const a=document.createElement('a'); a.href="data:text/json;charset=utf-8,"+encodeURIComponent(JSON.stringify(d)); a.download="go_backup.json"; document.body.appendChild(a); a.click(); a.remove(); }
 function importData(i) { const f=i.files[0]; if(!f)return; const r=new FileReader(); r.onload=e=>{ try{ let d=JSON.parse(e.target.result); if(d.f){userProgress=d.f; userSentenceProgress=d.s||{};} else userProgress=d; saveProgress(); alert("Import Successful"); }catch(x){alert("Import Error");}}; r.readAsText(f); }
@@ -356,15 +413,62 @@ window.speakWordScript = function() {
 // FUNZIONI ALBERO CON FILTRO LINGUA
 // ==========================================
 
-function showTreeMode() {
+// Apre l'albero come POPUP sopra il gioco
+function openTreeOverlay() {
     const unlockedIds = Object.keys(userProgress).filter(id => userProgress[id] === 'perfect');
     if (unlockedIds.length === 0) return alert("Unlock some cards perfectly first!");
 
-    previousScreen = 'main-menu';
-    showScreen('tree-screen');
+    // Mostra l'overlay
+    document.getElementById('tree-screen').style.display = 'flex';
     
-    // Di default apriamo il Cinese (o la lingua che preferisci, es 'zh')
+    // Carica di default il Cinese (o quello che preferisci)
     renderTree('zh');
+}
+
+// (La funzione renderTree che hai già va bene, ma assicurati che pulisca i bottoni corretti)
+// Se vuoi essere sicuro, ecco la versione aggiornata di renderTree per gestire i bottoni dentro #tree-screen
+function renderTree(filterLang) {
+    const container = document.getElementById('tree-container');
+    container.innerHTML = "";
+    
+    // Aggiorna bottoni specifici dell'albero
+    document.querySelectorAll('#tree-screen .filter-btn').forEach(b => b.classList.remove('active'));
+    let btnId = 'btn-tree-' + filterLang;
+    if(document.getElementById(btnId)) document.getElementById(btnId).classList.add('active');
+
+    const allCards = getAllCards();
+    const unlockedIds = Object.keys(userProgress).filter(id => userProgress[id] === 'perfect');
+
+    // ... (Il resto della logica di filtro rootCards rimane identico a prima) ...
+    let rootCards = allCards.filter(c => {
+        if (filterLang !== 'all' && c.lang !== filterLang) return false;
+        if (!unlockedIds.includes(c.id)) return false; 
+        if (!c.requires) return true; 
+        let parentsUnlocked = c.requires.some(req => unlockedIds.includes(req));
+        return !parentsUnlocked; 
+    });
+
+    rootCards.sort((a,b) => a.word.localeCompare(b.word));
+
+    const ul = document.createElement('ul');
+    ul.className = 'tree';
+
+    if (rootCards.length === 0) {
+        container.innerHTML = `<p style="text-align:center; margin-top:20px; color:#999;">No mastered roots found.</p>`;
+        document.getElementById('tree-stats').innerText = "Roots: 0";
+        return;
+    }
+
+    rootCards.forEach(root => {
+        let li = document.createElement('li');
+        li.appendChild(createNodeElement(root));
+        let childrenHTML = findChildrenRecursive(root.id, allCards, unlockedIds);
+        if (childrenHTML) li.appendChild(childrenHTML);
+        ul.appendChild(li);
+    });
+
+    container.appendChild(ul);
+    document.getElementById('tree-stats').innerText = `Roots: ${rootCards.length}`;
 }
 
 function renderTree(filterLang) {
@@ -473,4 +577,9 @@ function getLangFlag(lang) {
     if(lang === 'ja') return '🇯🇵';
     if(lang === 'ar') return '🇸🇦';
     return lang;
+}
+
+// Funzione universale per chiudere i menu overlay
+function closeMenu(menuId) {
+    document.getElementById(menuId).style.display = 'none';
 }

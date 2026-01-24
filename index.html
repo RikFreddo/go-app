@@ -6,7 +6,7 @@
     <title>Go</title>
     <link rel="icon" type="image/png" href="icon.png">
     <link rel="apple-touch-icon" href="icon.png">
-    <link rel="stylesheet" href="style.css?v=0.25.4">
+    <link rel="stylesheet" href="style.css?v=0.25.6">
 </head>
 <body>
 
@@ -29,7 +29,7 @@
             <button onclick="showTreeMode()" class="main-btn" style="background-color:#27ae60; color:white;">🌳 Knowledge Tree</button>
             <button onclick="showSettingsMenu()" class="main-btn secondary-btn">⚙️ Settings</button>
         </div>
-        <p class="footer-ver">v=0.25.4 - Knowledge Tree</p>
+        <p class="footer-ver">v=0.25.6 - Knowledge Tree</p>
     </div>
 
     <div id="settings-menu" class="menu-overlay full-center" style="display:none;">
@@ -67,13 +67,20 @@
     </div>
 
     <div id="unlock-menu" class="menu-overlay center-top" style="display:none;">
-        <h1 style="margin-top: 60px; color:#f39c12;">Unlock Cards</h1>
-        <div class="scroll-container">
-            <div class="config-section"><h3>Topics</h3><div id="unlock-topic-options" class="options-grid"></div></div>
-            <div class="config-section"><h3>Languages</h3><div id="unlock-lang-options" class="options-grid"></div></div>
+        <div class="progress-header">
+            <h2 style="margin:0;">Unlocked Cards</h2>
+            <button onclick="closeMenu('unlock-menu')" class="btn-close">X</button>
         </div>
-        <button onclick="performUnlock()" class="start-btn" style="background-color:#f39c12;">UNLOCK NOW</button>
-        <button onclick="showSettingsMenu()" class="main-btn secondary-btn" style="margin-top:10px;">Cancel</button>
+        
+        <div class="filter-row" style="display:flex; gap:10px; margin-top:15px; margin-bottom:15px; overflow-x:auto;">
+            <button onclick="renderProgressList('all')" class="filter-btn active" id="btn-prog-all">🌍 All</button>
+            <button onclick="renderProgressList('zh')" class="filter-btn" id="btn-prog-zh">🇨🇳 CH</button>
+            <button onclick="renderProgressList('ja')" class="filter-btn" id="btn-prog-ja">🇯🇵 JP</button>
+            <button onclick="renderProgressList('ar')" class="filter-btn" id="btn-prog-ar">🇸🇦 AR</button>
+        </div>
+
+        <p id="total-progress" style="color:#666; font-size:0.9rem;">Total: 0</p>
+        <div id="unlock-list" class="progress-list-container"></div>
     </div>
 
     <div id="reset-menu" class="menu-overlay center-top" style="display:none;">
@@ -105,9 +112,12 @@
 
     <div class="app-container" id="game-screen" style="display:none;">
         <header>
-             <div class="header-row">
-                <h1 id="deckTitle">Session</h1>
-                <p id="deckStatus">Cards: 0</p>
+            <div class="header-row">
+                <div>
+                    <h1 id="deckTitle">Session</h1>
+                    <p id="deckStatus">Cards: 0</p>
+                </div>
+                <button onclick="openTreeOverlay()" class="btn-icon" style="font-size:1.5rem; background:none; border:none; cursor:pointer;">🌳</button>
             </div>
         </header>
         <div class="card-container">
@@ -182,25 +192,26 @@
         <p class="instruction" id="s_instructionText">Tap to flip</p>
     </div>
 
-    <div class="app-container" id="tree-screen" style="display:none; overflow-y: auto; align-items: flex-start;">
-        <header style="width:100%; margin-top:60px; margin-bottom:10px;">
-            <div class="header-row">
-                <h1>My Network</h1>
-                <p id="tree-stats" style="font-size:0.9rem; color:#666;">Loading...</p>
-            </div>
-            <div class="filter-row" style="display:flex; gap:10px; margin-top:15px; overflow-x:auto;">
-                <button onclick="renderTree('zh')" class="filter-btn active" id="btn-tree-zh">🇨🇳 CH</button>
-                <button onclick="renderTree('ja')" class="filter-btn" id="btn-tree-ja">🇯🇵 JP</button>
-                <button onclick="renderTree('ar')" class="filter-btn" id="btn-tree-ar">🇸🇦 AR</button>
-                <button onclick="renderTree('all')" class="filter-btn" id="btn-tree-all">🌍 All</button>
-            </div>
-        </header>
+    <div id="tree-screen" class="menu-overlay center-top" style="display:none;">
+        <div class="header-row" style="margin-bottom:10px;">
+            <h1 style="margin:0;">My Network</h1>
+            <button onclick="closeMenu('tree-screen')" class="btn-close">X</button>
+        </div>
+        
+        <div class="filter-row" style="display:flex; gap:10px; margin-top:5px; margin-bottom:15px; overflow-x:auto;">
+            <button onclick="renderTree('zh')" class="filter-btn active" id="btn-tree-zh">🇨🇳 CH</button>
+            <button onclick="renderTree('ja')" class="filter-btn" id="btn-tree-ja">🇯🇵 JP</button>
+            <button onclick="renderTree('ar')" class="filter-btn" id="btn-tree-ar">🇸🇦 AR</button>
+        </div>
+        
+        <p id="tree-stats" style="font-size:0.9rem; color:#666; margin-bottom:10px;">Loading...</p>
+
         <div id="tree-container" class="tree-wrapper">
             </div>
     </div>
 
-    <script src="database.js?v=0.25.4"></script>
-    <script src="script.js?v=0.25.4"></script>
+    <script src="database.js?v=0.25.6"></script>
+    <script src="script.js?v=0.25.6"></script>
     <script>
         function speakWord(event) {
             event.stopPropagation();

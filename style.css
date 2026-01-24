@@ -314,3 +314,16 @@ ul.tree ul li:last-child:before {
     border-color: var(--primary-color);
     box-shadow: 0 2px 8px rgba(52, 152, 219, 0.4);
 }
+
+.btn-icon {
+    transition: transform 0.2s;
+    padding: 0 10px;
+}
+.btn-icon:hover {
+    transform: scale(1.2);
+}
+
+/* Assicura che i menu overlay stiano SOPRA la top-bar se necessario */
+.menu-overlay {
+    z-index: 200; /* Superiore alla top-bar che era 100 */
+}
