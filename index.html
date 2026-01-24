@@ -6,7 +6,7 @@
     <title>Go</title>
     <link rel="icon" type="image/png" href="icon.png">
     <link rel="apple-touch-icon" href="icon.png">
-    <link rel="stylesheet" href="style.css?v=0.25.10">
+    <link rel="stylesheet" href="style.css?v=0.25.13">
 </head>
 <body>
 
@@ -29,7 +29,7 @@
             <button onclick="showTreeMode()" class="main-btn" style="background-color:#27ae60; color:white;">🌳 Knowledge Tree</button>
             <button onclick="showSettingsMenu()" class="main-btn secondary-btn">⚙️ Settings</button>
         </div>
-        <p class="footer-ver">v=0.25.10 - Knowledge Tree</p>
+        <p class="footer-ver">v=0.25.13 - Knowledge Tree</p>
     </div>
 
     <div id="settings-menu" class="menu-overlay full-center" style="display:none;">
@@ -156,6 +156,18 @@
         <p class="instruction" id="instructionText">Tap card to see answer</p>
     </div>
 
+    <div class="app-container" id="tree-view" style="display:none;">
+        <header>
+            <div class="header-row">
+                <h1 id="treeTitle">Knowledge Tree</h1>
+                <button onclick="closeTreeMode()" class="btn-close">X</button>
+            </div>
+            <p style="color:#666; font-size:0.9rem;">Visualizza le connessioni tra le parole</p>
+        </header>
+        
+        <div id="tree-container" class="tree-wrapper"></div>
+    </div>
+
     <div class="app-container" id="sentence-screen" style="display:none;">
         <header>
             <div class="header-row">
@@ -197,26 +209,8 @@
         <p class="instruction" id="s_instructionText">Tap to flip</p>
     </div>
 
-    <div id="tree-screen" class="menu-overlay center-top" style="display:none;">
-        <div class="header-row" style="margin-bottom:10px;">
-            <h1 style="margin:0;">My Network</h1>
-            <button onclick="closeMenu('tree-screen')" class="btn-close">X</button>
-        </div>
-        
-        <div class="filter-row" style="display:flex; gap:10px; margin-top:5px; margin-bottom:15px; overflow-x:auto;">
-            <button onclick="renderTree('zh')" class="filter-btn active" id="btn-tree-zh">🇨🇳 CH</button>
-            <button onclick="renderTree('ja')" class="filter-btn" id="btn-tree-ja">🇯🇵 JP</button>
-            <button onclick="renderTree('ar')" class="filter-btn" id="btn-tree-ar">🇸🇦 AR</button>
-        </div>
-        
-        <p id="tree-stats" style="font-size:0.9rem; color:#666; margin-bottom:10px;">Loading...</p>
-
-        <div id="tree-container" class="tree-wrapper">
-            </div>
-    </div>
-
-    <script src="database.js?v=0.25.10"></script>
-    <script src="script.js?v=0.25.10"></script>
+    <script src="database.js?v=0.25.13"></script>
+    <script src="script.js?v=0.25.13"></script>
     <script>
         function speakWord(event) {
             event.stopPropagation();

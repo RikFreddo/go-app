@@ -652,11 +652,22 @@ function renderTree(filterLang) {
 }
 
 // Crea l'elemento grafico del nodo
+// Crea l'elemento grafico del nodo (CON COLORI GRAMMATICALI)
 function createNodeElement(card) {
     let span = document.createElement('span');
     span.className = 'tree-node';
+    
+    // --- LOGICA COLORI ---
+    // Se nel database c'è scritto grammar: 'qualcosa', aggiunge la classe CSS 'g-qualcosa'
+    if (card.grammar) {
+        span.classList.add('g-' + card.grammar);
+    }
+    // ---------------------
+
+    // Contenuto del nodo
     span.innerHTML = `<span class="node-lang">${getLangFlag(card.lang)}</span> ${card.word} <span class="node-meaning">(${card.meaning})</span>`;
-    // Click per sentire l'audio (opzionale)
+    
+    // Click per sentire l'audio
     span.onclick = () => {
         let s = new SpeechSynthesisUtterance(card.word);
         if(card.lang === 'zh') s.lang = 'zh-CN';
@@ -704,4 +715,10 @@ function getLangFlag(lang) {
 // Funzione universale per chiudere i menu overlay
 function closeMenu(menuId) {
     document.getElementById(menuId).style.display = 'none';
+}
+
+function closeTreeMode() {
+    document.getElementById('tree-view').style.display = 'none';
+    document.getElementById('main-menu').style.display = 'flex';
+    appMode = 'flashcards'; // Resetta la modalità
 }
