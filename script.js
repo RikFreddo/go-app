@@ -124,6 +124,8 @@ function showTreeMode() {
     showScreen('config-menu');
 }
 
+let lastSessionConfig = null; // Memorizza l'ultima configurazione di sessione per i filtri
+
 // Avvia la sessione (o apre l'albero) in base alla configurazione scelta
 function startCustomSession() {
     if (typeof decks === 'undefined') return alert("Errore: Database non trovato.");
@@ -145,6 +147,9 @@ function startCustomSession() {
 
     // --- RAMO 2: MODALITÀ FLASHCARD ---
     if (st.length === 0 || sl.length === 0) return alert("Seleziona Argomenti e Lingue!");
+
+    // Salva la configurazione per i filtri statistiche
+    lastSessionConfig = { topics: st, langs: sl };
 
     // Costruisce il mazzo filtrando le carte dal database
     playDeck = [];
@@ -185,6 +190,13 @@ function renderCheckboxes(tid, lid) {
     t.forEach(v => tc.innerHTML += `<label class="chk-label"><input type="checkbox" name="topic" value="${v}" ${chk}>${capitalize(v)}</label>`);
     l.forEach(v => lc.innerHTML += `<label class="chk-label"><input type="checkbox" name="lang" value="${v}" ${chk}>${getLangNameFull(v)}</label>`);
 }
+
+// Seleziona o Deseleziona tutti i checkbox di un certo tipo (topic o lang)
+function toggleAll(name, state) {
+    const checkboxes = document.querySelectorAll(`input[name="${name}"]`);
+    checkboxes.forEach(cb => cb.checked = state);
+}
+
 
 // ==========================================
 // 5. MOTORE FLASHCARDS (CORE GAME)
@@ -670,17 +682,38 @@ function performUnlock() {
 // 9. STATISTICHE GLOBALI
 // ==========================================
 
-function showGlobalProgress(filterLang = 'all') {
+function showGlobalProgress(filter = 'all') {
     // Gestione filtri visuali
     document.querySelectorAll('#progress-menu .filter-btn').forEach(b => b.classList.remove('active'));
-    let btnId = 'btn-stats-' + filterLang;
+    let btnId = 'btn-stats-' + filter;
     if (document.getElementById(btnId)) document.getElementById(btnId).classList.add('active');
 
-    let allCards = getAllCards();
-    let displayCards = allCards;
-    if (filterLang !== 'all') {
-        displayCards = allCards.filter(c => c.lang === filterLang);
+    let allCards = [];
+
+    // Logica di Filtro
+    if (filter === 'session') {
+        if (!lastSessionConfig) {
+            alert("Nessuna sessione recente trovata. Mostro tutte le carte.");
+            allCards = getAllCards();
+            document.getElementById('btn-stats-all').classList.add('active');
+            if (document.getElementById('btn-stats-session')) document.getElementById('btn-stats-session').classList.remove('active');
+        } else {
+            // Raccoglie solo i mazzi della sessione corrente
+            Object.keys(decks).forEach(k => {
+                let d = decks[k];
+                if (lastSessionConfig.topics.includes(d.tags[0]) && lastSessionConfig.langs.includes(d.tags[1])) {
+                    allCards = [...allCards, ...d.cards];
+                }
+            });
+        }
+    } else if (filter === 'all') {
+        allCards = getAllCards();
+    } else {
+        // Filtro per lingua
+        allCards = getAllCards().filter(c => c.lang === filter);
     }
+
+    let displayCards = allCards;
 
     // Ordinamento: Lingua -> Alfabetico
     displayCards.sort((a, b) => {
