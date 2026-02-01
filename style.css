@@ -1,16 +1,22 @@
+/* ========================================== */
+/* 1. VARIABILI E COLORI (TEMI) */
+/* ========================================== */
 :root {
-    --bg-color: #f0f4f8;
-    --text-color: #333;
-    --card-bg: white;
-    --header-p: #666;
-    --card-shadow: rgba(0,0,0,0.1);
-    --btn-text: #555;
-    --btn-bg: #e1e8ed;
-    --border-color: #ddd;
-    --primary-color: #3498db;
-    --danger-color: #e74c3c;
+    --bg-color: #f0f4f8;       /* Sfondo principale Light */
+    --text-color: #333;        /* Testo principale Light */
+    --card-bg: white;          /* Sfondo carte/pannelli */
+    --header-p: #666;          /* Testo secondario */
+    --card-shadow: rgba(0,0,0,0.1); /* Ombreggiatura */
+    --btn-text: #555;          /* Testo bottoni piccoli */
+    --btn-bg: #e1e8ed;         /* Sfondo bottoni piccoli */
+    --border-color: #ddd;      /* Bordi */
+    
+    /* Colori Semantici */
+    --primary-color: #3498db;  /* Blu principale */
+    --danger-color: #e74c3c;   /* Rosso azione distruttiva */
 }
 
+/* Override per Dark Mode */
 body.dark-mode {
     --bg-color: #121212;
     --text-color: #f0f0f0;
@@ -22,17 +28,21 @@ body.dark-mode {
     --border-color: #444;
 }
 
+/* ========================================== */
+/* 2. RESET E LAYOUT GLOBALE */
+/* ========================================== */
 body {
     font-family: 'Helvetica Neue', Arial, sans-serif;
     background-color: var(--bg-color);
     color: var(--text-color);
     margin: 0;
     text-align: center;
-    transition: background 0.3s, color 0.3s;
+    transition: background 0.3s, color 0.3s; /* Transizione morbida tema */
     overflow-x: hidden;
     -webkit-tap-highlight-color: transparent;
 }
 
+/* Contenitore principale dell'applicazione (per le schermate di gioco) */
 .app-container {
     width: 90%; 
     max-width: 400px;
@@ -41,11 +51,13 @@ body {
     flex-direction: column; 
     min-height: 100vh; 
     justify-content: flex-start; 
-    padding-top: 80px; 
+    padding-top: 80px; /* Spazio per la Top Bar */
     box-sizing: border-box;
 }
 
-/* TOP BAR */
+/* ========================================== */
+/* 3. BARRA DI NAVIGAZIONE (TOP BAR) */
+/* ========================================== */
 .top-bar {
     position: fixed; top: 0; left: 0; width: 100%; height: 60px;
     padding: 0 15px; box-sizing: border-box;
@@ -54,27 +66,40 @@ body {
     border-bottom: 1px solid var(--border-color);
     box-shadow: 0 2px 5px rgba(0,0,0,0.05);
 }
+
 .icon-btn {
-    background: rgba(150,150,150,0.2); border: none; font-size: 1rem;
-    cursor: pointer; color: var(--text-color);
-    padding: 8px 12px; border-radius: 8px; backdrop-filter: blur(5px);
+    background: rgba(150,150,150,0.2); 
+    border: none; 
+    font-size: 1rem;
+    cursor: pointer; 
+    color: var(--text-color);
+    padding: 8px 12px; 
+    border-radius: 8px; 
+    backdrop-filter: blur(5px);
 }
 
-/* MENUS */
+/* ========================================== */
+/* 4. MENU E OVERLAY (SCHERMATE INTERE) */
+/* ========================================== */
 .menu-overlay {
     position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    background-color: var(--bg-color); z-index: 50;
+    background-color: var(--bg-color); z-index: 200; /* Z-index alto per coprire tutto */
     padding: 80px 20px 20px 20px; box-sizing: border-box;
     overflow-y: auto;
 }
+
+/* Varianti di allineamento per i menu */
 .full-center { display: flex; flex-direction: column; justify-content: center; align-items: center; }
 .menu-overlay.full-center { justify-content: center; padding-top: 20px; }
 .center-top { display: flex; flex-direction: column; align-items: center; }
 
+/* Stili specifici Home Page */
 .logo-container { margin-bottom: 40px; }
 .app-logo { width: 120px; height: 120px; border-radius: 25px; box-shadow: 0 10px 20px var(--card-shadow); }
 .app-title { font-size: 2.5rem; margin: 10px 0; font-weight: 800; letter-spacing: -1px; }
+.footer-ver { position: absolute; bottom: 20px; color: var(--header-p); font-size: 0.8rem; opacity: 0.5; }
 
+/* Bottoni Menu Principale */
 .menu-buttons { display: flex; flex-direction: column; gap: 15px; width: 100%; max-width: 300px; }
 .main-btn {
     padding: 18px; border: none; border-radius: 15px;
@@ -84,78 +109,117 @@ body {
 .main-btn:active { transform: scale(0.98); }
 .primary-btn { background-color: var(--primary-color); color: white; box-shadow: 0 4px 15px rgba(52,152,219,0.3); }
 .secondary-btn { background-color: var(--card-bg); color: var(--text-color); border: 1px solid var(--border-color); }
-.footer-ver { position: absolute; bottom: 20px; color: var(--header-p); font-size: 0.8rem; opacity: 0.5; }
 
-/* SETTINGS */
-.settings-panel { width: 100%; max-width: 350px; }
-.setting-group { background: var(--card-bg); padding: 20px; border-radius: 15px; border: 1px solid var(--border-color); margin-bottom: 20px; }
-.theme-switcher { display: flex; gap: 5px; background: var(--btn-bg); padding: 5px; border-radius: 12px; }
-.theme-btn { flex: 1; padding: 10px; border: none; background: transparent; color: var(--text-color); font-weight: bold; border-radius: 8px; cursor: pointer; }
-.theme-btn.active { background-color: var(--card-bg); box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-.data-buttons { display: flex; flex-direction: column; gap: 10px; }
-.data-btn { padding: 12px; border: none; border-radius: 10px; background-color: var(--btn-bg); color: var(--text-color); font-weight: bold; cursor: pointer; text-align: left; }
-.btn-danger { background-color: #fadbd8; color: #c0392b; }
+/* ========================================== */
+/* 5. CONFIGURAZIONE E IMPOSTAZIONI */
+/* ========================================== */
+
+/* Pannelli Configurazione */
 .scroll-container { width: 100%; max-width: 400px; padding-bottom: 20px; }
 .config-section { width: 100%; margin-bottom: 20px; text-align: left; }
 .options-grid { display: flex; flex-wrap: wrap; gap: 10px; }
-.chk-label { display: flex; align-items: center; gap: 8px; background-color: var(--card-bg); padding: 10px 15px; border-radius: 10px; border: 1px solid var(--border-color); cursor: pointer; flex-grow: 1; }
-.chk-label input { width: 18px; height: 18px; accent-color: var(--primary-color); }
-.start-btn { padding: 15px 50px; background-color: var(--primary-color); color: white; border: none; border-radius: 30px; font-size: 1.2rem; font-weight: bold; cursor: pointer; margin-bottom: 30px; box-shadow: 0 4px 15px rgba(52, 152, 219, 0.4); }
 
-/* STATS */
-.stats-dashboard { 
-    width: 100%; max-width: 500px; display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 10px; margin: 10px 0 20px 0; 
+/* Checkbox Personalizzate */
+.chk-label { 
+    display: flex; align-items: center; gap: 8px; 
+    background-color: var(--card-bg); 
+    padding: 10px 15px; border-radius: 10px; 
+    border: 1px solid var(--border-color); 
+    cursor: pointer; flex-grow: 1; 
 }
-.stat-box { background-color: var(--card-bg); border-radius: 10px; padding: 10px 5px; border: 1px solid var(--border-color); display: flex; flex-direction: column; align-items: center; }
-.stat-num { font-size: 1.3rem; font-weight: bold; }
-.stat-label { font-size: 0.7rem; color: var(--header-p); margin-top: 5px; }
-.progress-header { width: 100%; display: flex; justify-content: space-between; align-items: center; max-width: 500px; margin-top: 60px; }
-.progress-list-container { width: 100%; max-width: 500px; padding-bottom: 50px; }
-.prog-item { display: flex; justify-content: space-between; align-items: center; background-color: var(--card-bg); padding: 15px; margin-bottom: 10px; border-radius: 10px; border: 1px solid var(--border-color); text-align: left; }
-.prog-info { display: flex; flex-direction: column; gap: 4px; }
-.prog-word { font-size: 1.3rem; font-weight: bold; }
-.prog-meaning { font-size: 0.9rem; color: var(--header-p); }
-.prog-status { font-size: 1.2rem; display:flex; align-items:center; justify-content: flex-end; }
-.btn-close { background: transparent; border: 2px solid var(--text-color); color: var(--text-color); width: 30px; height: 30px; border-radius: 50%; font-weight: bold; cursor: pointer; }
+.chk-label input { width: 18px; height: 18px; accent-color: var(--primary-color); }
 
-/* DOTS */
-.dot { display: inline-block; width: 12px; height: 12px; border-radius: 50%; margin-left: 5px; }
-.dot-green { background-color: #2ecc71; }
-.dot-blue { background-color: #3498db; }
-.dot-yellow { background-color: #f1c40f; }
-.dot-red { background-color: #e74c3c; }
-.dot-grey { background-color: #ddd; }
+/* Bottone START grande */
+.start-btn { 
+    padding: 15px 50px; 
+    background-color: var(--primary-color); 
+    color: white; border: none; 
+    border-radius: 30px; 
+    font-size: 1.2rem; font-weight: bold; 
+    cursor: pointer; margin-bottom: 30px; 
+    box-shadow: 0 4px 15px rgba(52, 152, 219, 0.4); 
+}
 
-/* CARDS & HEADER */
+/* Pannello Impostazioni */
+.settings-panel { width: 100%; max-width: 350px; }
+.setting-group { background: var(--card-bg); padding: 20px; border-radius: 15px; border: 1px solid var(--border-color); margin-bottom: 20px; }
+
+/* Switcher Tema */
+.theme-switcher { display: flex; gap: 5px; background: var(--btn-bg); padding: 5px; border-radius: 12px; }
+.theme-btn { flex: 1; padding: 10px; border: none; background: transparent; color: var(--text-color); font-weight: bold; border-radius: 8px; cursor: pointer; }
+.theme-btn.active { background-color: var(--card-bg); box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+
+/* Bottoni Gestione Dati */
+.data-buttons { display: flex; flex-direction: column; gap: 10px; }
+.data-btn { padding: 12px; border: none; border-radius: 10px; background-color: var(--btn-bg); color: var(--text-color); font-weight: bold; cursor: pointer; text-align: left; }
+.btn-danger { background-color: #fadbd8; color: #c0392b; }
+
+/* Header Menu Interni */
 #config-menu h1, #unlock-menu h1, #reset-menu h1, .progress-header { margin-top: 0 !important; }
+
+/* ========================================== */
+/* 6. GIOCO E CARTE (FLASHCARDS) */
+/* ========================================== */
 header { width: 100%; box-sizing: border-box; margin-top: 0; margin-bottom: 20px; }
 .header-row { display: flex; justify-content: space-between; align-items: center; width: 100%; }
 .header-row h1 { font-size: 1.4rem; margin: 0; text-align: left; }
 .header-row p { font-size: 0.9rem; color: var(--header-p); margin: 0; text-align: left;}
 
-.card-container { perspective: 1000px; margin: 20px auto; width: 100%; height: 400px; cursor: pointer; position: relative; }
-.card { width: 100%; height: 100%; position: relative; transition: transform 0.5s; transform-style: preserve-3d; box-shadow: 0 10px 20px var(--card-shadow); border-radius: 20px; }
+/* Container Carta 3D */
+.card-container { 
+    perspective: 1000px; 
+    margin: 20px auto; 
+    width: 100%; height: 400px; 
+    cursor: pointer; position: relative; 
+}
+.card { 
+    width: 100%; height: 100%; position: relative; 
+    transition: transform 0.5s; 
+    transform-style: preserve-3d; 
+    box-shadow: 0 10px 20px var(--card-shadow); 
+    border-radius: 20px; 
+}
 .card.flipped { transform: rotateY(180deg); }
-.card-front, .card-back { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; display: flex; flex-direction: column; justify-content: center; align-items: center; border-radius: 20px; background-color: var(--card-bg); padding: 15px; box-sizing: border-box; }
+
+/* Facce della Carta */
+.card-front, .card-back { 
+    position: absolute; width: 100%; height: 100%; 
+    backface-visibility: hidden; 
+    display: flex; flex-direction: column; 
+    justify-content: center; align-items: center; 
+    border-radius: 20px; 
+    background-color: var(--card-bg); 
+    padding: 15px; box-sizing: border-box; 
+}
 .card-back { transform: rotateY(180deg); border: 2px solid var(--btn-bg); }
+
+/* Elementi nella Carta */
 .lang-tag { position: absolute; top: 15px; right: 15px; background: var(--btn-bg); color: var(--btn-text); padding: 4px 10px; border-radius: 12px; font-size: 0.75rem; font-weight: bold; }
 .hint { position: absolute; bottom: 15px; color: #888; font-size: 0.8rem; }
 .audio-btn { background:none; border:none; cursor:pointer; font-size: 1.4rem; }
-body.dark-mode .audio-btn { filter: invert(1); }
+body.dark-mode .audio-btn { filter: invert(1); } /* Inverte colore icona audio in dark mode */
 
-/* CONTROLS */
+/* Controlli di Risposta */
 .controls-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; opacity: 1; pointer-events: auto; }
 .btn { padding: 12px; border: none; border-radius: 10px; font-size: 0.9rem; font-weight: bold; color: white; cursor: pointer; }
 .btn:active { transform: scale(0.96); }
+
+/* Colori Bottoni Risposta */
 .btn-red { background-color: #e74c3c; }
 .btn-blue { background-color: #3498db; }
 .btn-yellow { background-color: #f1c40f; color: #333; }
 .btn-green { background-color: #2ecc71; }
 
-/* ALBERO DELLA CONOSCENZA */
+.instruction { margin-top: 10px; color: #888; font-size: 0.9rem; }
+
+/* ========================================== */
+/* 7. ALBERO DELLA CONOSCENZA (TREE) */
+/* ========================================== */
 .tree-wrapper {
     width: 100%; padding: 20px; box-sizing: border-box; text-align: left; padding-bottom: 80px; overflow-x: auto;
 }
+
+/* Struttura Linee Albero */
 ul.tree, ul.tree ul { list-style-type: none; margin: 0; padding: 0; }
 ul.tree ul { margin-left: 50px; position: relative; }
 ul.tree ul:before { content: ""; display: block; width: 0; position: absolute; top: 0; bottom: 0; left: 0; border-left: 2px solid #ccc; }
@@ -163,6 +227,7 @@ ul.tree li { margin: 0; padding: 0 12px; line-height: 4.5em; position: relative;
 ul.tree ul li:before { content: ""; display: block; width: 35px; height: 0; border-top: 2px solid #ccc; margin-top: -1px; position: absolute; top: 2.25em; left: 0; }
 ul.tree ul li:last-child:before { background: var(--bg-color); height: auto; top: 2.25em; bottom: 0; }
 
+/* Nodi dell'Albero */
 .tree-node {
     display: inline-block; padding: 8px 16px; border-radius: 8px;
     background-color: var(--card-bg) !important; color: var(--text-color);
@@ -173,11 +238,11 @@ ul.tree ul li:last-child:before { background: var(--bg-color); height: auto; top
 .node-lang { font-size: 0.8em; margin-right: 8px; opacity: 0.9; }
 .node-meaning { font-weight: normal; font-size: 0.9em; color: #555; margin-left: 8px; }
 
-/* STILI ALBERO: LOCKED & GRAMMAR */
+/* Stili Nodo Bloccato */
 .tree-node.node-locked { opacity: 0.6; border-style: dashed; background-color: #f9f9f9 !important; border-color: #ccc; color: #999; }
 body.dark-mode .tree-node.node-locked { background-color: #2a2a2a !important; }
 
-/* COLORI GRAMMATICALI */
+/* Codifica Colori Grammaticale */
 .tree-node.g-place { border-left: 5px solid #e67e22; background-color: #fdf2e9; }
 .tree-node.g-agent { border-left: 5px solid #3498db; background-color: #ebf5fb; }
 .tree-node.g-verb, .tree-node.g-action { border-left: 5px solid #2ecc71; background-color: #eafaf1; }
@@ -188,10 +253,47 @@ body.dark-mode .tree-node.node-locked { background-color: #2a2a2a !important; }
 .tree-node.g-i-adj { border-left: 5px solid #1abc9c; background-color: #e8f8f5; }
 .tree-node.g-na-adj { border-left: 5px solid #f1c40f; background-color: #fef9e7; }
 
+/* Filtri Albero */
 .filter-row { width: 100%; overflow-x: auto; padding-bottom: 5px; display: flex; gap: 10px; margin-top: 20px; margin-bottom: 10px; flex-shrink: 0; }
 .filter-btn { padding: 8px 16px; border: 1px solid var(--border-color); background-color: var(--card-bg); color: var(--text-color); border-radius: 20px; cursor: pointer; font-size: 0.9rem; font-weight: bold; flex-shrink: 0; transition: all 0.2s; }
 .filter-btn:hover { background-color: var(--btn-bg); }
 .filter-btn.active { background-color: var(--primary-color); color: white; border-color: var(--primary-color); box-shadow: 0 2px 8px rgba(52, 152, 219, 0.4); }
+
 .btn-icon { transition: transform 0.2s; padding: 0 10px; }
 .btn-icon:hover { transform: scale(1.2); }
-.menu-overlay { z-index: 200; }
+
+/* ========================================== */
+/* 8. STATISTICHE (PROGRESS) */
+/* ========================================== */
+.stats-dashboard { 
+    width: 100%; max-width: 500px; 
+    display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 10px; 
+    margin: 10px 0 20px 0; 
+}
+.stat-box { background-color: var(--card-bg); border-radius: 10px; padding: 10px 5px; border: 1px solid var(--border-color); display: flex; flex-direction: column; align-items: center; }
+.stat-num { font-size: 1.3rem; font-weight: bold; }
+.stat-label { font-size: 0.7rem; color: var(--header-p); margin-top: 5px; }
+
+.progress-header { width: 100%; display: flex; justify-content: space-between; align-items: center; max-width: 500px; margin-top: 60px; }
+.progress-list-container { width: 100%; max-width: 500px; padding-bottom: 50px; }
+
+.prog-item { 
+    display: flex; justify-content: space-between; align-items: center; 
+    background-color: var(--card-bg); 
+    padding: 15px; margin-bottom: 10px; 
+    border-radius: 10px; border: 1px solid var(--border-color); 
+    text-align: left; 
+}
+.prog-info { display: flex; flex-direction: column; gap: 4px; }
+.prog-word { font-size: 1.3rem; font-weight: bold; }
+.prog-meaning { font-size: 0.9rem; color: var(--header-p); }
+.prog-status { font-size: 1.2rem; display:flex; align-items:center; justify-content: flex-end; }
+.btn-close { background: transparent; border: 2px solid var(--text-color); color: var(--text-color); width: 30px; height: 30px; border-radius: 50%; font-weight: bold; cursor: pointer; }
+
+/* Indicatori a pallino */
+.dot { display: inline-block; width: 12px; height: 12px; border-radius: 50%; margin-left: 5px; }
+.dot-green { background-color: #2ecc71; }
+.dot-blue { background-color: #3498db; }
+.dot-yellow { background-color: #f1c40f; }
+.dot-red { background-color: #e74c3c; }
+.dot-grey { background-color: #ddd; }
