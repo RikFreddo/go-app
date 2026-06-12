@@ -1,0 +1,28 @@
+{
+  "dependencies": {
+    "playwright": "^1.60.0"
+  },
+  "name": "go-app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "test-pw.js",
+  "devDependencies": {
+    "jsdom": "^29.1.1",
+    "vitest": "^4.1.8"
+  },
+  "scripts": {
+    "test": "vitest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RikFreddo/go-app.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/RikFreddo/go-app/issues"
+  },
+  "homepage": "https://github.com/RikFreddo/go-app#readme"
+}
